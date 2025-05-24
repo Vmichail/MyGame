@@ -22,12 +22,12 @@ public class DamageTextScript : MonoBehaviour
         StartFade();
     }
 
-    public void SetDamage(float damage, bool isCritical)
+    public void SetDamage(float damage, bool isCritical, Color color)
     {
+        damageText.color = color;
         damageText.text = ((int)damage).ToString();
         if (isCritical)
         {
-            damageText.color = Color.yellow;
             damageText.text = ((int)damage).ToString() + "!";
         }
     }

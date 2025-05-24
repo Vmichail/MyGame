@@ -1,12 +1,14 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerRangeDetector : MonoBehaviour
 {
     private List<GameObject> enemiesInRange = new List<GameObject>();
+
     public GameObject ClosestEnemy { get; private set; }
     public GameObject SecondClosestEnemy { get; private set; }
-
+    public GameObject ThirdClosestEnemy { get; private set; }
+    public GameObject FourthClosestEnemy { get; private set; }
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -14,11 +16,6 @@ public class PlayerRangeDetector : MonoBehaviour
         {
             enemiesInRange.Add(other.gameObject);
         }
-    }
-
-    void Update()
-    {
-        UpdateClosestEnemies();
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -29,39 +26,72 @@ public class PlayerRangeDetector : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        UpdateClosestEnemies();
+    }
+
     void UpdateClosestEnemies()
     {
-        enemiesInRange.RemoveAll(enemy => enemy == null);
+        enemiesInRange.RemoveAll(enemy => enemy == null || !enemy.activeInHierarchy);
 
-        float closestDist = float.MaxValue;
-        float secondClosestDist = float.MaxValue;
+        float dist1 = float.MaxValue;
+        float dist2 = float.MaxValue;
+        float dist3 = float.MaxValue;
+        float dist4 = float.MaxValue;
+
         GameObject closest = null;
-        GameObject secondClosest = null;
+        GameObject second = null;
+        GameObject third = null;
+        GameObject fourth = null;
 
         foreach (GameObject enemy in enemiesInRange)
         {
-            if (enemy == null) continue;
-
             float dist = Vector2.Distance(transform.position, enemy.transform.position);
 
-            if (dist < closestDist)
+            if (dist < dist1)
             {
-                // Shift current closest to second
-                secondClosestDist = closestDist;
-                secondClosest = closest;
+                dist4 = dist3;
+                fourth = third;
 
-                closestDist = dist;
+                dist3 = dist2;
+                third = second;
+
+                dist2 = dist1;
+                second = closest;
+
+                dist1 = dist;
                 closest = enemy;
             }
-            else if (dist < secondClosestDist)
+            else if (dist < dist2)
             {
-                secondClosestDist = dist;
-                secondClosest = enemy;
+                dist4 = dist3;
+                fourth = third;
+
+                dist3 = dist2;
+                third = second;
+
+                dist2 = dist;
+                second = enemy;
+            }
+            else if (dist < dist3)
+            {
+                dist4 = dist3;
+                fourth = third;
+
+                dist3 = dist;
+                third = enemy;
+            }
+            else if (dist < dist4)
+            {
+                dist4 = dist;
+                fourth = enemy;
             }
         }
-
         ClosestEnemy = closest;
-        SecondClosestEnemy = secondClosest;
+        SecondClosestEnemy = second;
+        ThirdClosestEnemy = third;
+        FourthClosestEnemy = fourth;
     }
 
     private void OnDrawGizmos()
@@ -71,6 +101,23 @@ public class PlayerRangeDetector : MonoBehaviour
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(transform.position, ClosestEnemy.transform.position);
         }
-    }
 
+        if (SecondClosestEnemy != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, SecondClosestEnemy.transform.position);
+        }
+
+        if (ThirdClosestEnemy != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, ThirdClosestEnemy.transform.position);
+        }
+
+        if (FourthClosestEnemy != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, FourthClosestEnemy.transform.position);
+        }
+    }
 }

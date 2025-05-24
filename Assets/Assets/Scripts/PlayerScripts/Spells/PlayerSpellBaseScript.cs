@@ -5,14 +5,20 @@ public class PlayerSpellBaseScript : MonoBehaviour
 {
     protected float damage;
     public virtual float Damage => damage;
-    public virtual float KnowckbackForce => knowckbackForce;
+    public virtual float CriticalChance => criticalChance;
+    public virtual float CriticalMultiplier => criticalMultiplier;
+    public virtual float KnockbackForce => knockbackForce;
+    public virtual Color BaseColor => baseColor;
+
 
     private Rigidbody2D rb;
     protected float speed;
     protected int bounces;
-    protected float knowckbackForce;
+    protected float knockbackForce;
+    protected float criticalChance;
+    protected float criticalMultiplier;
     private int currentBounces = 0;
-    public GlobalVariables.Direction moveDirection;
+    protected Color baseColor;
     [SerializeField] private GameObject particles;
 
     protected virtual void Awake()
@@ -21,12 +27,15 @@ public class PlayerSpellBaseScript : MonoBehaviour
         speed = GlobalVariables.defaultSpellSpeed;
         damage = GlobalVariables.defaultSpellDamage;
         bounces = GlobalVariables.defaultSpellBounces;
-        knowckbackForce = GlobalVariables.defaultKnockbackforce;
+        knockbackForce = GlobalVariables.defaultKnockbackforce;
+        criticalChance = GlobalVariables.globalCriticalChance;
+        criticalMultiplier = GlobalVariables.globalCriticalMultiplier;
+
     }
 
     protected virtual void Start()
     {
-
+        baseColor = GlobalVariables.Instance.defaultColor;
     }
 
     protected virtual void Update()
@@ -46,7 +55,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
             {
                 Debug.LogWarning("Particles prefab not assigned!");
             }
-            if (bounces > 1 && currentBounces < bounces)
+            if (bounces > 0 && currentBounces < bounces)
                 Bounce(collision.gameObject);
             else
                 Destroy(gameObject);
@@ -66,10 +75,17 @@ public class PlayerSpellBaseScript : MonoBehaviour
     {
         if (rb == null)
         {
-            Debug.Log("Rb is null??");
+            Debug.LogWarning("Rb is null??");
             return;
         }
-        rb.linearVelocity = direction * speed;
+        Vector2 desiredVelocity = direction * speed;
+
+        if (desiredVelocity.magnitude < speed - 2)
+        {
+            desiredVelocity = direction.normalized * speed;
+        }
+
+        rb.linearVelocity = desiredVelocity;
     }
 
     private GameObject FindClosestEnemy(GameObject exclude)
@@ -103,6 +119,10 @@ public class PlayerSpellBaseScript : MonoBehaviour
             float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle);
             SetVelocity(newDirection);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

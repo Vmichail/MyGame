@@ -25,11 +25,12 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected virtual void Awake()
     {
-        EnemyManagerScript.Instance.RegisterEnemy(gameObject);
+
     }
 
     protected virtual void Start()
     {
+        EnemyManagerScript.Instance.RegisterEnemy(gameObject);
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
 
@@ -100,14 +101,15 @@ public abstract class EnemyBaseScript : MonoBehaviour
         else if (collision.gameObject.CompareTag("PlayerSpell"))
         {
             PlayerSpellBaseScript spellScript = collision.gameObject.GetComponent<PlayerSpellBaseScript>();
-            if (canApplyKnockback)
-                applyKnockback(collision, spellScript.KnowckbackForce - knockbackResistance);
             if (spellScript == null)
                 Debug.LogWarning("PlayerSpellBaseScript component not found on PlayerSpell object!");
             else
             {
-                DamageEnemy(spellScript.Damage);
+                DamageEnemy(spellScript.Damage, criticalChance: spellScript.CriticalChance, criticalMultiplier: spellScript.CriticalMultiplier, color: spellScript.BaseColor);
             }
+            if (canApplyKnockback)
+                applyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
+
         }
     }
 
@@ -120,14 +122,14 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
-    private void DamageEnemy(float spellDamage)
+    private void DamageEnemy(float spellDamage, float criticalChance, float criticalMultiplier, Color color)
     {
         bool isCritical = false;
 
-        if (Random.value <= GlobalVariables.criticalChance)
+        if (Random.value <= criticalChance)
         {
             isCritical = true;
-            spellDamage *= GlobalVariables.criticalMultiplier;
+            spellDamage *= criticalMultiplier;
         }
 
         CurrentHealth -= spellDamage;
@@ -144,7 +146,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
 
         DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
-        dt.SetDamage(spellDamage, isCritical);
+        dt.SetDamage(spellDamage, isCritical, color);
 
     }
 
