@@ -11,7 +11,7 @@ public class PlayerAnimatorScript : MonoBehaviour
 
     public void CallCastFireball()
     {
-        playerScript.CastFireball();
+        playerScript.CastFirstSpell();
     }
 
 

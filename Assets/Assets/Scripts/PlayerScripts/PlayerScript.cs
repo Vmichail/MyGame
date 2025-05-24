@@ -7,13 +7,17 @@ public class PlayerScript : MonoBehaviour
     private Animator animator;
 
     [SerializeField] private PlayerRangeDetector rangeDetector;
-    [SerializeField] private GameObject fireball;
-    [SerializeField] private GameObject darkball;
-    private bool lookingRight = true;
-    private GlobalVariables.Direction direction = GlobalVariables.Direction.Left;
+    [SerializeField] private GameObject firstSpell;
+    [SerializeField] private GameObject secondSpell;
+    [SerializeField] private GameObject thirdSpell;
+    [SerializeField] private GameObject forthSpell;
     GameObject closestEnemy;
     GameObject secondClosestEnemy;
+    GameObject thirdClosestEnemy;
+    GameObject forthClosestEnemy;
     Transform spriteTransform;
+    public float originalY;
+
 
 
     private void Start()
@@ -24,6 +28,7 @@ public class PlayerScript : MonoBehaviour
             spriteTransform = spriteRenderer.transform;
         else
             Debug.LogWarning("No Sprite was found!");
+        originalY = spriteTransform.position.y;
     }
 
     void Update()
@@ -32,6 +37,8 @@ public class PlayerScript : MonoBehaviour
         {
             closestEnemy = rangeDetector.ClosestEnemy;
             secondClosestEnemy = rangeDetector.SecondClosestEnemy;
+            thirdClosestEnemy = rangeDetector.ThirdClosestEnemy;
+            forthClosestEnemy = rangeDetector.FourthClosestEnemy;
             animator.ResetTrigger("Idle");
             animator.SetTrigger("Attack");
 
@@ -45,54 +52,122 @@ public class PlayerScript : MonoBehaviour
 
     public void RotatePlayer()
     {
-        /*Debug.Log("Trying to rotate player\nclosestEnemy.transform.position:" + closestEnemy.transform.position);*/
+
         if (closestEnemy.transform.position.x < 0)
-            spriteTransform.rotation = new Quaternion(0, 180, 0, 0);
+        {
+            spriteTransform.SetPositionAndRotation(
+           new Vector3(-0.37f, originalY, 0),
+           Quaternion.Euler(0, 180, 0));
+        }
         else
         {
-            spriteTransform.rotation = new Quaternion(0, 0, 0, 0);
+            spriteTransform.SetPositionAndRotation(
+            new Vector3(0, originalY, 0),
+            Quaternion.Euler(0, 0, 0));
         }
+
     }
 
-    public void CastFireball()
+    public void CastFirstSpell()
     {
         RotatePlayer();
         if (closestEnemy == null)
             return;
 
-        GameObject newFireball = Instantiate(fireball, transform.position, Quaternion.identity);
-        if (GlobalVariables.DarkballEnabled)
-            CastDarkball();
 
-        Vector2 direction = (closestEnemy.transform.position - transform.position).normalized;
+        if (GlobalVariables.Instance.SecondSpellEnabled)
+            CastSecondSpell();
+        if (GlobalVariables.Instance.ThirdSpellEnabled)
+            CastThirdSpell();
+        if (GlobalVariables.Instance.ForthSpellEnabled)
+            CastForthSpell();
+        CastSpell(closestEnemy.transform.position, firstSpell);
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        newFireball.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        if (newFireball.TryGetComponent<Rigidbody2D>(out var rb))
-        {
-            rb.linearVelocity = direction * GlobalVariables.level1FireballSpeed;
-        }
     }
 
-    public void CastDarkball()
+
+
+    public void CastSecondSpell()
     {
-        if (secondClosestEnemy == null)
+        Vector3 enemyPosition;
+        if (secondClosestEnemy != null)
         {
-            Debug.Log("Second Enemy is null?");
+            enemyPosition = secondClosestEnemy.transform.position;
+        }
+        else if (closestEnemy != null)
+        {
+            enemyPosition = closestEnemy.transform.position;
+        }
+        else
+        {
             return;
         }
 
-        GameObject newDarkball = Instantiate(darkball, transform.position, Quaternion.identity);
-
-        Vector2 direction = (secondClosestEnemy.transform.position - transform.position).normalized;
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        newDarkball.transform.rotation = Quaternion.Euler(0, 0, angle);
-        PlayerSpellBaseScript playerSpellBaseScript = newDarkball.GetComponent<PlayerSpellBaseScript>();
-        if (playerSpellBaseScript)
-            playerSpellBaseScript.SetVelocity(direction);
+        CastSpell(enemyPosition, secondSpell);
 
     }
 
+    public void CastThirdSpell()
+    {
+        Vector3 enemyPosition;
+        if (thirdClosestEnemy != null)
+        {
+            enemyPosition = secondClosestEnemy.transform.position;
+        }
+        else if (secondClosestEnemy != null)
+        {
+            enemyPosition = secondClosestEnemy.transform.position;
+        }
+        else if (closestEnemy != null)
+        {
+            enemyPosition = closestEnemy.transform.position;
+        }
+        else
+        {
+            return;
+        }
+
+        CastSpell(enemyPosition, thirdSpell);
+
+    }
+
+    public void CastForthSpell()
+    {
+        Vector3 enemyPosition;
+        if (forthClosestEnemy != null)
+        {
+            enemyPosition = forthClosestEnemy.transform.position;
+        }
+        else if (closestEnemy != null)
+        {
+            enemyPosition = closestEnemy.transform.position;
+        }
+        else if (secondClosestEnemy != null)
+        {
+            enemyPosition = secondClosestEnemy.transform.position;
+        }
+        else if (thirdClosestEnemy != null)
+        {
+            enemyPosition = thirdClosestEnemy.transform.position;
+        }
+        else
+        {
+            return;
+        }
+
+        CastSpell(enemyPosition, forthSpell);
+
+    }
+
+
+    private void CastSpell(Vector3 enemyPosition, GameObject spell)
+    {
+        GameObject newSpell = Instantiate(spell, transform.position, Quaternion.identity);
+        Vector2 direction = (enemyPosition - transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        newSpell.transform.rotation = Quaternion.Euler(0, 0, angle);
+        PlayerSpellBaseScript playerSpellBaseScript = newSpell.GetComponent<PlayerSpellBaseScript>();
+        if (playerSpellBaseScript)
+            playerSpellBaseScript.SetVelocity(direction);
+    }
 }
