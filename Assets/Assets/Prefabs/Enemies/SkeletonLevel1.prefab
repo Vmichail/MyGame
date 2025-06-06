@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6904613285172328969}
   - component: {fileID: 8780418402257184642}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: SkeletonLevel1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,8 @@ MonoBehaviour:
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   damageText: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
   canApplyKnockback: 1
-  directionEnum: 2
+  rarity: 0
+  hasAttackAnimation: 0
 --- !u!61 &6904613285172328969
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -110,7 +111,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.4
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0

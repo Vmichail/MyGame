@@ -2,17 +2,12 @@ using UnityEngine;
 
 public class BladeScript : PlayerSpellBaseScript
 {
-
-    protected override void Awake()
-    {
-        base.Awake();
-        speed = GlobalVariables.Instance.bladeSpeed;
-        damage = GlobalVariables.Instance.bladeDamage;
-        bounces = GlobalVariables.Instance.bladeBounces;
-        knockbackForce = GlobalVariables.Instance.bladeKnockbackForce;
-        criticalChance = GlobalVariables.Instance.bladeCriticalChance + GlobalVariables.globalCriticalChance;
-        criticalMultiplier = GlobalVariables.Instance.bladeCriticalMultiplier + GlobalVariables.globalCriticalMultiplier;
-        baseColor = GlobalVariables.Instance.bladeDefaultColor;
-    }
+    public override float Speed => GlobalVariables.Instance.bladeSpeed;
+    public override float Damage => GlobalVariables.Instance.bladeDamage;
+    public override float Bounces => GlobalVariables.Instance.bladeBounces;
+    public override float KnockbackForce => GlobalVariables.Instance.bladeKnockbackForce;
+    public override float CriticalChance => GlobalVariables.Instance.bladeCriticalChance;
+    public override float CriticalMultiplier => GlobalVariables.Instance.bladeCriticalMultiplier;
+    public override Color BaseColor => GlobalVariables.Instance.bladeDefaultColor;
 
 }

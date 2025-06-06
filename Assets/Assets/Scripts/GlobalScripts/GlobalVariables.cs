@@ -16,39 +16,56 @@ public class GlobalVariables : MonoBehaviour
         DontDestroyOnLoad(gameObject); // Optional: persist across scenes
     }
 
-
+    //GreenMultiplier
+    public float greenHealthMultiplier = 3f;
+    public float greenAttackMultiplier = 2f;
+    public float greenScaleMultiplier = 1.2f;
+    public float greenKnockbackMultiplier = 1.2f;
     //Player Stats
-    public static float globalCriticalChance = 0.1f;
-    public static float globalCriticalMultiplier = 1f;
-    public static float defaultEnemySpeed = 1.5f;
-    public static float defaultKnockbackResistance = 10f;
-    public static float defaultEnemyHealth = 9f;
-    public static float defaultSpellDamage = 4f;
-    public static float defaultSpellSpeed = 4f;
-    public static int defaultSpellBounces = 0;
-    public static float defaultKnockbackforce = 10f;
+    public float globalCriticalChance = 0.1f;
+    public float globalCriticalMultiplier = 1f;
+    public float playerMaxHealth = 100;
+    public float playerCurrentHealth = 100;
+    public float playerAttackSpeed = 1;
+    //Default Values
+    public float defaultEnemySpeed = 1.5f;
+    public float defaultKnockbackResistance = 10f;
+    public float defaultEnemyHealth = 9f;
+    public float defaultSpellDamage = 4f;
+    public float defaultSpellSpeed = 4f;
+    public int defaultSpellBounces = 0;
+    public float defaultKnockbackforce = 10f;
     public Color defaultColor = Color.yellow;
     //Level1Skeleton
-    public static float level1SkeletonSpeed = 3f;
-    public static float level1SkeletonHealth = 250f;
-    public static float level1SkeletonKnockbackResistance = 5f;
-    public Color level1SkeletonDefaultColor = Color.white;
+    public float skeletonSpeed = 3f;
+    public float skeletonHealth = 250f;
+    public float skeletonKnockbackResistance = 5f;
+    public float skeletonDamage = 1f;
+    public float skeletonAttackCooldown = 2f;
+    public Color skeletonDefaultColor = Color.white;
+    //Level1Tortch
+    public float goblinTorchSpeed = 3f;
+    public float goblinTorchHealth = 250f;
+    public float goblinTorchKnockbackResistance = 5f;
+    public float goblinDamage = 2f;
+    public float goblinAttackCooldown = 2f;
+    public Color goblinTorchDefaultColor = Color.white;
     //Level1Fireball
-    public static float level1FireballSpeed = 5f;
-    public static float level1FireballDamage = 5f;
-    public static int level1FireballBounces = 1;
-    public static float level1FireballKnockbackForce = 15f;
-    public static float level1FireballCriticalChance = 0.5f;
-    public static float level1FireballCriticalMultiplier = 1f;
-    public Color level1FireballDefaultColor = new(255, 255, 0);
+    public float fireballSpeed = 5f;
+    public float fireballDamage = 5f;
+    public int fireballBounces = 1;
+    public float fireballKnockbackForce = 15f;
+    public float fireballCriticalChance = 0.5f;
+    public float fireballCriticalMultiplier = 1f;
+    public Color fireballDefaultColor = new(255, 255, 0);
     //Level1Darkball
-    public static float level1DarkballSpeed = 8f;
-    public static float level1DarkballDamage = 4f;
-    public static int level1DarkballBounces = 2;
-    public static float level1DarkballKnockbackForce = 10f;
-    public static float level1DarkballCriticalChance = 0.7f;
-    public static float level1DarkballCriticalMultiplier = 1f;
-    public Color level1DarkBallDefaultColor = Color.cyan;
+    public float darkballSpeed = 8f;
+    public float darkballDamage = 4f;
+    public int darkballBounces = 2;
+    public float darkballKnockbackForce = 10f;
+    public float darkballCriticalChance = 0.7f;
+    public float darkballCriticalMultiplier = 1f;
+    public Color darkballDefaultColor = Color.cyan;
     //Blade
     public float bladeSpeed = 12f;
     public float bladeDamage = 4f;
@@ -69,6 +86,9 @@ public class GlobalVariables : MonoBehaviour
     public bool SecondSpellEnabled = true;
     public bool ThirdSpellEnabled = true;
     public bool ForthSpellEnabled = true;
+    //EnemySpawner
+    public float enemyScore = 0;
+    public float spawnTime = 2f;
 
     public enum Direction
     {
@@ -76,5 +96,13 @@ public class GlobalVariables : MonoBehaviour
         Down,
         Left,
         Right
+    }
+
+    public enum EnemyRarity
+    {
+        None,
+        Green,
+        Purple,
+        Orange,
     }
 }

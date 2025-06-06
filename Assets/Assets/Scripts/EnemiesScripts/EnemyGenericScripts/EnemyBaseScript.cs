@@ -1,27 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.SocialPlatforms.Impl;
 
 public abstract class EnemyBaseScript : MonoBehaviour
 {
     [SerializeField] GameObject particles;
     [SerializeField] GameObject damageText;
     [SerializeField] private bool canApplyKnockback;
-    [SerializeField] GlobalVariables.Direction directionEnum;
+    [SerializeField] protected GlobalVariables.EnemyRarity rarity = GlobalVariables.EnemyRarity.None;
+    [SerializeField] protected bool hasAttackAnimation = false;
 
     protected Transform player;
     private bool hasReachedPlayer;
     private Animator animator;
-    protected float maxHealth = GlobalVariables.defaultEnemyHealth;
-    protected float currentHealth;
-    protected float knockbackResistance = GlobalVariables.defaultKnockbackResistance;
+
+    protected ObjectPool<GameObject> _pool;
+
+    public void SetPool(ObjectPool<GameObject> pool)
+    {
+        _pool = pool;
+    }
 
     private Rigidbody2D rb;
     private bool knockBackEffect;
-    private Transform spriteTransform;
+    private protected Transform spriteTransform;
+    private Coroutine damageCoroutine;
+    protected float maxHealth;
+    protected float knockbackResistance;
+    protected float speed;
+    protected float currentHealth;
+    protected float damage;
 
     public virtual float MaxHealth { get; set; }
     public virtual float CurrentHealth { get; set; }
+    public virtual float Damage { get => GlobalVariables.Instance.skeletonDamage; }
+    public virtual float AttackCooldown { get => GlobalVariables.Instance.skeletonAttackCooldown; }
+
+    public virtual void RestoreHealth()
+    {
+        CurrentHealth = MaxHealth;
+    }
+
+    private enum AttackDirection
+    {
+        Up,
+        Down,
+        Middle
+    }
 
     protected virtual void Awake()
     {
@@ -30,6 +57,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected virtual void Start()
     {
+        InstantiateVariables();
         EnemyManagerScript.Instance.RegisterEnemy(gameObject);
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
@@ -48,27 +76,57 @@ public abstract class EnemyBaseScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void InstantiateVariables()
+    {
+        maxHealth = GlobalVariables.Instance.defaultEnemyHealth;
+        knockbackResistance = GlobalVariables.Instance.defaultKnockbackResistance;
+        speed = GlobalVariables.Instance.defaultEnemySpeed;
+    }
+
     protected virtual void Update()
     {
         if (currentHealth <= 0)
         {
             Instantiate(particles, transform.position, transform.rotation);
             EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
-            Destroy(gameObject);
+            _pool.Release(gameObject);
         }
     }
 
     protected virtual void FixedUpdate()
     {
-        if (player != null)
+        if (player == null)
+            return;
+
+        MoveTowardPlayer(speed);
+
+        if (hasReachedPlayer && damageCoroutine == null && hasAttackAnimation == false)
         {
-            MoveTowardPlayer(GlobalVariables.defaultEnemySpeed);
+            damageCoroutine = StartCoroutine(CheckBeforeDamage());
+        }
+        else if (!hasReachedPlayer && damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
         }
     }
 
-    protected virtual void MoveTowardPlayer()
+    IEnumerator CheckBeforeDamage()
     {
-        MoveTowardPlayer(GlobalVariables.defaultEnemySpeed);
+        yield return new WaitForSeconds(AttackCooldown);
+
+        if (hasReachedPlayer)
+        {
+            DoDamage();
+        }
+
+        damageCoroutine = null;
+    }
+
+    public void DoDamage()
+    {
+        GlobalVariables.Instance.playerCurrentHealth -= Damage;
+        /*Debug.Log($"EnemyTypeClass: {GetType()} did {Damage} to player! but Damage should be {GlobalVariables.Instance.goblinDamage}");*/
     }
 
     protected void MoveTowardPlayer(float speed)
@@ -82,13 +140,55 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
 
         Vector2 direction = (player.position - transform.position).normalized;
-        rb.linearVelocity = direction * speed;
+        rb.linearVelocity = direction * this.speed;
         if (direction.x < 0)
-            spriteTransform.rotation = new Quaternion(0, 180, 0, 0);
+            spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
         else
         {
-            spriteTransform.rotation = new Quaternion(0, 0, 0, 0);
+            spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
         }
+        if (hasAttackAnimation)
+        {
+            GetAttackDirection(direction);
+        }
+    }
+
+    private void GetAttackDirection(Vector2 dir)
+    {
+        if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+        {
+            if (dir.y > 0)
+                SetAttackDirection(AttackDirection.Up);
+            else
+                SetAttackDirection(AttackDirection.Down);
+        }
+        else
+        {
+            SetAttackDirection(AttackDirection.Middle);
+        }
+    }
+
+    private void SetAttackDirection(AttackDirection direction)
+    {
+        if (AttackDirection.Up.Equals(direction))
+        {
+            animator.SetBool("Attack", false);
+            animator.SetBool("AttackUp", true);
+            animator.SetBool("AttackDown", false);
+        }
+        else if (AttackDirection.Down.Equals(direction))
+        {
+            animator.SetBool("Attack", false);
+            animator.SetBool("AttackUp", false);
+            animator.SetBool("AttackDown", true);
+        }
+        else
+        {
+            animator.SetBool("Attack", true);
+            animator.SetBool("AttackUp", false);
+            animator.SetBool("AttackDown", false);
+        }
+
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -108,7 +208,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 DamageEnemy(spellScript.Damage, criticalChance: spellScript.CriticalChance, criticalMultiplier: spellScript.CriticalMultiplier, color: spellScript.BaseColor);
             }
             if (canApplyKnockback)
-                applyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
+                ApplyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
 
         }
     }
@@ -157,7 +257,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         knockBackEffect = false;
     }
 
-    private void applyKnockback(Collider2D collision, float knockbackForce)
+    private void ApplyKnockback(Collider2D collision, float knockbackForce)
     {
         if (knockbackForce < 0)
             return;
