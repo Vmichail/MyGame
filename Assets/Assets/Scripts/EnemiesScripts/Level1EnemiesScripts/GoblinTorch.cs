@@ -1,23 +1,21 @@
 using UnityEngine;
 
-public class Level1Skeleton : EnemyBaseScript
+public class GoblinTorchScript : EnemyBaseScript
 {
 
     protected override void Start()
     {
         base.Start();
+        maxHealth = GlobalVariables.Instance.goblinTorchHealth;
+        knockbackResistance = GlobalVariables.Instance.goblinTorchKnockbackResistance;
         if (GlobalVariables.EnemyRarity.Green.Equals(rarity))
         {
-            maxHealth = GlobalVariables.Instance.skeletonHealth * GlobalVariables.Instance.greenHealthMultiplier;
-            knockbackResistance = GlobalVariables.Instance.skeletonKnockbackResistance * GlobalVariables.Instance.greenKnockbackMultiplier;
+            maxHealth *= GlobalVariables.Instance.greenHealthMultiplier;
+            knockbackResistance *= GlobalVariables.Instance.greenKnockbackMultiplier;
             spriteTransform.localScale *= GlobalVariables.Instance.greenScaleMultiplier;
         }
-        else
-        {
-            maxHealth = GlobalVariables.Instance.skeletonHealth;
-            knockbackResistance = GlobalVariables.Instance.skeletonKnockbackResistance;
-        }
         currentHealth = maxHealth;
+        hasAttackAnimation = true;
     }
 
     public override float MaxHealth
@@ -34,12 +32,11 @@ public class Level1Skeleton : EnemyBaseScript
 
     public override float Damage
     {
-        get => GlobalVariables.Instance.skeletonDamage;
+        get => GlobalVariables.Instance.goblinDamage;
     }
 
     public override float AttackCooldown
     {
-        get => GlobalVariables.Instance.skeletonAttackCooldown;
+        get => GlobalVariables.Instance.goblinAttackCooldown;
     }
-
 }

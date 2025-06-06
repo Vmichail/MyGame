@@ -47,12 +47,18 @@ public class PlayerScript : MonoBehaviour
         {
             animator.SetTrigger("Idle");
         }
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0 = Base Layer
+        if (stateInfo.IsName("Attack"))
+            animator.speed = 1f * GlobalVariables.Instance.playerAttackSpeed;
+        else
+            animator.speed = 1f;
 
     }
 
     public void RotatePlayer()
     {
-
+        if (closestEnemy == null)
+            return;
         if (closestEnemy.transform.position.x < 0)
         {
             spriteTransform.SetPositionAndRotation(
@@ -168,6 +174,6 @@ public class PlayerScript : MonoBehaviour
         newSpell.transform.rotation = Quaternion.Euler(0, 0, angle);
         PlayerSpellBaseScript playerSpellBaseScript = newSpell.GetComponent<PlayerSpellBaseScript>();
         if (playerSpellBaseScript)
-            playerSpellBaseScript.SetVelocity(direction);
+            playerSpellBaseScript.SetVelocity(direction, false);
     }
 }

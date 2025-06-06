@@ -3,20 +3,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerSpellBaseScript : MonoBehaviour
 {
-    protected float damage;
-    public virtual float Damage => damage;
-    public virtual float CriticalChance => criticalChance;
-    public virtual float CriticalMultiplier => criticalMultiplier;
-    public virtual float KnockbackForce => knockbackForce;
-    public virtual Color BaseColor => baseColor;
+
+    public virtual float Damage => GlobalVariables.Instance.defaultSpellDamage;
+    public virtual float Speed => GlobalVariables.Instance.defaultSpellSpeed;
+    public virtual float Bounces => GlobalVariables.Instance.defaultSpellBounces;
+    public virtual float KnockbackForce => GlobalVariables.Instance.defaultKnockbackforce;
+    public virtual float CriticalChance => GlobalVariables.Instance.globalCriticalChance;
+    public virtual float CriticalMultiplier => GlobalVariables.Instance.globalCriticalMultiplier;
+    public virtual Color BaseColor => GlobalVariables.Instance.defaultColor;
 
 
     private Rigidbody2D rb;
-    protected float speed;
-    protected int bounces;
-    protected float knockbackForce;
-    protected float criticalChance;
-    protected float criticalMultiplier;
     private int currentBounces = 0;
     protected Color baseColor;
     [SerializeField] private GameObject particles;
@@ -24,18 +21,10 @@ public class PlayerSpellBaseScript : MonoBehaviour
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        speed = GlobalVariables.defaultSpellSpeed;
-        damage = GlobalVariables.defaultSpellDamage;
-        bounces = GlobalVariables.defaultSpellBounces;
-        knockbackForce = GlobalVariables.defaultKnockbackforce;
-        criticalChance = GlobalVariables.globalCriticalChance;
-        criticalMultiplier = GlobalVariables.globalCriticalMultiplier;
-
     }
 
     protected virtual void Start()
     {
-        baseColor = GlobalVariables.Instance.defaultColor;
     }
 
     protected virtual void Update()
@@ -55,7 +44,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
             {
                 Debug.LogWarning("Particles prefab not assigned!");
             }
-            if (bounces > 0 && currentBounces < bounces)
+            if (Bounces > 0 && currentBounces < Bounces)
                 Bounce(collision.gameObject);
             else
                 Destroy(gameObject);
@@ -71,21 +60,22 @@ public class PlayerSpellBaseScript : MonoBehaviour
         }
     }
 
-    public void SetVelocity(Vector2 direction)
+    public void SetVelocity(Vector2 direction, bool bounce)
     {
         if (rb == null)
         {
             Debug.LogWarning("Rb is null??");
             return;
         }
-        Vector2 desiredVelocity = direction * speed;
+        Vector2 desiredVelocity = direction * Speed;
 
-        if (desiredVelocity.magnitude < speed - 2)
+        if (desiredVelocity.magnitude < Speed - 2)
         {
-            desiredVelocity = direction.normalized * speed;
+            desiredVelocity = direction.normalized * Speed;
         }
 
         rb.linearVelocity = desiredVelocity;
+        /*Debug.Log("linearVelocity:" + desiredVelocity + "\tBounce:" + bounce + "\trb.linearVelocity:" + rb.linearVelocity + "\tSpeed:" + Speed);*/
     }
 
     private GameObject FindClosestEnemy(GameObject exclude)
@@ -118,7 +108,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
             Vector2 newDirection = (nextEnemy.transform.position - transform.position).normalized;
             float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle);
-            SetVelocity(newDirection);
+            SetVelocity(newDirection, true);
         }
         else
         {

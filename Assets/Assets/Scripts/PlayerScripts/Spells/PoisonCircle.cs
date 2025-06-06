@@ -2,17 +2,12 @@ using UnityEngine;
 
 public class PoisonCircleScript : PlayerSpellBaseScript
 {
-
-    protected override void Start()
-    {
-        base.Start();
-        speed = GlobalVariables.Instance.poisonCircleSpeed;
-        damage = GlobalVariables.Instance.poisonCircleDamage;
-        bounces = GlobalVariables.Instance.poisonCircleBounces;
-        knockbackForce = GlobalVariables.Instance.poisonCircleKnockbackForce;
-        criticalChance = GlobalVariables.Instance.poisonCircleCriticalChance + GlobalVariables.globalCriticalChance;
-        criticalMultiplier = GlobalVariables.Instance.poisonCircleCriticalMultiplier + GlobalVariables.globalCriticalMultiplier;
-        baseColor = GlobalVariables.Instance.poisonCircleDefaultColor;
-    }
+    public override float Speed => GlobalVariables.Instance.poisonCircleSpeed;
+    public override float Damage => GlobalVariables.Instance.poisonCircleDamage;
+    public override float Bounces => GlobalVariables.Instance.poisonCircleBounces;
+    public override float KnockbackForce => GlobalVariables.Instance.poisonCircleKnockbackForce;
+    public override float CriticalChance => GlobalVariables.Instance.poisonCircleCriticalChance;
+    public override float CriticalMultiplier => GlobalVariables.Instance.poisonCircleCriticalMultiplier;
+    public override Color BaseColor => GlobalVariables.Instance.poisonCircleDefaultColor;
 
 }
