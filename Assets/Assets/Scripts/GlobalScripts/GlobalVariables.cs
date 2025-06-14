@@ -21,6 +21,10 @@ public class GlobalVariables : MonoBehaviour
     public float greenAttackMultiplier = 2f;
     public float greenScaleMultiplier = 1.2f;
     public float greenKnockbackMultiplier = 1.2f;
+    //Player Collectables
+    public int coinsCollected = 100;
+    public int permanentCoinsCollected = 100;
+    public int diamondsCollected = 100;
     //Player Stats
     public float globalCriticalChance = 0.1f;
     public float globalCriticalMultiplier = 1f;
