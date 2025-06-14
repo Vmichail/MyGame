@@ -18,6 +18,5 @@ public class PlayerAnimatorScript : MonoBehaviour
     public void CallRotatePlayer()
     {
         return;
-        playerScript.RotatePlayer();
     }
 }
