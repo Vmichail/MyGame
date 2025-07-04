@@ -14,4 +14,8 @@ public class EnemyAnimatorScript : MonoBehaviour
         enemyBaseScript.DoDamage();
     }
 
+    public void ProjectileInstantiation()
+    {
+        enemyBaseScript.RangeAttackProjectile();
+    }
 }

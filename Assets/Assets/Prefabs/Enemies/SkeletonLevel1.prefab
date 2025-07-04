@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5573341890515427910}
   - component: {fileID: 6904613285172328969}
   - component: {fileID: 8780418402257184642}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SkeletonLevel1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -49,10 +49,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
-  damageText: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
+  damageTextPopUp: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
+  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
   canApplyKnockback: 1
   rarity: 0
   hasAttackAnimation: 0
+  projectile: {fileID: 0}
+  projectilePosition: {fileID: 0}
+  projectileParent: {fileID: 0}
+  isDead: 0
+  hasReachedPlayer: 0
+  animator: {fileID: 0}
+  knockBackEffect: 0
 --- !u!61 &6904613285172328969
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -138,7 +146,7 @@ GameObject:
   - component: {fileID: 7574699134787346723}
   - component: {fileID: 5438151929545386926}
   - component: {fileID: 7256280829388089518}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HealthText
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -326,7 +334,7 @@ GameObject:
   - component: {fileID: 5885275568314056776}
   - component: {fileID: 8929437180971912582}
   - component: {fileID: 2793687261277554937}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
