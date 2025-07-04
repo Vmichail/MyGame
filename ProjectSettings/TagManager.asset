@@ -7,16 +7,19 @@ TagManager:
   - Enemy
   - PlayerSpell
   - Map
+  - iconImage
+  - Collectable
+  - Range
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Collectables
+  - Range
+  - Player
   - 
   - 
   - 

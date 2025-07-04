@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UICollactablesTextUpdate : MonoBehaviour
 {
-    private TextMeshPro coinsCollectedText;
-    private TextMeshPro permanentCoinsCollectedText;
-    private TextMeshPro diamondsCollectedText;
+    [SerializeField] private TextMeshProUGUI coinsCollectedText;
+    [SerializeField] private TextMeshProUGUI permanentCoinsCollectedText;
+    [SerializeField] private TextMeshProUGUI diamondsCollectedText;
 
 
 
