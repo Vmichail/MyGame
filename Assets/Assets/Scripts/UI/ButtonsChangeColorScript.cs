@@ -1,54 +1,106 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting.ReorderableList;
 
 public class ButtonsChangeColorScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 
     private Image[] targetImages;
-    public Color normalColor;
-    public Color highlightColor = new Color(1f, 1f, 1f, 0.1f); // Slightly lighter
+    private Color[] normalColor;
+    private bool clicked;
+    public Color highlightColor = new Color(0.1f, 0.1f, 0.1f, 1f);
+    public bool isWhite;
+    public bool clickColorNotStays;
+    public Color highlightColorDarker = new Color(0.1f, 0.1f, 0.1f, 0f);
+    public void ResetColors()
+    {
+        clicked = false;
+        for (int i = 0; i < targetImages.Length; i++)
+        {
+            if (targetImages[i] != null)
+                targetImages[i].color = normalColor[i];
+        }
+    }
+
+    public void SetClicked(bool value)
+    {
+        clicked = value;
+    }
+
+    public void ForceHighlight()
+    {
+        for (int i = 0; i < targetImages.Length; i++)
+        {
+            if (targetImages[i] != null)
+            {
+                targetImages[i].color = normalColor[i] + highlightColor;
+            }
+        }
+    }
 
     private void Awake()
     {
         int childCount = transform.childCount;
         targetImages = new Image[childCount];
+        normalColor = new Color[childCount];
 
         for (int i = 0; i < childCount; i++)
         {
             Transform child = transform.GetChild(i);
-            targetImages[i] = child.GetComponent<Image>();
+            if (child.GetComponent<Image>() != null)
+            {
+                targetImages[i] = child.GetComponent<Image>();
+                normalColor[i] = targetImages[i].color;
+            }
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SetColor(highlightColor, true);
+        SetColor(true);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        SetColor(normalColor, false);
+        if (clickColorNotStays)
+        {
+            clicked = false;
+        }
+        else
+        {
+            clicked = true;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        SetColor(normalColor, false);
+        if (clicked)
+            return;
+        SetColor(false);
     }
 
-    private void SetColor(Color color, bool highligh)
+    private void SetColor(bool highligh)
     {
+        int i = 0;
         foreach (var img in targetImages)
         {
             if (img != null)
                 if (img.gameObject.CompareTag("iconImage") && !highligh)
                 {
-                    img.color = new Color(255, 255, 255, 255);
+                    img.color = Color.white;
+                }
+                else if (highligh)
+                {
+                    if (isWhite)
+                        img.color -= highlightColorDarker;
+                    img.color += highlightColor;
                 }
                 else
                 {
-                    img.color = color;
+                    img.color = normalColor[i];
                 }
+            i++;
         }
     }
 }

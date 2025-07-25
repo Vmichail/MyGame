@@ -13,7 +13,7 @@ public class PlayerHealthbarScipt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthText.text = GlobalVariables.Instance.playerCurrentHealth + "/" + GlobalVariables.Instance.playerMaxHealth;
+        healthText.text = (int)GlobalVariables.Instance.playerCurrentHealth + "/" + (int)GlobalVariables.Instance.playerMaxHealth;
         float normalized = GlobalVariables.Instance.playerCurrentHealth / GlobalVariables.Instance.playerMaxHealth;
         healthSlider.maxValue = GlobalVariables.Instance.playerMaxHealth;
         healthSlider.value = GlobalVariables.Instance.playerCurrentHealth;
