@@ -25,10 +25,10 @@ public class DamageTextScript : MonoBehaviour
     public void SetDamage(float damage, bool isCritical, Color color)
     {
         damageText.color = color;
-        damageText.text = ((int)damage).ToString();
+        damageText.text = Mathf.RoundToInt(damage).ToString();
         if (isCritical)
         {
-            damageText.text = ((int)damage).ToString() + "!";
+            damageText.text = Mathf.RoundToInt(damage).ToString() + "!";
         }
     }
 
