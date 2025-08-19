@@ -11,7 +11,7 @@ public class UICollactablesTextUpdate : MonoBehaviour
 
     void Update()
     {
-        coinsCollectedText.text = FormatValues(GlobalVariables.Instance.coinsCollected);
+        coinsCollectedText.text = FormatValues((int)GlobalVariables.Instance.coinsCollected);
         permanentCoinsCollectedText.text = GlobalVariables.Instance.permanentCoinsCollected.ToString();
         diamondsCollectedText.text = GlobalVariables.Instance.diamondsCollected.ToString();
     }

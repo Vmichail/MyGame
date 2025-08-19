@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d646f146f04f42b4b918d6ee35b7ad8b, type: 3}
+  m_Name: Filler1
+  m_EditorClassIdentifier: 
+  title: Filler1
+  icon: {fileID: -5507386069841060875, guid: 2f6d4a23ae1dbd54988c2a794d523d19, type: 3}
+  description: Meteor
+  damage: 100
+  manaCost: 20
+  cooldown: 10
+  relearn: 1
+  canSelftCast: 1
+  spellCode: 1

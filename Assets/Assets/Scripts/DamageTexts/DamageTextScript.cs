@@ -24,6 +24,8 @@ public class DamageTextScript : MonoBehaviour
 
     public void SetDamage(float damage, bool isCritical, Color color)
     {
+        if (color == null)
+            color = Color.white;
         damageText.color = color;
         damageText.text = Mathf.RoundToInt(damage).ToString();
         if (isCritical)

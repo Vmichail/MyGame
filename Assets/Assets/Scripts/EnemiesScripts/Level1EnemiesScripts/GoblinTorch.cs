@@ -17,7 +17,10 @@ public class GoblinTorchScript : EnemyBaseScript
         currentHealth = maxHealth;
         hasAttackAnimation = true;
     }
-
+    public override GlobalVariables.EnemyTypes EnemyType
+    {
+        get => GlobalVariables.EnemyTypes.GoblinTourch;
+    }
     public override float Speed
     {
         get => GlobalVariables.Instance.goblinTNTSpeed;
@@ -52,5 +55,10 @@ public class GoblinTorchScript : EnemyBaseScript
     public override GlobalVariables.CoinDropEnum CoinDropEnum
     {
         get => GlobalVariables.Instance.goblinCoinEnum;
+    }
+
+    public override float Exp
+    {
+        get => GlobalVariables.Instance.goblinTorchExp;
     }
 }

@@ -3,89 +3,116 @@ using System.Collections;
 using UnityEngine.Pool;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using System;
+using Random = UnityEngine.Random;
 
 public class EnemySpawningScript : MonoBehaviour
 {
-    [SerializeField] private EnemyTypesScriptableObject[] enemyTypes;
-    [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] Transform parent;
+    /*
+     * 0 -> Skeleons
+     * 1 -> Vampire(Boss)
+     */
+    [SerializeField] private GameObject[] enemyPrefabs;
+    [SerializeField] private Transform parent;
+    [SerializeField] private int allowedLength;
+    [SerializeField] private GameObject spawnIndicatorPrefab;
 
-    private Dictionary<GlobalVariables.EnemyTypes, ObjectPool<GameObject>> enemyPools;
+    private List<ObjectPool<GameObject>> enemyPools = new();
 
     void Start()
     {
-        enemyPools = new Dictionary<GlobalVariables.EnemyTypes, ObjectPool<GameObject>>();
-
-        foreach (var entry in enemyTypes)
+        foreach (var prefab in enemyPrefabs)
         {
-            var type = entry.type;
-            var prefab = entry.prefab;
-
-            enemyPools[type] = new ObjectPool<GameObject>(
-                () => CreateFunction(prefab, type),
-                mob => ActionOnGet(mob),
-                mob => ActionOnRelease(mob),
-                mob => ActionOnDestroy(mob),
+            var pool = new ObjectPool<GameObject>(
+                () => CreateEnemy(prefab),
+                mob => OnGet(mob),
+                mob => mob.SetActive(false),
+                mob => Destroy(mob),
                 false,
                 10,
-                50
+                100
             );
-        }
 
-        StartCoroutine(SpawnMobs());
+            enemyPools.Add(pool);
+        }
+        StartCoroutine(SpawnSpecificMobs(0));
+        /*StartCoroutine(SpawnRandomMobs());*/
     }
 
-    private GameObject CreateFunction(GameObject prefab, GlobalVariables.EnemyTypes type)
+    private void Update()
     {
-        GameObject mob = Instantiate(prefab);
-        mob.transform.SetParent(parent, false);
+        if (GlobalVariables.Instance.spawnedSkeletons > 50 && !GlobalVariables.Instance.level1BossActive)
+        {
+            GlobalVariables.Instance.level1BossActive = true;
+            Vector2 position = new Vector2(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
+            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[1], position));
+
+        }
+    }
+
+    private GameObject CreateEnemy(GameObject prefab)
+    {
+        GameObject mob = Instantiate(prefab, parent);
 
         if (mob.TryGetComponent<EnemyBaseScript>(out var enemyBase))
         {
-            enemyBase.SetPool(enemyPools[type]);
+            // Assign pool so the mob can return itself
+            enemyBase.SetPool(enemyPools[(int)enemyBase.EnemyType]);
         }
 
         return mob;
     }
 
-    private void ActionOnGet(GameObject mob)
+    private void OnGet(GameObject mob)
     {
         if (mob.TryGetComponent<EnemyBaseScript>(out var enemyBase))
         {
             enemyBase.RestoreHealth();
-            enemyBase.isDead = false;
-            enemyBase.knockBackEffect = false;
+            enemyBase.IsDead = false;
+            enemyBase.KnockbackEffect = false;
+            EnemyManagerScript.Instance.RegisterEnemy(mob, enemyBase.EnemyType);
         }
         mob.SetActive(true);
     }
 
-    private void ActionOnRelease(GameObject mob)
+    private IEnumerator SpawnRandomMobs()
     {
-        mob.SetActive(false);
-    }
-
-    private void ActionOnDestroy(GameObject mob)
-    {
-        Destroy(mob);
-    }
-
-    IEnumerator SpawnMobs()
-    {
-        while (true)
+        while (GlobalVariables.Instance.spawningMobsIsEnabled)
         {
-            yield return new WaitForSeconds(2f);
-
-            var entry = enemyTypes[Random.Range(0, enemyTypes.Length)];
-            var pool = enemyPools[entry.type];
-
-            GameObject mob = pool.Get();
-            Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
-
-            Vector2 spawnPositionAdjustment = Mathf.Abs(spawn.position.y) > Mathf.Abs(spawn.position.x)
-                ? new Vector2(Random.Range(-17f, 17f), 0)
-                : new Vector2(0, Random.Range(-9.5f, 9.5f));
-
-            mob.transform.position = (Vector2)spawn.position + spawnPositionAdjustment;
+            yield return new WaitForSeconds(GlobalVariables.Instance.mobsSpawningTime);
+            // Choose pool index
+            int index = Random.Range(0, allowedLength > 0 ? allowedLength : enemyPools.Count);
+            Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
+            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
         }
     }
+
+    private IEnumerator SpawnSpecificMobs(int index)
+    {
+        float spawningTime = GlobalVariables.Instance.spawnTime;
+        if (index == 0)
+        {
+            spawningTime = GlobalVariables.Instance.skeletonsSpawningTime;
+        }
+        while (GlobalVariables.Instance.spawningMobsIsEnabled)
+        {
+            yield return new WaitForSeconds(spawningTime);
+            Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
+            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
+        }
+    }
+
+    private IEnumerator SpawnIndicatorThenEnemy(ObjectPool<GameObject> pool, Vector2 position)
+    {
+        GameObject indicator = Instantiate(spawnIndicatorPrefab, position, Quaternion.identity, parent);
+        SpawnIndicator indicatorScript = indicator.GetComponent<SpawnIndicator>();
+
+        yield return new WaitUntil(() => indicatorScript.IsReadyToSpawn);
+
+        Destroy(indicator);
+
+        GameObject mob = pool.Get();
+        mob.transform.position = position;
+    }
+
 }

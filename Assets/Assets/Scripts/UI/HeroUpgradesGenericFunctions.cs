@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
@@ -9,6 +10,7 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
     [SerializeField] private GameObject gameMenuPanel;
     [SerializeField] private GameObject gameOverOptions;
     [SerializeField] private GameObject pauseOptions;
+    [SerializeField] private GameObject spellIcons;
     [Header("Buy Menus")]
     [SerializeField] private GameObject heroBuyMenu;
     [SerializeField] private GameObject heroAttackMaximized;
@@ -17,51 +19,24 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
     [SerializeField] private Color selectedColor;
     [SerializeField] private Color normalColor;
     private int currentTabIndex = 0;
-    [Header("Images")]
-    [SerializeField] private Image attackImage;
-    [SerializeField] private Image defenceImage;
-    [SerializeField] private Image utilityImage;
-    [SerializeField] private Image spellsImage;
-    [Header("Button Scripts")]
-    [SerializeField] private ButtonsChangeColorScript attackButtonScript;
-    [SerializeField] private ButtonsChangeColorScript defenceButtonScript;
-    [SerializeField] private ButtonsChangeColorScript utilityButtonScript;
-    [SerializeField] private ButtonsChangeColorScript spellsButtonScript;
+    [Header("Option Buttons")]
+    [SerializeField] private Button attackButton;
+    [SerializeField] private Button healthButton;
+    [SerializeField] private Button economyButton;
+    [SerializeField] private Button spellsButton;
+
 
     private void Start()
     {
-        Time.timeScale = 1.0f;
-        SetChoicesToBottom();
         SetGameMenuPanelOff();
     }
 
     private void Update()
     {
-        //HeroBuyMenu
-        if (GlobalVariables.Instance.playerIsAlive && !heroBuyMenu.activeSelf)
-        {
-            heroBuyMenu.SetActive(true);
-        }
-        else if (!GlobalVariables.Instance.playerIsAlive && heroBuyMenu.activeSelf)
-        {
-            heroBuyMenu.SetActive(false);
-        }
-
-        //PauseUnPause
-        if (Time.timeScale == 0f && !GlobalVariables.Instance.gameIsPaused)
-        {
-            GlobalVariables.Instance.gameIsPaused = true;
-        }
-        else if (Time.timeScale != 0f && GlobalVariables.Instance.gameIsPaused)
-        {
-            GlobalVariables.Instance.gameIsPaused = false;
-        }
-
-        //AliveOrDead
         if (GlobalVariables.Instance.playerCurrentHealth <= 0 && GlobalVariables.Instance.playerIsAlive)
         {
             GlobalVariables.Instance.playerIsAlive = false;
-            Time.timeScale = 0f;
+            GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.PlayerIsDead);
         }
         else if (GlobalVariables.Instance.playerCurrentHealth > 0 && !GlobalVariables.Instance.playerIsAlive)
         {
@@ -80,6 +55,12 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
             TogglePause();
         }
 
+        //TABShowsMenu
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            EnableDisableBuyMenu();
+        }
+
         //GameMenuPanel
         if (pauseOptions.activeSelf || gameOverOptions.activeSelf)
         {
@@ -92,11 +73,11 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
 
     }
 
-    public void SetChoicesToTop(float topOffset = 0f)
+    public void SetChoicesToLeft(float topOffset = 0f)
     {
-        buyMenuChoices.anchorMin = new Vector2(0.5f, 1f);
-        buyMenuChoices.anchorMax = new Vector2(0.5f, 1f);
-        buyMenuChoices.pivot = new Vector2(0.5f, 1f);
+        buyMenuChoices.anchorMin = new Vector2(0f, 1f);
+        buyMenuChoices.anchorMax = new Vector2(0f, 1f);
+        buyMenuChoices.pivot = new Vector2(0f, 1f);
         buyMenuChoices.anchoredPosition = new Vector2(0f, -topOffset);
     }
 
@@ -108,10 +89,7 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
         buyMenuChoices.anchorMax = new Vector2(0.5f, 0f);
         buyMenuChoices.pivot = new Vector2(0.5f, 0f);
         buyMenuChoices.anchoredPosition = new Vector2(0f, bottomOffset);
-        attackImage.color = normalColor;
-        defenceImage.color = normalColor;
-        utilityImage.color = normalColor;
-        spellsImage.color = normalColor;
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void ChangeTab(int tabIndex)
@@ -125,51 +103,44 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
         UpdateUI(tabIndex);
     }
 
-
+    private void EnableDisableBuyMenu()
+    {
+        if (heroBuyMenu.activeInHierarchy == false && !GlobalVariables.gameIsPaused)
+        {
+            GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.HeroBuyMenu);
+            heroBuyMenu.SetActive(true);
+            spellIcons.SetActive(false);
+        }
+        else
+        {
+            heroBuyMenu.SetActive(false);
+            spellIcons.SetActive(true);
+            GlobalVariables.UnPauseTime(GlobalVariables.PauseReasonEnum.HeroBuyMenu);
+        }
+    }
     private void UpdateUI(int index)
     {
-        attackButtonScript.ResetColors();
-        defenceButtonScript.ResetColors();
-        utilityButtonScript.ResetColors();
-        spellsButtonScript.ResetColors();
-
         if (index == 1)
         {
-
+            EventSystem.current.SetSelectedGameObject(attackButton.gameObject);
             heroAttackMaximized.SetActive(true);
             heroHealthMaximized.SetActive(false);
-
-            attackImage.color = selectedColor;
-            attackButtonScript.SetClicked(true);
-            attackButtonScript.ForceHighlight();
-
-            defenceImage.color = normalColor;
-            utilityImage.color = normalColor;
-            spellsImage.color = normalColor;
         }
         else if (index == 2)
         {
-
+            EventSystem.current.SetSelectedGameObject(healthButton.gameObject);
             heroAttackMaximized.SetActive(false);
             heroHealthMaximized.SetActive(true);
-
-            defenceImage.color = selectedColor;
-            defenceButtonScript.SetClicked(true);
-            defenceButtonScript.ForceHighlight();
-
-            attackImage.color = normalColor;
-            utilityImage.color = normalColor;
-            spellsImage.color = normalColor;
         }
         currentTabIndex = index;
-        SetChoicesToTop();
+        SetChoicesToLeft();
     }
 
     private void TogglePause()
     {
-        if (!GlobalVariables.Instance.gameIsPaused && Time.timeScale != 0f && GlobalVariables.Instance.playerIsAlive)
+        if (GlobalVariables.Instance.playerIsAlive && !pauseOptions.activeInHierarchy)
         {
-            Time.timeScale = 0f;
+            GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
             pauseOptions.SetActive(true);
         }
         else
@@ -180,9 +151,9 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
 
     private void Unpause()
     {
-        if (GlobalVariables.Instance.gameIsPaused && GlobalVariables.Instance.playerIsAlive)
+        if (GlobalVariables.Instance.playerIsAlive && pauseOptions.activeInHierarchy)
         {
-            Time.timeScale = 1f;
+            GlobalVariables.UnPauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
             pauseOptions.SetActive(false);
         }
     }
@@ -191,9 +162,8 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
     {
         gameOverOptions.SetActive(false);
         pauseOptions.SetActive(false);
+        heroBuyMenu.SetActive(false);
     }
-
-    //Button Functions
 
     public void Continue()
     {
@@ -205,13 +175,12 @@ public class HeroUpgradesGenericFunctions : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         GlobalVariables.Instance.ResetValues();
         UpgradePrices.Instance.ResetValues();
+        GlobalVariables.UnPauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
     }
 
     public void MainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        GlobalVariables.Instance.ResetValues();
-        UpgradePrices.Instance.ResetValues();
+        Replay();
     }
 
     public void Exit()

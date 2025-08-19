@@ -1,7 +1,12 @@
+using NUnit.Framework;
+using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
 {
+    [Header("SerializeFields??")]
+    [SerializeField] private Transform playerRangeTransform;
     public static GlobalVariables Instance { get; private set; }
 
     void Awake()
@@ -16,14 +21,21 @@ public class GlobalVariables : MonoBehaviour
         CacheInitialValues();
         DontDestroyOnLoad(gameObject); // Optional: persist across scenes
     }
+    [Header("Upgrade Generic Values")]
+    public bool isUpgradeOption4Unlocked = false;
+    public bool isUpgradeOption5Unlocked = false;
+    public int upgradeStartingCost = 0;
+    public int additionUpdateCost = 5;
+    public int upgradeOption4UnlockPrice = 25;
+    public int upgradeOption5UnlockPrice = 50;
     [Header("Player Generic Values")]
     public bool playerIsAlive = true;
-    public bool gameIsPaused = true;
+    public static bool gameIsPaused = false;
     [Header("Player Collectables")]
-    public int coinsCollected = 100;
+    public float coinsCollected = 100;
     public int permanentCoinsCollected = 100;
     public int diamondsCollected = 100;
-    public int yellowCoinValue = 1;
+    public float yellowCoinValue = 1;
     //Player Stats
     [Header("Player Stats")]
     [Header("Player Attack")]
@@ -36,11 +48,22 @@ public class GlobalVariables : MonoBehaviour
     public float playerAttackRange = 100;
     [Header("Player Health")]
     public float playerMaxHealth = 100;
-    public bool regenIsActive = true;
+    public bool healthRegenIsActive = true;
     public float playerHealthRegen = 1;
     public float playerHealthRegenInterval = 1;
     public float playerArmor = 1;
     public float playerCurrentHealth = 100;
+    [Header("Exp and Mana Values")]
+    public float shardExp = 0.5f;
+    public float currentExp = 0;
+    public float maxExp = 100;
+    public int level = 1;
+    public float playerCurrentMana = 100;
+    public float playerMaxMana = 100;
+    public bool manaRegenIsActive = true;
+    public float playerManaRegenInterval = 1;
+    public float playerManaRegen = 1;
+
 
     //GreenMultiplier
     public float greenHealthMultiplier = 3f;
@@ -58,15 +81,37 @@ public class GlobalVariables : MonoBehaviour
     public float defaultKnockbackforce = 10f;
     public Color defaultColor = Color.yellow;
     [Header("--!!Enemies!!--")]
+    [Header("--!!Generic Spawning Variables")]
+    public bool spawningMobsIsEnabled = true;
+    public float mobsSpawningTime = 2f;
+    public float skeletonsSpawningTime = 2f;
+    public int aliveEnemies = 0;
+    public int killedEnemies = 0;
+    public int score = 0;
+    public int spawnedSkeletons = 0;
+    public bool level1BossActive = false;
     [Header("Skeleton")]
     public float skeletonSpeed = 3f;
     public float skeletonHealth = 250f;
     public float skeletonKnockbackResistance = 5f;
     public float skeletonDamage = 1f;
-    public float skeletonAttackCooldown = 2f;
+    public float skeletonAttackCooldown = 0.5f;
     public float skeleonCoinDropChance = 0.1f;
     public CoinDropEnum skeletonCoinEnum = CoinDropEnum.Yellow;
     public Color skeletonDefaultColor = Color.white;
+    public float skeletonExp = 15f;
+    [Header("Vampire")]
+    public float vampireType3Speed = 3f;
+    public float vampireType3Health = 250f;
+    public float vampireType3KnockbackResistance = 5f;
+    public float vampireType3Damage = 2f;
+    public float vampireType3AttackCooldown = 2f;
+    public float vampireType3CoinDropChance = 0.1f;
+    public CoinDropEnum vampireType3CoinEnum = CoinDropEnum.Red;
+    public Color vampireType3DefaultColor = Color.white;
+    public float vampireType3ProjectileSpeed = 10f;
+    public float vampireType3Range = 10f;
+    public float vampireType3Exp = 20f;
     [Header("GoblinTortch")]
     public float goblinTorchSpeed = 3f;
     public float goblinTorchHealth = 250f;
@@ -76,6 +121,7 @@ public class GlobalVariables : MonoBehaviour
     public float goblinTorchCoinDropChance = 0.1f;
     public CoinDropEnum goblinCoinEnum = CoinDropEnum.Red;
     public Color goblinTorchDefaultColor = Color.white;
+    public float goblinTorchExp = 10f;
     [Header("GoblinTNT")]
     public float goblinTNTSpeed = 3f;
     public float goblinTNTHealth = 250f;
@@ -87,6 +133,7 @@ public class GlobalVariables : MonoBehaviour
     public Color goblinTNTDefaultColor = Color.white;
     public float goblinTNTProjectileSpeed = 10f;
     public float goblinTNTRange = 3f;
+    public float goblinTNTExp = 20f;
     [Header("!!Spells!!")]
     [Header("Spell-FireBall")]
     public float fireballSpeed = 5f;
@@ -132,10 +179,10 @@ public class GlobalVariables : MonoBehaviour
     // BACKUP variables
     private bool _initialPlayerIsAlive;
     private bool _initialGameIsPaused;
-    private int _initialCoinsCollected;
+    private float _initialCoinsCollected;
     private int _initialPermanentCoinsCollected;
     private int _initialDiamondsCollected;
-    private int _initialYellowCoinValue;
+    private float _initialYellowCoinValue;
     private float _initialPlayerAttackDamage;
     private float _initialGlobalCriticalChance;
     private float _initialGlobalCriticalMultiplier;
@@ -175,6 +222,31 @@ public class GlobalVariables : MonoBehaviour
         Orange,
     }
 
+    public enum UpgradeCategory
+    {
+        Attack,
+        Defence,
+        Economy,
+        Spells,
+    }
+
+    public enum UpgradeCode
+    {
+        //Attack
+        Attack,
+        AttackSpeed,
+        AttackRange,
+        CriticalChance,
+        CriticalDamage,
+        //Health
+        Health,
+        HealthRegen,
+        Armor,
+        //Economy
+        CoinsValue,
+        MoreCoins,
+    }
+
     public enum CoinDropEnum
     {
         None,
@@ -186,8 +258,44 @@ public class GlobalVariables : MonoBehaviour
     public enum EnemyTypes
     {
         Level1Skeleton,
+        VampireType3,
         GoblinTourch,
         GoblinTNT,
+    }
+
+    public enum PauseReasonEnum
+    {
+        PlayerIsDead,
+        HeroBuyMenu,
+        LevelUpPanel,
+        GameMenu,
+    }
+
+    private static HashSet<PauseReasonEnum> pauseReasonsSet = new();
+
+    public static void PauseTime(PauseReasonEnum pauseReason)
+    {
+        Debug.Log("Paused Time with reason:" + pauseReason);
+        if (pauseReasonsSet.Add(pauseReason))
+        {
+            if (Time.timeScale > 0)
+            {
+                gameIsPaused = true;
+                Time.timeScale = 0;
+            }
+        }
+    }
+    public static void UnPauseTime(PauseReasonEnum pauseReason)
+    {
+        if (pauseReasonsSet.Remove(pauseReason))
+        {
+            // Only unpause if no other reasons remain
+            if (pauseReasonsSet.Count == 0 && Time.timeScale == 0)
+            {
+                Time.timeScale = 1;
+                gameIsPaused = false;
+            }
+        }
     }
 
     private void CacheInitialValues()
@@ -208,7 +316,7 @@ public class GlobalVariables : MonoBehaviour
         _initialPlayerMaxHealth = playerMaxHealth;
         _initialPlayerCurrentHealth = playerCurrentHealth;
         _initialPlayerArmor = playerArmor;
-        _initialRegenIsActive = regenIsActive;
+        _initialRegenIsActive = healthRegenIsActive;
         _initialPlayerHealthRegen = playerHealthRegen;
         _initialPlayerHealthRegenInterval = playerHealthRegenInterval;
         _initialGreenHealthMultiplier = greenHealthMultiplier;
@@ -240,7 +348,7 @@ public class GlobalVariables : MonoBehaviour
         playerMaxHealth = _initialPlayerMaxHealth;
         playerCurrentHealth = _initialPlayerCurrentHealth;
         playerArmor = _initialPlayerArmor;
-        regenIsActive = _initialRegenIsActive;
+        healthRegenIsActive = _initialRegenIsActive;
         playerHealthRegen = _initialPlayerHealthRegen;
         playerHealthRegenInterval = _initialPlayerHealthRegenInterval;
         greenHealthMultiplier = _initialGreenHealthMultiplier;
@@ -252,5 +360,82 @@ public class GlobalVariables : MonoBehaviour
         SecondSpellEnabled = _initialSecondSpellEnabled;
         ThirdSpellEnabled = _initialThirdSpellEnabled;
         ForthSpellEnabled = _initialForthSpellEnabled;
+    }
+
+    public void UpgradeHero(UpgradeCode upgradeCode)
+    {
+        /*
+        Attack,
+        AttackSpeed,
+        AttackRange,
+        CriticalChance,
+        CriticalDamage,
+        Health,
+        Armor,
+        */
+        //Attack
+        if (UpgradeCode.AttackRange.Equals(upgradeCode))
+        {
+            playerAttackRange += 10f;
+            float scale = playerAttackRangeBaseScale *
+                (playerAttackRange / playerAttackRangeBase);
+            playerRangeTransform.localScale = new Vector3(scale, scale, 1f);
+        }
+        else if (UpgradeCode.Attack.Equals(upgradeCode))
+        {
+            playerAttackDamage += 1;
+        }
+        else if (UpgradeCode.AttackSpeed.Equals(upgradeCode))
+        {
+            playerAttackSpeed *= 1.2f;
+        }
+        else if (UpgradeCode.CriticalChance.Equals(upgradeCode))
+        {
+            globalCriticalChance += 0.5f;
+        }
+        else if (UpgradeCode.CriticalDamage.Equals(upgradeCode))
+        {
+            globalCriticalMultiplier += 0.1f;
+        }
+        //Health
+        else if (UpgradeCode.Health.Equals(upgradeCode))
+        {
+            playerMaxHealth += 5f;
+            playerCurrentHealth += 5f;
+        }
+        else if (UpgradeCode.HealthRegen.Equals(upgradeCode))
+        {
+            playerHealthRegen *= 1.1f;
+            playerHealthRegenInterval *= 0.9f;
+        }
+        else if (UpgradeCode.Armor.Equals(upgradeCode))
+        {
+            playerArmor += 1f;
+        }
+        //Economy
+        else if (UpgradeCode.CoinsValue.Equals(upgradeCode))
+        {
+            yellowCoinValue *= 1.2f;
+        }
+        else if (UpgradeCode.CoinsValue.Equals(upgradeCode))
+        {
+            IncreaseCoinDropChance();
+        }
+        else if (UpgradeCode.Armor.Equals(upgradeCode))
+        {
+            playerArmor += 1f;
+        }
+        else
+        {
+            Debug.Log($"No upgradeCode was found for {upgradeCode}");
+        }
+    }
+
+    private void IncreaseCoinDropChance()
+    {
+        skeleonCoinDropChance *= 1.2f;
+        vampireType3CoinDropChance *= 1.2f;
+        goblinTNTCoinDropChance *= 1.2f;
+        goblinTorchCoinDropChance *= 1.2f;
     }
 }

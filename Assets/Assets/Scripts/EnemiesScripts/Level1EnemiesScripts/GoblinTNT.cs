@@ -17,6 +17,10 @@ public class GoblinTNT : EnemyBaseScript
         currentHealth = maxHealth;
         hasAttackAnimation = true;
     }
+    public override GlobalVariables.EnemyTypes EnemyType
+    {
+        get => GlobalVariables.EnemyTypes.GoblinTNT;
+    }
 
     public override float Speed
     {
@@ -59,4 +63,13 @@ public class GoblinTNT : EnemyBaseScript
     {
         get => GlobalVariables.Instance.goblinTNTCoinEnum;
     }
+    public override float Exp
+    {
+        get => GlobalVariables.Instance.goblinTNTExp;
+    }
+    public override float AttackRange
+    {
+        get => GlobalVariables.Instance.goblinTNTRange;
+    }
+
 }

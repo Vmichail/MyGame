@@ -7,32 +7,57 @@ public class PlayerScript : MonoBehaviour
     private Animator animator;
 
     [SerializeField] private PlayerRangeDetector rangeDetector;
+    [Header("--!!Attack Spells!!--")]
     [SerializeField] private GameObject firstSpell;
     [SerializeField] private GameObject secondSpell;
     [SerializeField] private GameObject thirdSpell;
     [SerializeField] private GameObject forthSpell;
-    GameObject closestEnemy;
-    GameObject secondClosestEnemy;
-    GameObject thirdClosestEnemy;
-    GameObject forthClosestEnemy;
-    Transform spriteTransform;
-    public float originalY;
+    private GameObject closestEnemy;
+    private GameObject secondClosestEnemy;
+    private GameObject thirdClosestEnemy;
+    private GameObject forthClosestEnemy;
+    private Transform spriteTransform;
+    [Header("--!!Move Functionallity!!--")]
+    public float moveSpeed = 5f;
+    public bool playerCanMove = true;
+    private Vector2 movementInput;
+    private Rigidbody2D rb;
+    [Header("--!!ETC!!--")]
+    [SerializeField] private GameObject target;
+
+    public GameObject ClosestEnemy => closestEnemy;
 
 
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+        target.transform.SetParent(null);
+
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
         if (spriteRenderer != null)
             spriteTransform = spriteRenderer.transform;
         else
             Debug.LogWarning("No Sprite was found!");
-        originalY = spriteTransform.position.y;
     }
 
     void Update()
     {
+        if (playerCanMove)
+        {
+            movementInput.x = Input.GetAxisRaw("Horizontal");
+            movementInput.y = Input.GetAxisRaw("Vertical");
+        }
+        else
+        {
+            movementInput = Vector2.zero;
+        }
+        if (movementInput != Vector2.zero)
+            animator.SetBool("Moving", true);
+        else
+            animator.SetBool("Moving", false);
+
         if (rangeDetector.ClosestEnemy != null)
         {
             closestEnemy = rangeDetector.ClosestEnemy;
@@ -43,10 +68,18 @@ public class PlayerScript : MonoBehaviour
             animator.SetTrigger("Attack");
 
         }
-        else
+        else if (movementInput == Vector2.zero)
         {
+            animator.ResetTrigger("Attack");
             animator.SetTrigger("Idle");
         }
+        else if (Mathf.Abs(movementInput.x) != 0)
+        {
+            animator.ResetTrigger("Attack");
+            animator.SetTrigger("Idle");
+            RotatePlayer();
+        }
+        ActivateDeactivateTarget();
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0 = Base Layer
         if (stateInfo.IsName("Attack"))
             animator.speed = 1f * GlobalVariables.Instance.playerAttackSpeed;
@@ -55,28 +88,50 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    public void RotatePlayer()
+    private void FixedUpdate()
     {
-        if (closestEnemy == null)
-            return;
-        if (closestEnemy.transform.position.x < 0)
+        rb.MovePosition(rb.position + movementInput.normalized * moveSpeed * Time.fixedDeltaTime);
+    }
+
+    private void RotatePlayer()
+    {
+        if (movementInput.x < 0)
         {
             spriteTransform.SetPositionAndRotation(
-           new Vector3(-0.37f, originalY, 0),
-           Quaternion.Euler(0, 180, 0));
+                transform.position + new Vector3(-0.37f, 0, 0),
+                Quaternion.Euler(0, 180, 0));
         }
         else
         {
             spriteTransform.SetPositionAndRotation(
-            new Vector3(0, originalY, 0),
-            Quaternion.Euler(0, 0, 0));
+                transform.position,
+                Quaternion.Euler(0, 0, 0));
+        }
+    }
+
+    public void RotatePlayerToEnemy()
+    {
+        if (closestEnemy == null)
+            return;
+
+        if (closestEnemy.transform.position.x < transform.position.x)
+        {
+            spriteTransform.SetPositionAndRotation(
+                transform.position + new Vector3(-0.37f, 0, 0),
+                Quaternion.Euler(0, 180, 0));
+        }
+        else
+        {
+            spriteTransform.SetPositionAndRotation(
+                transform.position,
+                Quaternion.Euler(0, 0, 0));
         }
 
     }
 
     public void CastFirstSpell()
     {
-        RotatePlayer();
+        RotatePlayerToEnemy();
         if (closestEnemy == null)
             return;
 
@@ -87,6 +142,8 @@ public class PlayerScript : MonoBehaviour
             CastThirdSpell();
         if (GlobalVariables.Instance.ForthSpellEnabled)
             CastForthSpell();
+
+
         CastSpell(closestEnemy.transform.position, firstSpell);
 
     }
@@ -175,5 +232,18 @@ public class PlayerScript : MonoBehaviour
         PlayerSpellBaseScript playerSpellBaseScript = newSpell.GetComponent<PlayerSpellBaseScript>();
         if (playerSpellBaseScript)
             playerSpellBaseScript.SetVelocity(direction, false);
+    }
+
+    private void ActivateDeactivateTarget()
+    {
+        if (rangeDetector.ClosestEnemy != null)
+        {
+            target.SetActive(true);
+            target.transform.position = rangeDetector.ClosestEnemy.transform.position;
+        }
+        else
+        {
+            target.SetActive(false);
+        }
     }
 }

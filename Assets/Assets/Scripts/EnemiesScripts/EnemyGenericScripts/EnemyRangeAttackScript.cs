@@ -12,11 +12,12 @@ public class EnemyRangeAttackScript : MonoBehaviour
     {
         enemyScript = GetComponentInParent<EnemyBaseScript>();
         circleCollider = GetComponent<CircleCollider2D>();
+        circleCollider.radius = enemyScript.AttackRange;
     }
 
     private void Update()
     {
-        circleCollider.radius = GlobalVariables.Instance.goblinTNTRange;
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -33,7 +34,7 @@ public class EnemyRangeAttackScript : MonoBehaviour
         {
             IsPlayerInRange = false;
             enemyScript.hasReachedPlayer = false;
-            enemyScript.animator.SetBool("hasReachedPlayer", false);
+            enemyScript.SetAnimatorValue("hasReachedPlayer", false);
         }
     }
 }

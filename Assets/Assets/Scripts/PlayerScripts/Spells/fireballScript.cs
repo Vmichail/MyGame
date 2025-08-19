@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class fireballScript : PlayerSpellBaseScript
+public class FireballScript : PlayerSpellBaseScript
 {
     public override float Speed => GlobalVariables.Instance.fireballSpeed;
     public override float Damage => GlobalVariables.Instance.playerAttackDamage * GlobalVariables.Instance.fireballDamage;

@@ -19,13 +19,15 @@ public abstract class EnemyBaseScript : MonoBehaviour
     [SerializeField] GameObject projectile;
     [SerializeField] Transform projectilePosition;
     [SerializeField] Transform projectileParent;
-
-    public bool isDead = false;
     public virtual float ProjectileSpeed { get => GlobalVariables.Instance.goblinTNTProjectileSpeed; }
 
     protected Transform player;
     public bool hasReachedPlayer;
-    public Animator animator;
+    [SerializeField] private Animator animator;
+    public void SetAnimatorValue(string animatorValue, bool status)
+    {
+        animator.SetBool(animatorValue, status);
+    }
 
     protected ObjectPool<GameObject> _pool;
 
@@ -35,15 +37,14 @@ public abstract class EnemyBaseScript : MonoBehaviour
     }
 
     private Rigidbody2D rb;
-    public bool knockBackEffect;
     private protected Transform spriteTransform;
     private Coroutine damageCoroutine;
     protected float maxHealth;
     protected float knockbackResistance;
     protected float currentHealth;
-    protected float damage;
     private float cameraZ;
 
+    public virtual bool IsDead { get; set; }
     public virtual float Speed { get; set; }
     public virtual float MaxHealth { get; set; }
     public virtual float CurrentHealth { get; set; }
@@ -51,6 +52,11 @@ public abstract class EnemyBaseScript : MonoBehaviour
     public virtual float AttackCooldown { get => GlobalVariables.Instance.skeletonAttackCooldown; }
     public virtual float CoinDropChance { get => GlobalVariables.Instance.skeletonAttackCooldown; }
     public virtual GlobalVariables.CoinDropEnum CoinDropEnum { get => GlobalVariables.CoinDropEnum.Yellow; }
+    public virtual float Exp { get => GlobalVariables.Instance.skeletonExp; }
+    public virtual float AttackRange { get => GlobalVariables.Instance.goblinTNTRange; }
+    public virtual bool KnockbackEffect { get; set; }
+    public virtual GlobalVariables.EnemyTypes EnemyType { get; set; }
+
 
 
     public virtual void RestoreHealth()
@@ -75,7 +81,6 @@ public abstract class EnemyBaseScript : MonoBehaviour
         InstantiateVariables();
         rangeScript = GetComponentInChildren<EnemyRangeAttackScript>();
         hasRangeAttack = rangeScript != null;
-        EnemyManagerScript.Instance.RegisterEnemy(gameObject);
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
 
@@ -107,9 +112,9 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (currentHealth <= 0 && !isDead)
+        if (currentHealth <= 0 && !IsDead)
         {
-            isDead = true;
+            IsDead = true;
             TryDropCoin();
             Instantiate(particles, transform.position, transform.rotation);
             EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
@@ -165,7 +170,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected void MoveTowardPlayer()
     {
-        if (knockBackEffect)
+        if (KnockbackEffect)
             return;
         else if (hasReachedPlayer)
         {
@@ -206,15 +211,15 @@ public abstract class EnemyBaseScript : MonoBehaviour
     {
         if (AttackDirection.Up.Equals(direction))
         {
-            animator.SetBool("Attack", false);
-            animator.SetBool("AttackUp", true);
+            animator.SetBool("Attack", true);
+            animator.SetBool("AttackUp", false);
             animator.SetBool("AttackDown", false);
         }
         else if (AttackDirection.Down.Equals(direction))
         {
-            animator.SetBool("Attack", false);
+            animator.SetBool("Attack", true);
             animator.SetBool("AttackUp", false);
-            animator.SetBool("AttackDown", true);
+            animator.SetBool("AttackDown", false);
         }
         else
         {
@@ -224,20 +229,21 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
 
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //MeleeAttack
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (!hasRangeAttack)
+            {
+                hasReachedPlayer = true;
+                animator.SetBool("hasReachedPlayer", true);
+            }
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-
-        if (collision.gameObject.CompareTag("Player") && !hasRangeAttack)
-        {
-            hasReachedPlayer = true;
-            animator.SetBool("hasReachedPlayer", true);
-        }
-        else if (hasRangeAttack && rangeScript.IsPlayerInRange)
-        {
-            hasReachedPlayer = true;
-            animator.SetBool("hasReachedPlayer", true);
-        }
 
         if (collision.gameObject.CompareTag("PlayerSpell"))
         {
@@ -245,15 +251,24 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 Debug.LogWarning("PlayerSpellBaseScript component not found on PlayerSpell object!");
             else
             {
-                DamageEnemy(spellScript.Damage, criticalChance: spellScript.CriticalChance, criticalMultiplier: spellScript.CriticalMultiplier, color: spellScript.BaseColor);
+                ReceiveDamage(spellScript.Damage, criticalChance: spellScript.CriticalChance, criticalMultiplier: spellScript.CriticalMultiplier, color: spellScript.BaseColor);
             }
             if (canApplyKnockback)
                 ApplyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
 
         }
+        //RangeAttack
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (hasRangeAttack && rangeScript.IsPlayerInRange)
+            {
+                hasReachedPlayer = true;
+                animator.SetBool("hasReachedPlayer", true);
+            }
+        }
     }
 
-    void OnTriggerExit2D(Collider2D collision)
+    void OnCollisionExit2D(Collision2D collision)
     {
         if (!hasRangeAttack && collision.gameObject.CompareTag("Player"))
         {
@@ -262,7 +277,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
-    private void DamageEnemy(float spellDamage, float criticalChance, float criticalMultiplier, Color color)
+    public void ReceiveDamage(float spellDamage, float criticalChance, float criticalMultiplier, Color color)
     {
         bool isCritical = false;
 
@@ -285,9 +300,9 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     private IEnumerator ResetVelocityAfterDelay(float delay)
     {
-        knockBackEffect = true;
+        KnockbackEffect = true;
         yield return new WaitForSeconds(delay);
-        knockBackEffect = false;
+        KnockbackEffect = false;
     }
 
     private void ApplyKnockback(Collider2D collision, float knockbackForce)
@@ -303,17 +318,17 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     private void TryDropCoin()
     {
-
+        Vector3 dropPosition = transform.position;
         if (Random.value <= CoinDropChance)
         {
             if (GlobalVariables.CoinDropEnum.Yellow.Equals(CoinDropEnum))
             {
                 GameObject coin = CoinPoolScript.Instance.GetCoin();
-                Vector3 dropPosition = transform.position;
-                dropPosition.z = cameraZ;
                 coin.transform.position = dropPosition;
             }
         }
+        GameObject shard = ShardPoolScript.Instance.GetShard();
+        shard.transform.position = dropPosition;
     }
 
     //RangeAttack
@@ -332,5 +347,10 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
+    //Used for spells like midas etc
+    public void MarkedToDie()
+    {
+        CurrentHealth = -1;
+    }
 
 }

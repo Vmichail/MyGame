@@ -75,7 +75,6 @@ public class PlayerSpellBaseScript : MonoBehaviour
         }
 
         rb.linearVelocity = desiredVelocity;
-        /*Debug.Log("linearVelocity:" + desiredVelocity + "\tBounce:" + bounce + "\trb.linearVelocity:" + rb.linearVelocity + "\tSpeed:" + Speed);*/
     }
 
     private GameObject FindClosestEnemy(GameObject exclude)
@@ -102,7 +101,8 @@ public class PlayerSpellBaseScript : MonoBehaviour
     private void Bounce(GameObject lastHitEnemy)
     {
         currentBounces++;
-        GameObject nextEnemy = FindClosestEnemy(exclude: lastHitEnemy);
+        /*GameObject nextEnemy = FindClosestEnemy(exclude: lastHitEnemy);*/
+        GameObject nextEnemy = null;
         if (nextEnemy != null)
         {
             Vector2 newDirection = (nextEnemy.transform.position - transform.position).normalized;
@@ -112,7 +112,10 @@ public class PlayerSpellBaseScript : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            Vector2 randomDirection = Random.insideUnitCircle.normalized;
+            float angle = Mathf.Atan2(randomDirection.y, randomDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+            SetVelocity(randomDirection, true);
         }
     }
 }

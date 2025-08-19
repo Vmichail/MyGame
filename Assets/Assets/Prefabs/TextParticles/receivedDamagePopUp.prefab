@@ -135,7 +135,7 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 1
+  m_fontSizeMin: 5
   m_fontSizeMax: 5
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 9.401521, y: 2.0314229, z: 9.504537, w: 2.064836}
+  m_margin: {x: 0.5129324, y: 0.47361225, z: -1.3161995, w: 0.20744634}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0

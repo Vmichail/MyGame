@@ -2,8 +2,6 @@ using UnityEngine;
 
 public static class EnemyGenericFunctions
 {
-    static float minDamage = 1f; // Always deal at least 1 damage
-
     public static float DamagePlayer(float damage)
     {
         float armor = GlobalVariables.Instance.playerArmor;

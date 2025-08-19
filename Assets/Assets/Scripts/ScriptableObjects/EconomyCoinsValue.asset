@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13268346f900c814cb73d29659582d9e, type: 3}
+  m_Name: EconomyCoinsValue
+  m_EditorClassIdentifier: 
+  image: {fileID: 5646670602975050462, guid: 95728f973314a3b429fd032a6bd44fce, type: 3}
+  title: Coins Value
+  icon: {fileID: -6451696303836038272, guid: b19e94ad410d5c44495e7389280a8315, type: 3}
+  value: 20
+  percentage: 1
+  cost: 0
+  locked: 0
+  unlockCost: 0
+  upgradeCategory: 2
+  upgradeCode: 8

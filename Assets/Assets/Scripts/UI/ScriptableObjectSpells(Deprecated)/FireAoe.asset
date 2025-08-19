@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d646f146f04f42b4b918d6ee35b7ad8b, type: 3}
+  m_Name: FireAoe
+  m_EditorClassIdentifier: 
+  title: FireAoe
+  icon: {fileID: -1736356323369764548, guid: 198ae2ba7bd2323448292adf9f933d9e, type: 3}
+  description: Aoe
+  damage: 100
+  manaCost: 5
+  cooldown: 1
+  relearn: 1
+  canSelftCast: 1
+  smallIcon: {fileID: 21300000, guid: 89c2b29b11ef09d42a222909252d423e, type: 3}
+  spellCode: 1

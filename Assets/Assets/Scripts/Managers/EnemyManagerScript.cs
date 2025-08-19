@@ -12,13 +12,30 @@ public class EnemyManagerScript : MonoBehaviour
         Instance = this;
     }
 
-    public void RegisterEnemy(GameObject enemy)
+    public void RegisterEnemy(GameObject enemy, GlobalVariables.EnemyTypes enemyType)
     {
         ActiveEnemies.Add(enemy);
+        GlobalVariables.Instance.aliveEnemies++;
+        AddSpecificType(enemyType);
     }
 
     public void UnregisterEnemy(GameObject enemy)
     {
         ActiveEnemies.Remove(enemy);
+        GlobalVariables.Instance.aliveEnemies--;
+        GlobalVariables.Instance.killedEnemies++;
+        GlobalVariables.Instance.score++;
+    }
+
+    private void AddSpecificType(GlobalVariables.EnemyTypes enemyType)
+    {
+        if (GlobalVariables.EnemyTypes.Level1Skeleton.Equals(enemyType))
+        {
+            GlobalVariables.Instance.spawnedSkeletons++;
+        }
+        else
+        {
+            Debug.Log("Uknown Enemy Type:" + enemyType);
+        }
     }
 }

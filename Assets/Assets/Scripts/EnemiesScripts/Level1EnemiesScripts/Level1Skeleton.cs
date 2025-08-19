@@ -20,6 +20,10 @@ public class Level1Skeleton : EnemyBaseScript
         currentHealth = maxHealth;
     }
 
+    public override GlobalVariables.EnemyTypes EnemyType
+    {
+        get => GlobalVariables.EnemyTypes.Level1Skeleton;
+    }
     public override float Speed
     {
         get => GlobalVariables.Instance.skeletonSpeed;
@@ -55,6 +59,11 @@ public class Level1Skeleton : EnemyBaseScript
     public override GlobalVariables.CoinDropEnum CoinDropEnum
     {
         get => GlobalVariables.Instance.skeletonCoinEnum;
+    }
+
+    public override float Exp
+    {
+        get => GlobalVariables.Instance.skeletonExp;
     }
 
 }
