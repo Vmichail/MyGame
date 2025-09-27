@@ -4,7 +4,7 @@ public class BladeScript : PlayerSpellBaseScript
 {
     public override float Speed => GlobalVariables.Instance.bladeSpeed;
     public override float Damage => GlobalVariables.Instance.playerAttackDamage * GlobalVariables.Instance.bladeDamageMulti;
-    public override float Bounces => GlobalVariables.Instance.bladeBounces;
+    public override int Bounces => GlobalVariables.Instance.bladeBounces + GlobalVariables.Instance.defaultSpellBounces;
     public override float KnockbackForce => GlobalVariables.Instance.bladeKnockbackForce;
     public override float CriticalChance => GlobalVariables.Instance.bladeCriticalChance;
     public override float CriticalMultiplier => GlobalVariables.Instance.bladeCriticalMultiplier;

@@ -21,6 +21,7 @@ public class LevelUpPanelScript : MonoBehaviour
     [SerializeField] private Button continueButton;
     private List<SetUpgradeScript> upgradeScripts = new();
     [SerializeField] private GameObject refreshButtonGO;
+    private int currentRefreshes = 0;
 
     private void Start()
     {
@@ -97,7 +98,29 @@ public class LevelUpPanelScript : MonoBehaviour
 
     private void OnEnable()
     {
-        GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
+        AudioManager.Instance.PlaySoundFX("vsLevelUp", transform.position, 1f, 1f, 1f);
+        // Animate panel
+        wholeLevelUpPanel.transform.localScale = Vector3.zero;
+        if (!wholeLevelUpPanel.TryGetComponent<CanvasGroup>(out var cg)) cg = wholeLevelUpPanel.AddComponent<CanvasGroup>();
+        cg.alpha = 0;
+
+        LeanTween.scale(wholeLevelUpPanel, Vector3.one, 0.5f)
+            .setEaseOutBack()
+            .setIgnoreTimeScale(true);
+
+        LeanTween.value(wholeLevelUpPanel, 0f, 1f, 0.4f)
+            .setIgnoreTimeScale(true)
+            .setOnUpdate((float val) => cg.alpha = val);
+
+        // Animate refresh button
+        refreshButtonGO.transform.localScale = Vector3.zero;
+        LeanTween.scale(refreshButtonGO, Vector3.one, 0.3f)
+            .setEaseOutBack()
+            .setIgnoreTimeScale(true);
+
+
+        currentRefreshes = 0;
+        GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
         refreshButtonGO.SetActive(true);
         RefreshChoices(true);
         /* GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);*/
@@ -127,6 +150,7 @@ public class LevelUpPanelScript : MonoBehaviour
             UpdatePrices();
             UpdateContinueButton();
             setUpgradeScript.IsClicked = true;
+            AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
             AnimatedDeletion(buttonGO);
             GlobalVariables.Instance.UpgradeHero(chosenUpgrade.UpgradeCode);
         }
@@ -164,7 +188,7 @@ public class LevelUpPanelScript : MonoBehaviour
         else if (upgradeCost > 0 && !continueButton.interactable)
         {
             continueButton.interactable = true;
-            LeanTween.scale(continueButton.gameObject, Vector3.one, 0.5f)
+            LeanTween.scale(continueButton.gameObject, Vector3.one, 0.8f)
             .setEaseOutBack()
             .setIgnoreTimeScale(true);
         }
@@ -212,8 +236,10 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void Continue()
     {
+        AudioManager.Instance.PlayRandomSoundFX(GlobalVariables.Instance.linaAnnouncementsClips, transform.position, 1f, 1f, 1.25f);
+        AudioManager.Instance.PlaySoundFX("buttonClickSound", transform.position, 1f, 0.75f, 1.25f);
         wholeLevelUpPanel.SetActive(false);
-        GlobalVariables.UnPauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
+        GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
     }
 
 
@@ -241,14 +267,19 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void RefreshChoicesButton()
     {
+        AudioManager.Instance.PlaySoundFX("rerollSound", transform.position, 1f, 0.75f, 1.25f);
+        currentRefreshes++;
         RefreshChoices(false);
-        LeanTween.cancel(refreshButtonGO);
-        LeanTween.scale(refreshButtonGO, Vector3.zero, 0.3f)
-            .setEaseInBack()
-            .setIgnoreTimeScale(true)
-            .setOnComplete(() =>
-            {
-                refreshButtonGO.SetActive(false);
-            });
+        if (currentRefreshes >= GlobalVariables.Instance.maxRefreshBuyOptions)
+        {
+            LeanTween.cancel(refreshButtonGO);
+            LeanTween.scale(refreshButtonGO, Vector3.zero, 0.3f)
+                .setEaseInBack()
+                .setIgnoreTimeScale(true)
+                .setOnComplete(() =>
+                {
+                    refreshButtonGO.SetActive(false);
+                });
+        }
     }
 }

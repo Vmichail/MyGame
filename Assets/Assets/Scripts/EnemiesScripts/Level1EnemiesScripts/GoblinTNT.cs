@@ -63,7 +63,7 @@ public class GoblinTNT : EnemyBaseScript
     {
         get => GlobalVariables.Instance.goblinTNTCoinEnum;
     }
-    public override float Exp
+    public override float MinExp
     {
         get => GlobalVariables.Instance.goblinTNTExp;
     }

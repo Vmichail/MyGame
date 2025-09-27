@@ -33,7 +33,7 @@ public class ShardPoolScript : MonoBehaviour
     }
 
 
-    public GameObject GetShard()
+    public GameObject GetShard(int minShards, int maxShards)
     {
         GameObject shard = shardPool.Get();
 
@@ -45,7 +45,10 @@ public class ShardPoolScript : MonoBehaviour
         {
             Debug.LogWarning("Shards parent GameObject not found in scene.");
         }
-
+        if (shard.TryGetComponent(out ParentShardScript parentShardScript))
+        {
+            parentShardScript.InitializeShards(minShards, maxShards);
+        }
         return shard;
     }
 

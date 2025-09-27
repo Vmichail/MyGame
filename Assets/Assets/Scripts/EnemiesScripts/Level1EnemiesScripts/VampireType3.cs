@@ -59,13 +59,21 @@ public class VampireType3 : EnemyBaseScript
     {
         get => GlobalVariables.Instance.vampireType3CoinEnum;
     }
-    public override float Exp
+    public override float MinExp
     {
         get => GlobalVariables.Instance.vampireType3Exp;
     }
     public override float AttackRange
     {
         get => GlobalVariables.Instance.vampireType3Range;
+    }
+    public override string DeathSoundClip
+    {
+        get => "GlobalVariables.Instance.vampireType3Range";
+    }
+    public override string[] AttackSoundClip
+    {
+        get => new string[] { "vampireAttackSound1", "vampireAttackSound2" };
     }
 
 }

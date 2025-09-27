@@ -18,6 +18,7 @@ public class PlayerSlidersScipt : MonoBehaviour
     void Update()
     {
         //Health
+        GlobalVariables.Instance.playerCurrentHealth = Mathf.Clamp(GlobalVariables.Instance.playerCurrentHealth, 0, GlobalVariables.Instance.playerMaxHealth);
         healthText.text = (int)GlobalVariables.Instance.playerCurrentHealth + "/" + (int)GlobalVariables.Instance.playerMaxHealth;
         healthSlider.maxValue = GlobalVariables.Instance.playerMaxHealth;
         healthSlider.value = GlobalVariables.Instance.playerCurrentHealth;
@@ -30,6 +31,7 @@ public class PlayerSlidersScipt : MonoBehaviour
         {
             GlobalVariables.Instance.currentExp = GlobalVariables.Instance.currentExp - GlobalVariables.Instance.maxExp;
             GlobalVariables.Instance.maxExp = (float)(GlobalVariables.Instance.maxExp + 1.2 * GlobalVariables.Instance.level);
+            GlobalVariables.Instance.level++;
             levelUpPanel.SetActive(true);
         }
 

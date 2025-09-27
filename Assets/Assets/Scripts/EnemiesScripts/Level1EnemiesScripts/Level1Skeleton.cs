@@ -6,18 +6,16 @@ public class Level1Skeleton : EnemyBaseScript
     protected override void Start()
     {
         base.Start();
-        if (GlobalVariables.EnemyRarity.Green.Equals(rarity))
-        {
-            maxHealth = GlobalVariables.Instance.skeletonHealth * GlobalVariables.Instance.greenHealthMultiplier;
-            knockbackResistance = GlobalVariables.Instance.skeletonKnockbackResistance * GlobalVariables.Instance.greenKnockbackMultiplier;
-            spriteTransform.localScale *= GlobalVariables.Instance.greenScaleMultiplier;
-        }
-        else
-        {
-            maxHealth = GlobalVariables.Instance.skeletonHealth;
-            knockbackResistance = GlobalVariables.Instance.skeletonKnockbackResistance;
-        }
-        currentHealth = maxHealth;
+        MaxHealth = GlobalVariables.Instance.skeletonHealth;
+        knockbackResistance = GlobalVariables.Instance.skeletonKnockbackResistance;
+        CurrentHealth = MaxHealth;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        MaxHealth = GlobalVariables.Instance.skeletonHealth;
+        CurrentHealth = MaxHealth;
     }
 
     public override GlobalVariables.EnemyTypes EnemyType
@@ -61,9 +59,19 @@ public class Level1Skeleton : EnemyBaseScript
         get => GlobalVariables.Instance.skeletonCoinEnum;
     }
 
-    public override float Exp
+    public override float MinExp
     {
-        get => GlobalVariables.Instance.skeletonExp;
+        get => GlobalVariables.Instance.skeletonMinExp;
+    }
+
+    public override float MaxExp
+    {
+        get => GlobalVariables.Instance.skeletonMaxExp;
+    }
+
+    public override string DeathSoundClip
+    {
+        get => "skeletonDeadSound";
     }
 
 }

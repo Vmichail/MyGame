@@ -43,14 +43,22 @@ public class EnemyProjectileBaseScript : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            float damage = EnemyGenericFunctions.DamagePlayer(Damage);
+            AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.2f, 0.9f, 1.1f);
             Destroy(gameObject);
             Instantiate(particles, transform.position, Quaternion.identity);
+            float damage = EnemyGenericFunctions.DamagePlayer(Damage);
             Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
             Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;
             GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
             DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
             dt.SetDamage(damage, false, Color.red);
         }
+        else if (other.CompareTag("PlayerSpell"))
+        {
+            AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.5f, 0.9f, 1.1f);
+            Instantiate(particles, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+
     }
 }

@@ -16,6 +16,7 @@ public class EnemyHealthUpdate : MonoBehaviour
 
     void Update()
     {
-        healthText.SetText(enemyBaseScript.CurrentHealth.ToString());
+        int roundedHealth = Mathf.RoundToInt(enemyBaseScript.CurrentHealth);
+        healthText.SetText(roundedHealth.ToString());
     }
 }

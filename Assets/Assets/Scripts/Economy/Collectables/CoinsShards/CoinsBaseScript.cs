@@ -35,6 +35,7 @@ public class CoinsBaseScript : MonoBehaviour, ICollectable
 
     public void TriggerCoinStart()
     {
+        AudioManager.Instance.PlaySoundFX("coinSound", transform.position, 0.8f, 0.75f, 1.25f);
         GlobalVariables.Instance.coinsCollected += CoinValue;
     }
 

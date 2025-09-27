@@ -57,7 +57,7 @@ public class GoblinTorchScript : EnemyBaseScript
         get => GlobalVariables.Instance.goblinCoinEnum;
     }
 
-    public override float Exp
+    public override float MinExp
     {
         get => GlobalVariables.Instance.goblinTorchExp;
     }

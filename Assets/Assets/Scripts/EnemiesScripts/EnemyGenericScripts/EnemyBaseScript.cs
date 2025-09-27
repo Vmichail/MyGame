@@ -13,12 +13,15 @@ public abstract class EnemyBaseScript : MonoBehaviour
     [SerializeField] private bool canApplyKnockback;
     [SerializeField] protected GlobalVariables.EnemyRarity rarity = GlobalVariables.EnemyRarity.None;
     [SerializeField] protected bool hasAttackAnimation = false;
+    [SerializeField] private bool spriteIsFacingLeft;
     [Header("--!!RangeAtributes!!--")]
     private EnemyRangeAttackScript rangeScript;
     private bool hasRangeAttack = false;
     [SerializeField] GameObject projectile;
     [SerializeField] Transform projectilePosition;
     [SerializeField] Transform projectileParent;
+    [SerializeField] private bool projectileCanRotate = true;
+    private float attackCooldownTimer = 0f;
     public virtual float ProjectileSpeed { get => GlobalVariables.Instance.goblinTNTProjectileSpeed; }
 
     protected Transform player;
@@ -46,16 +49,38 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     public virtual bool IsDead { get; set; }
     public virtual float Speed { get; set; }
-    public virtual float MaxHealth { get; set; }
-    public virtual float CurrentHealth { get; set; }
+    public virtual float MaxHealth
+    {
+        get => maxHealth;
+        set
+        {
+            maxHealth = value;
+            if (currentHealth > maxHealth)
+                currentHealth = maxHealth;
+        }
+    }
+    public virtual float CurrentHealth
+    {
+        get => currentHealth;
+        set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
+    }
     public virtual float Damage { get => GlobalVariables.Instance.skeletonDamage; }
     public virtual float AttackCooldown { get => GlobalVariables.Instance.skeletonAttackCooldown; }
     public virtual float CoinDropChance { get => GlobalVariables.Instance.skeletonAttackCooldown; }
     public virtual GlobalVariables.CoinDropEnum CoinDropEnum { get => GlobalVariables.CoinDropEnum.Yellow; }
-    public virtual float Exp { get => GlobalVariables.Instance.skeletonExp; }
+    public virtual float MinExp { get => GlobalVariables.Instance.skeletonMinExp; }
+    public virtual float MaxExp { get => GlobalVariables.Instance.skeletonMaxExp; }
     public virtual float AttackRange { get => GlobalVariables.Instance.goblinTNTRange; }
+    public virtual float MultipleAttackChance { get => GlobalVariables.Instance.goblinTNTMultipleAttackChance; }
     public virtual bool KnockbackEffect { get; set; }
     public virtual GlobalVariables.EnemyTypes EnemyType { get; set; }
+    public virtual string DeathSoundClip { get => "skeletonDeadSound"; }
+    AnimatorStateInfo stateInfo;
+
+    public virtual string[] AttackSoundClip
+    {
+        get => new string[] { "vampireAttackSound1", "vampireAttackSound2" };
+    }
 
 
 
@@ -76,9 +101,16 @@ public abstract class EnemyBaseScript : MonoBehaviour
         cameraZ = Camera.main.transform.position.z;
     }
 
+    protected virtual void OnEnable()
+    {
+        IsDead = false;
+        KnockbackEffect = false;
+        currentHealth = maxHealth;
+        hasReachedPlayer = false;
+    }
+
     protected virtual void Start()
     {
-        InstantiateVariables();
         rangeScript = GetComponentInChildren<EnemyRangeAttackScript>();
         hasRangeAttack = rangeScript != null;
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -112,11 +144,16 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (currentHealth <= 0 && !IsDead)
+        if (attackCooldownTimer > 0f)
+            attackCooldownTimer -= Time.deltaTime;
+
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if (CurrentHealth <= 0 && !IsDead)
         {
             IsDead = true;
             TryDropCoin();
             Instantiate(particles, transform.position, transform.rotation);
+            AudioManager.Instance.PlaySoundFX(DeathSoundClip, transform.position, 1f, 0.75f, 1.25f);
             EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
             _pool.Release(gameObject);
         }
@@ -160,6 +197,8 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     public void DoDamage()
     {
+        if (GlobalVariables.Instance.playerInvulnerableReasons.Count > 0)
+            return;
         float damage = EnemyGenericFunctions.DamagePlayer(Damage);
         Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
         Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;
@@ -170,65 +209,79 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected void MoveTowardPlayer()
     {
+        Vector2 direction = (player.position - transform.position).normalized;
         if (KnockbackEffect)
             return;
-        else if (hasReachedPlayer)
+        else if (hasReachedPlayer || !stateInfo.IsName("Walk"))
         {
             rb.linearVelocity = Vector2.zero;
-            return;
         }
-
-        Vector2 direction = (player.position - transform.position).normalized;
-        rb.linearVelocity = direction * Speed;
-        if (direction.x < 0)
-            spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
         else
         {
-            spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
+            rb.linearVelocity = direction * Speed;
         }
-        if (hasAttackAnimation)
+        if (spriteIsFacingLeft)
         {
-            GetAttackDirection(direction);
-        }
-    }
-
-    private void GetAttackDirection(Vector2 dir)
-    {
-        if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
-        {
-            if (dir.y > 0)
-                SetAttackDirection(AttackDirection.Up);
+            if (direction.x < 0)
+                spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
             else
-                SetAttackDirection(AttackDirection.Down);
+            {
+                spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
+            }
         }
         else
         {
-            SetAttackDirection(AttackDirection.Middle);
+            if (direction.x < 0)
+                spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
+            else
+            {
+                spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+        if (hasAttackAnimation && !hasRangeAttack && attackCooldownTimer <= 0 && !stateInfo.IsName("Attack"))
+        {
+            /*GetAttackDirection(direction);*/
+            animator.SetBool("Attack", true);
         }
     }
 
-    private void SetAttackDirection(AttackDirection direction)
-    {
-        if (AttackDirection.Up.Equals(direction))
+    /*    private void GetAttackDirection(Vector2 dir)
         {
-            animator.SetBool("Attack", true);
-            animator.SetBool("AttackUp", false);
-            animator.SetBool("AttackDown", false);
-        }
-        else if (AttackDirection.Down.Equals(direction))
-        {
-            animator.SetBool("Attack", true);
-            animator.SetBool("AttackUp", false);
-            animator.SetBool("AttackDown", false);
-        }
-        else
-        {
-            animator.SetBool("Attack", true);
-            animator.SetBool("AttackUp", false);
-            animator.SetBool("AttackDown", false);
+            if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+            {
+                if (dir.y > 0)
+                    SetAttackDirection(AttackDirection.Up);
+                else
+                    SetAttackDirection(AttackDirection.Down);
+            }
+            else
+            {
+                SetAttackDirection(AttackDirection.Middle);
+            }
         }
 
-    }
+        private void SetAttackDirection(AttackDirection direction)
+        {
+            if (attackCooldownTimer > 0) return;
+            if (AttackDirection.Up.Equals(direction))
+            {
+                animator.SetBool("Attack", true);
+                animator.SetBool("AttackUp", false);
+                animator.SetBool("AttackDown", false);
+            }
+            else if (AttackDirection.Down.Equals(direction))
+            {
+                animator.SetBool("Attack", true);
+                animator.SetBool("AttackUp", false);
+                animator.SetBool("AttackDown", false);
+            }
+            else
+            {
+                animator.SetBool("Attack", true);
+                animator.SetBool("AttackUp", false);
+                animator.SetBool("AttackDown", false);
+            }
+        }*/
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //MeleeAttack
@@ -251,21 +304,23 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 Debug.LogWarning("PlayerSpellBaseScript component not found on PlayerSpell object!");
             else
             {
+                if (spellScript.OnHitSound != null)
+                {
+                    AudioManager.Instance.PlaySoundFX(spellScript.OnHitSound, transform.position, 0.4f, 0.75f, 1.25f);
+                }
                 ReceiveDamage(spellScript.Damage, criticalChance: spellScript.CriticalChance, criticalMultiplier: spellScript.CriticalMultiplier, color: spellScript.BaseColor);
+                if (canApplyKnockback)
+                    ApplyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
             }
-            if (canApplyKnockback)
-                ApplyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
 
         }
         //RangeAttack
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (hasRangeAttack && rangeScript.IsPlayerInRange)
-            {
-                hasReachedPlayer = true;
-                animator.SetBool("hasReachedPlayer", true);
-            }
-        }
+        RangeAttackDetector(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        RangeAttackDetector(collision);
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -327,15 +382,25 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 coin.transform.position = dropPosition;
             }
         }
-        GameObject shard = ShardPoolScript.Instance.GetShard();
+        GameObject shard = ShardPoolScript.Instance.GetShard((int)MinExp, (int)MaxExp);
         shard.transform.position = dropPosition;
     }
 
     //RangeAttack
     public void RangeAttackProjectile()
     {
+        AudioManager.Instance.PlayRandomSoundFX(AttackSoundClip, transform.position, 0.4f, 0.75f, 1.25f);
+
         GameObject rangeInstance = Instantiate(projectile, projectilePosition.position, Quaternion.identity);
         rangeInstance.transform.SetParent(projectileParent, false);
+
+        if (projectileCanRotate && player != null)
+        {
+            Vector2 direction = (player.position - rangeInstance.transform.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            rangeInstance.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+
         if (rangeInstance.TryGetComponent<EnemyProjectileBaseScript>(out var projectileScript))
         {
             projectileScript.Damage = Damage;
@@ -347,10 +412,34 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
+    public void EndAttackAnimation()
+    {
+        if (Random.value > MultipleAttackChance)
+        {
+            attackCooldownTimer = AttackCooldown;
+        }
+        animator.SetBool("Attack", false);
+        animator.SetBool("hasReachedPlayer", false);
+        hasReachedPlayer = false;
+    }
+
     //Used for spells like midas etc
     public void MarkedToDie()
     {
         CurrentHealth = -1;
+    }
+
+    private void RangeAttackDetector(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (hasRangeAttack && rangeScript.IsPlayerInRange && attackCooldownTimer <= 0)
+            {
+                hasReachedPlayer = true;
+                animator.SetBool("hasReachedPlayer", true);
+                animator.SetBool("Attack", true);
+            }
+        }
     }
 
 }

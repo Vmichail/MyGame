@@ -10,7 +10,8 @@ public class EnemySpawningScript : MonoBehaviour
 {
     /*
      * 0 -> Skeleons
-     * 1 -> Vampire(Boss)
+     * 1 -> Skeleton archer(Boss)
+     * 2 -> Vampire(Boss)
      */
     [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private Transform parent;
@@ -36,17 +37,28 @@ public class EnemySpawningScript : MonoBehaviour
             enemyPools.Add(pool);
         }
         StartCoroutine(SpawnSpecificMobs(0));
-        /*StartCoroutine(SpawnRandomMobs());*/
+
     }
 
     private void Update()
     {
-        if (GlobalVariables.Instance.spawnedSkeletons > 50 && !GlobalVariables.Instance.level1BossActive)
+        //Skeleton Archer spawn
+        if (GlobalVariables.Instance.spawnedSkeletons > 1 && GlobalVariables.Instance.skeletonArchersEnabled == false)
         {
-            GlobalVariables.Instance.level1BossActive = true;
-            Vector2 position = new Vector2(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
-            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[1], position));
+            GlobalVariables.Instance.skeletonArchersEnabled = true;
+            StartCoroutine(SpawnSpecificMobs(1));
+        }
 
+
+        if (GlobalVariables.Instance.gameTime > GlobalVariables.Instance.upgradeEnemiesTimer)
+        {
+            StartCoroutine(SpawnSpecificMobs(2));
+        }
+
+        if (GlobalVariables.Instance.gameTime >= GlobalVariables.Instance.upgradeEnemiesTimer)
+        {
+            UpgradeEnemies();
+            GlobalVariables.Instance.upgradeEnemiesTimer += GlobalVariables.Instance.upgradeEnemiesTimerIncreaseValue;
         }
     }
 
@@ -67,9 +79,6 @@ public class EnemySpawningScript : MonoBehaviour
     {
         if (mob.TryGetComponent<EnemyBaseScript>(out var enemyBase))
         {
-            enemyBase.RestoreHealth();
-            enemyBase.IsDead = false;
-            enemyBase.KnockbackEffect = false;
             EnemyManagerScript.Instance.RegisterEnemy(mob, enemyBase.EnemyType);
         }
         mob.SetActive(true);
@@ -89,15 +98,25 @@ public class EnemySpawningScript : MonoBehaviour
 
     private IEnumerator SpawnSpecificMobs(int index)
     {
+        Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
+        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
         float spawningTime = GlobalVariables.Instance.spawnTime;
         if (index == 0)
         {
             spawningTime = GlobalVariables.Instance.skeletonsSpawningTime;
         }
+        else if (index == 1)
+        {
+            spawningTime = GlobalVariables.Instance.skeletonArchersSpawningTime;
+        }
+        else if (index == 2)
+        {
+            spawningTime = GlobalVariables.Instance.vampireType3SpawningTime;
+        }
         while (GlobalVariables.Instance.spawningMobsIsEnabled)
         {
+            position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
             yield return new WaitForSeconds(spawningTime);
-            Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
             StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
         }
     }
@@ -115,4 +134,16 @@ public class EnemySpawningScript : MonoBehaviour
         mob.transform.position = position;
     }
 
+
+    private void UpgradeEnemies()
+    {
+        //Skeleton
+        GlobalVariables.Instance.skeletonHealth += 1;
+        GlobalVariables.Instance.skeletonDamage += 1;
+        //Skeleton Archer
+        GlobalVariables.Instance.skeletonArcherHealth += 1;
+        GlobalVariables.Instance.skeletonArcherAttackCooldown -= 0.1f;
+        //Vampire Type 3
+        GlobalVariables.Instance.vampireType3Health += 5;
+    }
 }

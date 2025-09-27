@@ -33,6 +33,10 @@ public class EnemyManagerScript : MonoBehaviour
         {
             GlobalVariables.Instance.spawnedSkeletons++;
         }
+        else if (GlobalVariables.EnemyTypes.SkeletonArcher.Equals(enemyType))
+        {
+            GlobalVariables.Instance.spawnedSkeletonArchers++;
+        }
         else
         {
             Debug.Log("Uknown Enemy Type:" + enemyType);

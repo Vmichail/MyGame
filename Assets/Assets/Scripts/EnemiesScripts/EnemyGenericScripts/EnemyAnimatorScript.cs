@@ -18,4 +18,9 @@ public class EnemyAnimatorScript : MonoBehaviour
     {
         enemyBaseScript.RangeAttackProjectile();
     }
+
+    public void EndAttackAnimation()
+    {
+        enemyBaseScript.EndAttackAnimation();
+    }
 }

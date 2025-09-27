@@ -25,6 +25,7 @@ public class BaseButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public virtual void HighlightButton()
     {
+        AudioManager.Instance.PlaySoundFX("buttonHighlight1Sound", transform.position, 0.3f, 0.75f, 1.25f);
         LeanTween.scale(gameObject, Vector3.one * 1.1f, 0.25f)
             .setEaseInOutSine()
             .setLoopPingPong(1)

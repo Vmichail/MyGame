@@ -1,0 +1,13 @@
+using UnityEngine;
+
+public class ChildBladeScript : PlayerSpellBaseScript
+{
+    public override float Speed => GlobalVariables.Instance.bladeSpeed;
+    public override float Damage => GlobalVariables.Instance.playerAttackDamage * GlobalVariables.Instance.bladeDamageMulti;
+    public override int Bounces => GlobalVariables.Instance.bladeBounces + GlobalVariables.Instance.defaultSpellBounces;
+    public override float KnockbackForce => GlobalVariables.Instance.bladeKnockbackForce;
+    public override float CriticalChance => GlobalVariables.Instance.bladeCriticalChance;
+    public override float CriticalMultiplier => GlobalVariables.Instance.bladeCriticalMultiplier;
+    public override Color BaseColor => GlobalVariables.Instance.bladeDefaultColor;
+
+}
