@@ -1,44 +1,55 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
+
 
 public class MenuGenericFunctions : MonoBehaviour
 {
     [Header("Game Menus")]
+    [SerializeField] private GameObject wholeGameMenuPanels;
     [SerializeField] private GameObject pauseOrGameOverPanel;
-    [SerializeField] private GameObject MusicPanel;
-    [Header("Buy Menus")]
-    [SerializeField] private GameObject heroBuyMenu;
-    [SerializeField] private GameObject heroAttackMaximized;
-    [SerializeField] private GameObject heroHealthMaximized;
-    [SerializeField] RectTransform buyMenuChoices;
-    [SerializeField] private Color selectedColor;
-    [SerializeField] private Color normalColor;
-    private int currentTabIndex = 0;
-    [Header("Option Buttons")]
-    [SerializeField] private Button attackButton;
-    [SerializeField] private Button healthButton;
-    [SerializeField] private Button economyButton;
-    [SerializeField] private Button spellsButton;
+    [SerializeField] private GameObject musicPanel;
+    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject difficultyPanel;
+
+    [Header("Background Animation")]
+    [SerializeField] private Image backgroundImage;
+    private Vector2 centerPosition;
+    private Vector2 leftPosition;
+    private bool isCentered = false;
 
 
     private void Start()
     {
-        SetGameMenuPanelOff();
+        // Initialize Game Menu
+        backgroundImage.enabled = false;
+        centerPosition = wholeGameMenuPanels.transform.position;
+        leftPosition = new Vector2(-1250f, centerPosition.y);
+        transform.position = leftPosition;
+        if (!DifficultyManager.Instance.startingDifficultySet)
+        {
+            Debug.Log("Showing Difficulty Menu at Start");
+            GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
+            ShowDifficultyMenu();
+        }
+        else
+        {
+            Debug.Log("Hiding All Menus at Start");
+            HideAllMenus();
+        }
     }
 
     private void Update()
     {
-        if (GlobalVariables.Instance.playerCurrentHealth <= 0 && GlobalVariables.Instance.playerIsAlive)
+        if (GlobalVariables.Instance.playerCurrentHealth < 1 && GlobalVariables.Instance.playerIsAlive)
         {
-            AudioManager.Instance.PlayRandomSoundFX(GlobalVariables.Instance.gameOverClips, transform.position, 1f, 1f, 1.25f);
-            AudioManager.Instance.PlaySoundFX("GameOverGeneric", transform.position, 1f, 0.75f, 1.25f);
+            Debug.Log("Player is Dead - Triggering Game Over with sounds");
             GlobalVariables.Instance.playerIsAlive = false;
+            AudioManager.Instance.PlayRandomSoundFX(GlobalVariables.Instance.gameOverClips, transform.position, 1f, 1f, 1.25f);
+            AudioManager.Instance.PlaySoundFX("gameOverGeneric", transform.position, 1f, 1f, 1.25f);
             GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.PlayerIsDead);
         }
-        else if (GlobalVariables.Instance.playerCurrentHealth > 0 && !GlobalVariables.Instance.playerIsAlive)
+        else if (GlobalVariables.Instance.playerCurrentHealth > 1 && !GlobalVariables.Instance.playerIsAlive)
         {
             GlobalVariables.Instance.playerIsAlive = true;
         }
@@ -46,90 +57,23 @@ public class MenuGenericFunctions : MonoBehaviour
         //GameOverMenu
         if (!GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeSelf)
         {
-            pauseOrGameOverPanel.SetActive(true);
+            ShowPauseMenu();
         }
 
-        //PauseUnPauseButton
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        //PauseUnPauseButton 
+        if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab)) && DifficultyManager.Instance.startingDifficultySet)
         {
             TogglePause();
         }
 
-        //TABShowsMenu
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            TogglePause();
-        }
-
-    }
-
-    public void SetChoicesToLeft(float topOffset = 0f)
-    {
-        buyMenuChoices.anchorMin = new Vector2(0f, 1f);
-        buyMenuChoices.anchorMax = new Vector2(0f, 1f);
-        buyMenuChoices.pivot = new Vector2(0f, 1f);
-        buyMenuChoices.anchoredPosition = new Vector2(0f, -topOffset);
-    }
-
-    public void SetChoicesToBottom(float bottomOffset = 0f)
-    {
-        heroAttackMaximized.SetActive(false);
-        heroHealthMaximized.SetActive(false);
-        buyMenuChoices.anchorMin = new Vector2(0.5f, 0f);
-        buyMenuChoices.anchorMax = new Vector2(0.5f, 0f);
-        buyMenuChoices.pivot = new Vector2(0.5f, 0f);
-        buyMenuChoices.anchoredPosition = new Vector2(0f, bottomOffset);
-        EventSystem.current.SetSelectedGameObject(null);
-    }
-
-    public void ChangeTab(int tabIndex)
-    {
-        if (currentTabIndex == tabIndex)
-        {
-            SetChoicesToBottom();
-            currentTabIndex = 0;
-            return;
-        }
-        UpdateUI(tabIndex);
-    }
-
-    private void EnableDisableBuyMenu()
-    {
-        if (heroBuyMenu.activeInHierarchy == false && !GlobalVariables.Instance.gameIsPaused)
-        {
-            GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.HeroBuyMenu);
-            heroBuyMenu.SetActive(true);
-        }
-        else
-        {
-            heroBuyMenu.SetActive(false);
-            GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.HeroBuyMenu);
-        }
-    }
-    private void UpdateUI(int index)
-    {
-        if (index == 1)
-        {
-            EventSystem.current.SetSelectedGameObject(attackButton.gameObject);
-            heroAttackMaximized.SetActive(true);
-            heroHealthMaximized.SetActive(false);
-        }
-        else if (index == 2)
-        {
-            EventSystem.current.SetSelectedGameObject(healthButton.gameObject);
-            heroAttackMaximized.SetActive(false);
-            heroHealthMaximized.SetActive(true);
-        }
-        currentTabIndex = index;
-        SetChoicesToLeft();
     }
 
     private void TogglePause()
     {
-        if (GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeInHierarchy && !MusicPanel.activeInHierarchy)
+        if (GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeInHierarchy && !musicPanel.activeInHierarchy)
         {
             GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
-            pauseOrGameOverPanel.SetActive(true);
+            ShowPauseMenu();
         }
         else
         {
@@ -139,18 +83,10 @@ public class MenuGenericFunctions : MonoBehaviour
 
     private void Unpause()
     {
-        if (GlobalVariables.Instance.playerIsAlive && (pauseOrGameOverPanel.activeInHierarchy || MusicPanel.activeInHierarchy))
+        if (GlobalVariables.Instance.playerIsAlive && (pauseOrGameOverPanel.activeInHierarchy || musicPanel.activeInHierarchy))
         {
-            GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
-            SetGameMenuPanelOff();
+            HideAllMenus();
         }
-    }
-
-    private void SetGameMenuPanelOff()
-    {
-        pauseOrGameOverPanel.SetActive(false);
-        heroBuyMenu.SetActive(false);
-        MusicPanel.SetActive(false);
     }
 
     public void Continue()
@@ -176,18 +112,76 @@ public class MenuGenericFunctions : MonoBehaviour
         Application.Quit();
     }
 
-    public void BackButton(bool gameover)
+    public enum GameMenuType
     {
-        pauseOrGameOverPanel.SetActive(true);
-        MusicPanel.SetActive(false);
+        None,
+        PauseOrGameOver,
+        Music,
+        Settings,
+        Difficulty
     }
-    //===============Music================
-    public void MusicButton()
+
+    public void ShowGameMenu(GameMenuType menuType)
     {
-        MusicPanel.SetActive(true);
+        // Turn off all menus first
         pauseOrGameOverPanel.SetActive(false);
+        musicPanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        difficultyPanel.SetActive(false);
+        bool show = menuType != GameMenuType.None;
+        // Then enable only the requested one
+        switch (menuType)
+        {
+            case GameMenuType.PauseOrGameOver:
+                pauseOrGameOverPanel.SetActive(true);
+                break;
+            case GameMenuType.Music:
+                musicPanel.SetActive(true);
+                break;
+            case GameMenuType.Settings:
+                settingsPanel.SetActive(true);
+                break;
+            case GameMenuType.Difficulty:
+                difficultyPanel.SetActive(true);
+                break;
+            case GameMenuType.None:
+                GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
+                break;
+            default:
+                // do nothing, all are off
+                break;
+        }
+        AnimateMenu(show);
     }
 
+    public void ShowPauseMenu() => ShowGameMenu(GameMenuType.PauseOrGameOver);
+    public void ShowMusicMenu() => ShowGameMenu(GameMenuType.Music);
+    public void ShowSettingsMenu() => ShowGameMenu(GameMenuType.Settings);
+    public void ShowDifficultyMenu() => ShowGameMenu(GameMenuType.Difficulty);
+    public void HideAllMenus() => ShowGameMenu(GameMenuType.None);
 
+
+    //==================== MENU ANIMATION ====================//
+    private void AnimateMenu(bool show)
+    {
+        LeanTween.cancel(wholeGameMenuPanels);
+
+        if (show && !isCentered)
+        {
+            backgroundImage.enabled = true;
+            LeanTween.move(wholeGameMenuPanels, centerPosition, 0.25f)
+                     .setEase(LeanTweenType.easeOutCubic)
+                     .setIgnoreTimeScale(true);
+            isCentered = true;
+        }
+        else if (!show && isCentered)
+        {
+            LeanTween.move(wholeGameMenuPanels, leftPosition, 0.25f)
+                     .setEase(LeanTweenType.easeInCubic)
+                     .setIgnoreTimeScale(true)
+                     .setOnComplete(() => backgroundImage.enabled = false);
+            isCentered = false;
+        }
+    }
 
 }

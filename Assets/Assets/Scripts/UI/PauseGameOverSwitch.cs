@@ -1,8 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PauseGameOverSwitch : MonoBehaviour
 {
+    [Header("Buttons")]
+    [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject replayButton;
+
     [SerializeField] GameObject pauseOptions;
     [SerializeField] GameObject gameOverOptions;
     [SerializeField] GameObject colorWheelImage;
@@ -26,6 +32,7 @@ public class PauseGameOverSwitch : MonoBehaviour
             previousScore = GlobalVariables.Instance.score;
             gameOverOptions.SetActive(false);
             pauseOptions.SetActive(true);
+            StartCoroutine(SelectNextFrame(continueButton));
         }
         else
         {
@@ -41,6 +48,7 @@ public class PauseGameOverSwitch : MonoBehaviour
                  })
                  .setEase(LeanTweenType.easeOutCubic)
                  .setIgnoreTimeScale(true);
+            StartCoroutine(SelectNextFrame(replayButton));
         }
     }
 
@@ -72,5 +80,12 @@ public class PauseGameOverSwitch : MonoBehaviour
                 AudioManager.Instance.PlaySoundFX(soundName, transform.position, 0.2f, 0.75f, 1.25f);
             }).setIgnoreTimeScale(true);
         }
+    }
+
+    private System.Collections.IEnumerator SelectNextFrame(GameObject go)
+    {
+        yield return null; // wait one frame for layout/activation
+        var es = EventSystem.current;
+        es.SetSelectedGameObject(go);
     }
 }

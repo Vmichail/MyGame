@@ -15,6 +15,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] audioClips;
     private int currentMusicIndex = 0;
     private bool isMusicPlaying = false;
+    private Transform playerTransform;
 
 
     private List<AudioSource> audioSourcePool;
@@ -38,6 +39,12 @@ public class AudioManager : MonoBehaviour
             musicSource = gameObject.AddComponent<AudioSource>();
             musicSource.loop = false;
         }
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+            playerTransform = playerObj.transform;
+        else
+            Debug.LogWarning("AudioManager: Player object with tag 'Player' not found in the scene.");
     }
 
     private void Start()
@@ -91,25 +98,73 @@ public class AudioManager : MonoBehaviour
         return newSource;
     }
 
-    public void PlaySoundFX(string clipName, Vector3 position, float volume = 1f, float minPitch = 1, float maxPitch = 1, bool loop = false)
+    public void PlayRandomSoundFX(string[] clipNames, Vector2 position, float volume = 1f, float minPitch = 1, float maxPitch = 1, bool applyDistance = false)
     {
+        if (clipNames == null || clipNames.Length == 0) return;
 
-        if (clipName == null || !clipDictionary.ContainsKey(clipName))
+        // Pick a random name
+        int index = Random.Range(0, clipNames.Length);
+        string clipName = clipNames[index];
+
+        // Play using the existing string-based method
+        PlaySoundFX(clipName, position, volume, minPitch, maxPitch, applyDistance: applyDistance);
+    }
+
+    public AudioSource PlaySoundFX(string clipName, Vector2 position, float volume = 1f, float minPitch = 1, float maxPitch = 1, bool loop = false, bool applyDistance = false)
+    {
+        if (string.IsNullOrEmpty(clipName) || !clipDictionary.ContainsKey(clipName))
         {
             Debug.LogWarning($"AudioManager: Clip '{clipName}' not found!");
-            return;
+            return null;
         }
+
         AudioClip clip = clipDictionary[clipName];
         AudioSource source = GetPooledSource();
         source.transform.position = position;
-        source.volume = volume * GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.SFXVolume;
-        // Randomize pitch between minPitch and maxPitch
+        //volume based on distance
+        float distance = Vector2.Distance(position, playerTransform.position);
+        float minDistance = 1f;
+        float maxDistance = 70f;
+        float distanceFactor = Mathf.Clamp01(1 - (distance - minDistance) / (maxDistance - minDistance));
+        if (applyDistance)
+        {
+            Debug.Log($"AudioManager: Playing '{clipName}' at distance {distance} with volume factor {distanceFactor}");
+            source.volume = volume * distanceFactor * GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.SFXVolume;
+        }
+        else
+        {
+            source.volume = volume * GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.SFXVolume;
+        }
         source.pitch = Random.Range(minPitch, maxPitch);
+        source.loop = loop;
         source.gameObject.SetActive(true);
-        source.PlayOneShot(clip);
 
-        StartCoroutine(DisableAfter(source, clip.length));
+        if (loop)
+        {
+            source.clip = clip;
+            source.Play();
+        }
+        else
+        {
+            source.clip = null;
+            source.PlayOneShot(clip);
+            StartCoroutine(DisableAfter(source, clip.length));
+        }
+
+        return source;
     }
+
+    public void StopSound(AudioSource source)
+    {
+        if (source == null) return;
+
+        source.Stop();
+        source.loop = false;
+        source.clip = null;
+        source.gameObject.SetActive(false);
+    }
+
+
 
     public int GetClipLength(string clipName)
     {
@@ -122,18 +177,6 @@ public class AudioManager : MonoBehaviour
         return Mathf.CeilToInt(clip.length);
     }
 
-    public void PlayRandomSoundFX(string[] clipNames, Vector3 position, float volume = 1f, float minPitch = 1, float maxPitch = 1)
-    {
-        if (clipNames == null || clipNames.Length == 0) return;
-
-        // Pick a random name
-        int index = Random.Range(0, clipNames.Length);
-        string clipName = clipNames[index];
-
-        // Play using the existing string-based method
-        PlaySoundFX(clipName, position, volume, minPitch, maxPitch);
-    }
-
     private System.Collections.IEnumerator DisableAfter(AudioSource source, float time)
     {
         yield return new WaitForSeconds(time);
@@ -141,11 +184,15 @@ public class AudioManager : MonoBehaviour
     }
 
     // ===== MUSIC =====
-    public void PlayMusic()
+    public void PlayMusic(int index = -1)
     {
         if (musicClips.Length == 0) return;
 
-        currentMusicIndex = Random.Range(0, musicClips.Length);
+        if (index < 0)
+            currentMusicIndex = Random.Range(0, musicClips.Length - 1);
+        else
+            currentMusicIndex = index;
+
         musicSource.clip = musicClips[currentMusicIndex];
         musicSource.volume = GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.musicVolume;
         musicSource.Play();

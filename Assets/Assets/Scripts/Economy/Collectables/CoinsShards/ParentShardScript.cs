@@ -25,7 +25,7 @@ public class ParentShardScript : MonoBehaviour
             {
                 MinShardsToSpawn = 0;
                 MaxShardsToSpawn = 0;
-                ShardPoolScript.Instance.ReleaseShard(gameObject);
+                ShardPool.Instance.ReleaseShard(gameObject);
             }
         }
     }
@@ -61,5 +61,15 @@ public class ParentShardScript : MonoBehaviour
             child.SetActive(true);
             child.transform.localPosition = Random.insideUnitCircle * 0.9f;
         }
+    }
+
+    public void Initialize(Vector3 spawnPos)
+    {
+        transform.position = spawnPos;
+
+        LeanTween.cancel(gameObject);
+        LeanTween.moveY(gameObject, spawnPos.y + 0.3f, 0.8f)
+                 .setEaseInOutSine()
+                 .setLoopPingPong();
     }
 }

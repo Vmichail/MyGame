@@ -56,11 +56,9 @@ public class PlayerScript : MonoBehaviour
 
     private void Start()
     {
-        foreach (var spell in manaSpells)
-        {
-            spell.spellData.InitData();
-        }
-        moveSpeed = GlobalVariables.Instance.playerSpeed;
+        InitializePlayer();
+
+
         rb = GetComponent<Rigidbody2D>();
         target.transform.SetParent(null);
 
@@ -70,20 +68,7 @@ public class PlayerScript : MonoBehaviour
             spriteTransform = spriteRenderer.transform;
         else
             Debug.LogWarning("No Sprite was found!");
-        // Auto-fetch UI cooldown script from each prefab
-        int spellCount = manaSpells.Length;
-        for (int i = 0; i < spellCount; i++)
-        {
-            manaSpells[i].spellData.IsOnCooldown = false;
-            if (manaSpells[i].UICooldownGO.TryGetComponent(out UICooldownScript uiCooldownScript))
-            {
-                manaSpells[i].ui = uiCooldownScript;
-            }
-            else
-            {
-                Debug.LogWarning($"Spell prefab {manaSpells[i].UICooldownGO.name} is missing UICooldownScript!");
-            }
-        }
+
     }
 
     void Update()
@@ -296,20 +281,30 @@ public class PlayerScript : MonoBehaviour
 
     public void CastManaSpell(int index)
     {
-        if (manaSpells[index].spellData.IsOnCooldown || GlobalVariables.Instance.playerCurrentMana <= manaSpells[index].spellData.manaCost || !manaSpells[index].spellData.IsActive)
+        if (GlobalVariables.Instance.gameIsPaused)
+        {
+            return;
+        }
+        if (manaSpells[index].spellData.IsOnCooldown || GlobalVariables.Instance.playerCurrentMana < manaSpells[index].spellData.manaCost || !manaSpells[index].spellData.IsActive)
         {
             AudioManager.Instance.PlaySoundFX("uiDeny", transform.position, 0.8f, 0.9f, 1.1f);
             return;
         }
-
+        CinemachineScript.Instance.Shake(0.5f, 0.15f);
         SpellDataFull spell = manaSpells[index];
         GlobalVariables.Instance.playerCurrentMana -= spell.spellData.manaCost;
         Debug.Log($"Casting mana spell {spell.spellData.SpellCode}, mana cost: {spell.spellData.manaCost}, cooldown:{spell.spellData.cooldownTime}");
         AudioManager.Instance.PlaySoundFX(spell.spellData.castSound, transform.position, 0.6f, 0.8f, 1.25f);
         if (GlobalVariables.SpellCode.FireBlade.Equals(spell.spellData.SpellCode))
+        {
+            HealEffectSelector.SelectHealEffect(HealEffectSelector.PlayerHealEffectType.Fire);
             FireBladeCast(spell);
+        }
         else if (GlobalVariables.SpellCode.RotatingBlades.Equals(spell.spellData.SpellCode))
+        {
+            HealEffectSelector.SelectHealEffect(HealEffectSelector.PlayerHealEffectType.White);
             CastRotatingBlades(spell);
+        }
         else if (GlobalVariables.SpellCode.Shield.Equals(spell.spellData.SpellCode))
             CastShield(spell);
         else
@@ -445,6 +440,50 @@ public class PlayerScript : MonoBehaviour
             moveSpeed /= speedUpdate;
         else
             moveSpeed *= speedUpdate;
+    }
+
+
+
+    private void InitializePlayer()
+    {
+        DifficultyScaler();
+        foreach (var spell in manaSpells)
+        {
+            spell.spellData.InitData();
+        }
+        // Auto-fetch UI cooldown script from each prefab
+        int spellCount = manaSpells.Length;
+        for (int i = 0; i < spellCount; i++)
+        {
+            manaSpells[i].spellData.IsOnCooldown = false;
+            if (manaSpells[i].UICooldownGO.TryGetComponent(out UICooldownScript uiCooldownScript))
+            {
+                manaSpells[i].ui = uiCooldownScript;
+            }
+            else
+            {
+                Debug.LogWarning($"Spell prefab {manaSpells[i].UICooldownGO.name} is missing UICooldownScript!");
+            }
+        }
+    }
+
+    public void DifficultyScaler()
+    {
+        float playerGenericMultiplier = DifficultyManager.Instance.playerGenericMultiplier;
+        moveSpeed = GlobalVariables.Instance.playerSpeed * playerGenericMultiplier;
+        GlobalVariables.Instance.playerMaxHealth = GlobalVariables.Instance.playerMaxHealth * playerGenericMultiplier;
+        GlobalVariables.Instance.playerCurrentHealth = GlobalVariables.Instance.playerMaxHealth;
+        GlobalVariables.Instance.playerMaxMana = GlobalVariables.Instance.playerMaxMana * playerGenericMultiplier;
+        GlobalVariables.Instance.playerCurrentMana = GlobalVariables.Instance.playerMaxMana;
+        GlobalVariables.Instance.playerHealthRegen = GlobalVariables.Instance.playerHealthRegen * playerGenericMultiplier;
+        GlobalVariables.Instance.playerManaRegen = GlobalVariables.Instance.playerManaRegen * playerGenericMultiplier;
+        GlobalVariables.Instance.playerAttackSpeed = GlobalVariables.Instance.playerAttackSpeed * playerGenericMultiplier;
+        GlobalVariables.Instance.playerAttackDamage = Mathf.Max(1f, GlobalVariables.Instance.playerAttackDamage * playerGenericMultiplier);
+        GlobalVariables.Instance.healthPotionHealth = GlobalVariables.Instance.healthPotionHealth * playerGenericMultiplier;
+        GlobalVariables.Instance.manaPotionMana = GlobalVariables.Instance.manaPotionMana * playerGenericMultiplier;
+        GlobalVariables.Instance.playerArmor = GlobalVariables.Instance.playerArmor * playerGenericMultiplier;
+        GlobalVariables.Instance.playerHealthRegenInterval = GlobalVariables.Instance.playerHealthRegenInterval / playerGenericMultiplier;
+        GlobalVariables.Instance.playerManaRegenInterval = GlobalVariables.Instance.playerManaRegenInterval / playerGenericMultiplier;
     }
 
 }

@@ -124,14 +124,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
-  damageTextPopUp: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
   receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
+  playerWasHitDamage: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
   canApplyKnockback: 0
   rarity: 0
   hasAttackAnimation: 1
+  spriteIsFacingLeft: 0
   projectile: {fileID: 828209180850330798, guid: d61aa2d11e11ab541b1d982472d73083, type: 3}
   projectilePosition: {fileID: 4074421219935893854}
   projectileParent: {fileID: 0}
+  projectileCanRotate: 1
   hasReachedPlayer: 0
   animator: {fileID: 4442439744357065514}
 --- !u!1 &3552664787862045162

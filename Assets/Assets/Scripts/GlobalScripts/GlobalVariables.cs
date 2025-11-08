@@ -29,7 +29,6 @@ public class GlobalVariables : MonoBehaviour
 
         Instance = this;
         CacheInitialValues();
-        DontDestroyOnLoad(gameObject); // Optional: persist across scenes
     }
     [Header("Sound-Music values")]
     public float masterVolume = 1f;
@@ -55,6 +54,8 @@ public class GlobalVariables : MonoBehaviour
     public float upgradeEnemiesTimer = 40f;
     public float upgradeEnemiesTimerIncreaseValue = 5f;
     [Header("Player Collectables")]
+    public bool isSpawningCollectablePets = true;
+    public int catsCollected = 0;
     public float coinsCollected = 100;
     public int permanentCoinsCollected = 100;
     public int diamondsCollected = 100;
@@ -87,6 +88,9 @@ public class GlobalVariables : MonoBehaviour
     public bool manaRegenIsActive = true;
     public float playerManaRegenInterval = 1;
     public float playerManaRegen = 1;
+    //Potions
+    public float manaPotionMana = 10;
+    public float healthPotionHealth = 20;
 
 
     //GreenMultiplier
@@ -119,6 +123,7 @@ public class GlobalVariables : MonoBehaviour
     public int spawnedSkeletons = 0;
     public int spawnedSkeletonArchers = 0;
     public bool skeletonArchersEnabled = false;
+    public bool vampiresType3Enabled = false;
     public bool level1BossActive = false;
     [Header("Skeleton")]
     public float skeletonSpeed = 3f;
@@ -127,6 +132,8 @@ public class GlobalVariables : MonoBehaviour
     public float skeletonDamage = 1f;
     public float skeletonAttackCooldown = 0.5f;
     public float skeleonCoinDropChance = 0.1f;
+    public float skeletonHealthPotionChance = 0.05f;
+    public float skeletonManaPotionChance = 0.01f;
     public CoinDropEnum skeletonCoinEnum = CoinDropEnum.Yellow;
     public Color skeletonDefaultColor = Color.white;
     public float skeletonMinExp = 1f;
@@ -138,6 +145,8 @@ public class GlobalVariables : MonoBehaviour
     public float skeletonArcherDamage = 2f;
     public float skeletonArcherAttackCooldown = 1f;
     public float skeletonArcherCoinDropChance = 0.1f;
+    public float skeletonArcherHealthPotionChance = 0.1f;
+    public float skeletonArcherManaPotionChance = 0.02f;
     public CoinDropEnum skeletonArcherCoinEnum = CoinDropEnum.Red;
     public Color skeletonArcherDefaultColor = Color.white;
     public float skeletonArcherProjectileSpeed = 10f;
@@ -150,20 +159,39 @@ public class GlobalVariables : MonoBehaviour
     public float vampireType3KnockbackResistance = 5f;
     public float vampireType3Damage = 2f;
     public float vampireType3AttackCooldown = 2f;
-    public float vampireType3CoinDropChance = 0.1f;
+    public float vampireType3CoinDropChance = 0.8f;
+    public float vampireType3HealthPotionChance = 0.5f;
+    public float vampireType3ManaPotionChance = 0.5f;
     public CoinDropEnum vampireType3CoinEnum = CoinDropEnum.Red;
     public Color vampireType3DefaultColor = Color.white;
     public float vampireType3ProjectileSpeed = 10f;
     public float vampireType3Range = 10f;
     public float vampireType3Exp = 20f;
+    [Header("Vampire Type 2")]
+    public float vampireType2Speed = 3f;
+    public float vampireType2Health = 250f;
+    public float vampireType2KnockbackResistance = 5f;
+    public float vampireType2Damage = 2f;
+    public float vampireType2AttackCooldown = 2f;
+    public float vampireType2CoinDropChance = 1f;
+    public float vampireType2HealthPotionChance = 1f;
+    public float vampireType2ManaPotionChance = 1f;
+    public CoinDropEnum vampireType2CoinEnum = CoinDropEnum.Red;
+    public Color vampireType2DefaultColor = Color.white;
+    public float vampireType2ProjectileSpeed = 10f;
+    public float vampireType2Range = 10f;
+    public float vampireType2Exp = 20f;
+    public float vampireType2MultipleAttackChance = 0.3f;
     [Header("GoblinTorch")]
     public float goblinTorchSpeed = 3f;
     public float goblinTorchHealth = 250f;
     public float goblinTorchKnockbackResistance = 5f;
-    public float goblinDamage = 2f;
-    public float goblinAttackCooldown = 2f;
-    public float goblinTorchCoinDropChance = 0.1f;
-    public CoinDropEnum goblinCoinEnum = CoinDropEnum.Red;
+    public float goblinTorchDamage = 2f;
+    public float goblinTorchAttackCooldown = 2f;
+    public float goblinTorchCoinDropChance = 0.7f;
+    public float goblinTorchHealthPotionChance = 0.5f;
+    public float goblinTorchManaPotionChance = 0.5f;
+    public CoinDropEnum goblinTorchCoinEnum = CoinDropEnum.Red;
     public Color goblinTorchDefaultColor = Color.white;
     public float goblinTorchExp = 10f;
     [Header("GoblinTNT")]
@@ -172,7 +200,9 @@ public class GlobalVariables : MonoBehaviour
     public float goblinTNTKnockbackResistance = 5f;
     public float goblinTNTDamage = 2f;
     public float goblinTNTAttackCooldown = 2f;
-    public float goblinTNTCoinDropChance = 0.1f;
+    public float goblinTNTCoinDropChance = 0.6f;
+    public float goblinTNTHealthPotionChance = 0.5f;
+    public float goblinTNTManaPotionChance = 0.5f;
     public CoinDropEnum goblinTNTCoinEnum = CoinDropEnum.Red;
     public Color goblinTNTDefaultColor = Color.white;
     public float goblinTNTProjectileSpeed = 10f;
@@ -252,7 +282,7 @@ public class GlobalVariables : MonoBehaviour
     public float bladeKnockbackForce = 20f;
     public float bladeCriticalChance = 0.7f;
     public float bladeCriticalMultiplier = 1f;
-    public Color bladeDefaultColor = Color.gray;
+    public Color bladeDefaultColor = Color.white;
     [Header("Spell-PoisonCircle")]
     public float poisonCircleSpeed = 14f;
     public float poisonCircleDamageMulti = 1.1f;
@@ -317,6 +347,28 @@ public class GlobalVariables : MonoBehaviour
         Shield,
 
     }
+    public static readonly Dictionary<GlobalVariables.UpgradeCode, string> UpgradesTitles =
+       new Dictionary<GlobalVariables.UpgradeCode, string>
+       {
+            { GlobalVariables.UpgradeCode.Attack, "Attack" },
+            { GlobalVariables.UpgradeCode.AttackSpeed, "Atk Speed" },
+            { GlobalVariables.UpgradeCode.AttackRange, "Atk Range" },
+            { GlobalVariables.UpgradeCode.CriticalChance, "Cr.Chance" },
+            { GlobalVariables.UpgradeCode.CriticalDamage, "Cr.Dmg" },
+            { GlobalVariables.UpgradeCode.Bounce, "Bounce" },
+            { GlobalVariables.UpgradeCode.Health, "Health" },
+            { GlobalVariables.UpgradeCode.HealthRegen, "Hlth Reg." },
+            { GlobalVariables.UpgradeCode.Armor, "Armor" },
+            { GlobalVariables.UpgradeCode.MovementSpeed, "Mvmnt Spd" },
+            { GlobalVariables.UpgradeCode.CoinsValue, "Coin Value" },
+            { GlobalVariables.UpgradeCode.MoreCoins, "More Coins" },
+            { GlobalVariables.UpgradeCode.FireBlade, "Fire Blade" },
+            { GlobalVariables.UpgradeCode.RotatingBlades, "Rot.Blades" },
+            { GlobalVariables.UpgradeCode.Shield, "Shield" },
+       };
+
+    public static string GetUpgradeTitle(UpgradeCode code)
+        => UpgradesTitles.TryGetValue(code, out var title) ? title : code.ToString();
     public enum SpellCode
     {
         //Shoule be same with UpgradeCode
@@ -374,6 +426,7 @@ public class GlobalVariables : MonoBehaviour
     }
     public void UnPauseTime(PauseReasonEnum pauseReason)
     {
+        Debug.Log("UnPaused Time with reason:" + pauseReason);
         if (pauseReasonsList.Remove(pauseReason))
         {
             // Only unpause if no other reasons remain
@@ -475,9 +528,9 @@ public class GlobalVariables : MonoBehaviour
             else
             {
                 fireBladeManaTotal += 2;
-                if (fireBladeUpgrades % 2 == 0)
+                if (fireBladeUpgrades % 2 == 0 && fireBladeDelay > 0.2f)
                     fireBladeDelay -= 0.05f;
-                fireBladeManaSpellDamageMutli += 0.5f;
+                fireBladeManaSpellDamageMutli += 0.2f;
                 fireBladeManaSpellCriticalChance += 0.1f;
                 fireBladeManaSpellCriticalMultiplier += 0.1f;
                 fireBladeManaSpellPiercing += 5;

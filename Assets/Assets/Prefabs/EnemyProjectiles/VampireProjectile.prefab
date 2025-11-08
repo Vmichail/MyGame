@@ -128,6 +128,7 @@ MonoBehaviour:
   lifeTime: 5
   particles: {fileID: 3292213846079307020, guid: 1044e1f64dbf4cf4095cdeb0503383dc, type: 3}
   receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
+  hasDirection: 0
 --- !u!58 &4774684900185818875
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -162,5 +163,5 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0023880005, y: 0.0017544627}
-  m_Radius: 0.16357732
+  m_Offset: {x: -0.0096235275, y: -0.0015214682}
+  m_Radius: 0.23564672

@@ -122,7 +122,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
             }
             else
             {
-                AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.1f, 0.9f, 1.1f);
+                AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.5f, 0.6f, 1.1f);
                 Destroy(gameObject);
             }
         }
@@ -131,8 +131,9 @@ public class PlayerSpellBaseScript : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Map"))
+        if (collision.gameObject.CompareTag("Wall"))
         {
+            AudioManager.Instance.PlaySoundFX("wallHitSpell", transform.position, 0.8f, 0.9f, 1.1f);
             Destroy(gameObject);
         }
     }

@@ -8,23 +8,32 @@ using UnityEngine.UI;
 
 public class LevelUpPanelScript : MonoBehaviour
 {
-    [Header("Spell Data")]
-    [Header("")]
+    [Header("Cats")]
+    [SerializeField] private Transform catsGOParent;
+    [Header("Upgrade Choices")]
     [SerializeField] private Transform upgradeChoicesParentTransform;
     [SerializeField] private GameObject wholeLevelUpPanel;
     [SerializeField] private List<UpgradeChoice> upgradeChoices = new();
     [SerializeField] int numberOfOptions = 5;
     [SerializeField] GameObject upgradeOptionPrefab;
-    private int upgradeCost;
+    private int upgradeCost = 0;
+    [SerializeField] private int healthCost = 10;
     private List<UpgradeChoice> randomChoices = new();
+    private List<UpgradeChoice> allSpells = new();
     [SerializeField] private Animator buffAnimator;
-    [SerializeField] private Button continueButton;
     private List<SetUpgradeScript> upgradeScripts = new();
     [SerializeField] private GameObject refreshButtonGO;
     private int currentRefreshes = 0;
-
-    private void Start()
+    public bool HealthCost = false;
+    private Image levelUpPanelImage;
+    private Color normalColor;
+    private Color redColor = new Color(1f, 0f, 0f, 0.3f);
+    private string[] levelUpSounds = new[] { "levelup1", "levelup2", "levelup3" };
+    private void Awake()
     {
+        allSpells = upgradeChoices.Where(uc => uc.UpgradeCategory == GlobalVariables.UpgradeCategory.Spells).ToList();
+        levelUpPanelImage = wholeLevelUpPanel.GetComponent<Image>();
+        normalColor = levelUpPanelImage.color;
     }
 
     private void Update()
@@ -35,6 +44,7 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void RefreshChoices(bool resetCost)
     {
+        levelUpPanelImage.color = normalColor;
         if (resetCost)
         {
             upgradeCost = 0;
@@ -83,9 +93,47 @@ public class LevelUpPanelScript : MonoBehaviour
                         button.onClick.AddListener(() => BuyOption(choiceCopy, button.gameObject, setUpgradeScript));
                     }
                 }
+                if (i == 0)
+                {
+                    SetNavigationGO(upgradeChoice);
+                }
             }
 
         }
+    }
+
+    public void ShowChoicesWithHealth()
+    {
+        levelUpPanelImage.color = redColor;
+        upgradeScripts.Clear();
+        foreach (Transform child in upgradeChoicesParentTransform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        randomChoices = GetOnlySpells(3);
+        foreach (int i in Enumerable.Range(0, 3))
+        {
+            UpgradeChoice choiceCopy = randomChoices[i];
+            GameObject upgradeChoice = Instantiate(upgradeOptionPrefab, upgradeChoicesParentTransform);
+            upgradeChoice.name = "UpgradeOption" + i;
+            if (upgradeChoice.TryGetComponent(out SetUpgradeScript setUpgradeScript))
+            {
+                upgradeScripts.Add(setUpgradeScript);
+                setUpgradeScript.HealthCost = true;
+                setUpgradeScript.SetUpgradeChoice(randomChoices[i], healthCost, false, 0);
+                //Button
+                if (upgradeChoice.TryGetComponent<Button>(out var button))
+                {
+                    button.onClick.AddListener(() => BuyOptionWithHealth(choiceCopy, button.gameObject, setUpgradeScript));
+                }
+            }
+            if (i == 0)
+            {
+                SetNavigationGO(upgradeChoice);
+            }
+        }
+        refreshButtonGO.SetActive(false);
     }
 
     public List<UpgradeChoice> GetRandomChoices(int count)
@@ -96,9 +144,18 @@ public class LevelUpPanelScript : MonoBehaviour
             .ToList();
     }
 
+    public List<UpgradeChoice> GetOnlySpells(int count)
+    {
+        return allSpells
+            .OrderBy(x => Random.value)  // Random.value gives a float between 0–1
+            .Take(count)
+            .ToList();
+    }
+
     private void OnEnable()
     {
-        AudioManager.Instance.PlaySoundFX("vsLevelUp", transform.position, 1f, 1f, 1f);
+        ShowCatUi();
+        AudioManager.Instance.PlayRandomSoundFX(levelUpSounds, transform.position, 1f, 1f, 1f);
         // Animate panel
         wholeLevelUpPanel.transform.localScale = Vector3.zero;
         if (!wholeLevelUpPanel.TryGetComponent<CanvasGroup>(out var cg)) cg = wholeLevelUpPanel.AddComponent<CanvasGroup>();
@@ -122,7 +179,12 @@ public class LevelUpPanelScript : MonoBehaviour
         currentRefreshes = 0;
         GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
         refreshButtonGO.SetActive(true);
-        RefreshChoices(true);
+        if (HealthCost)
+        {
+            ShowChoicesWithHealth();
+        }
+        else
+            RefreshChoices(true);
         /* GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);*/
         //Refresh Button
         LeanTween.scale(refreshButtonGO, Vector3.one, 0.3f)
@@ -132,7 +194,6 @@ public class LevelUpPanelScript : MonoBehaviour
             {
                 gameObject.SetActive(true);
             });
-        continueButton.gameObject.SetActive(false);
     }
 
     public void BuyOption(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript)
@@ -148,11 +209,11 @@ public class LevelUpPanelScript : MonoBehaviour
             randomChoices.Remove(chosenUpgrade);
             upgradeCost += 10;
             UpdatePrices();
-            UpdateContinueButton();
             setUpgradeScript.IsClicked = true;
             AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
             AnimatedDeletion(buttonGO);
             GlobalVariables.Instance.UpgradeHero(chosenUpgrade.UpgradeCode);
+            Continue();
         }
         else
         {
@@ -167,6 +228,24 @@ public class LevelUpPanelScript : MonoBehaviour
         }
     }
 
+    public void BuyOptionWithHealth(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript)
+    {
+        if (buttonGO.TryGetComponent(out Button button))
+        {
+            button.interactable = false;
+        }
+        healthCost = (int)Mathf.Min(healthCost, GlobalVariables.Instance.playerCurrentHealth - 1);
+        healthCost = Mathf.Max(healthCost, 0);
+        UpdatePrices(healthCost);
+        EnemyGenericFunctions.DamagePlayer(healthCost);
+        TriggerBuff();
+        setUpgradeScript.IsClicked = true;
+        AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
+        AnimatedDeletion(buttonGO);
+        GlobalVariables.Instance.UpgradeHero(chosenUpgrade.UpgradeCode);
+        Continue();
+    }
+
     private void RemoveLock(int unlockCost, int index, Button button, UpgradeChoice upgradeChoice, SetUpgradeScript setUpgradeScript)
     {
         if (GlobalVariables.Instance.coinsCollected >= unlockCost)
@@ -177,58 +256,21 @@ public class LevelUpPanelScript : MonoBehaviour
         }
     }
 
-    private void UpdateContinueButton()
+    private void UpdatePrices(int cost = -1)
     {
-        continueButton.gameObject.SetActive(true);
-        continueButton.interactable = false;
-        if (upgradeCost == 0)
+        if (cost == -1)
         {
-            return;
-        }
-        else if (upgradeCost > 0 && !continueButton.interactable)
-        {
-            continueButton.interactable = true;
-            LeanTween.scale(continueButton.gameObject, Vector3.one, 0.8f)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
+            foreach (SetUpgradeScript upgradeScript in upgradeScripts)
+            {
+                upgradeScript.SetPrice(upgradeCost);
+            }
         }
         else
         {
-            LeanTween.scale(continueButton.gameObject, Vector3.one * 1.05f, 0.5f)
-            .setEaseInOutSine()
-            .setLoopPingPong(2)
-            .setIgnoreTimeScale(true)
-            .setOnComplete(() =>
-             {
-                 continueButton.transform.localScale = Vector3.one; // reset scale
-             });
-
-            LeanTween.rotateZ(continueButton.gameObject, 5f, 0.25f)
-                .setEaseInOutSine()
-                .setLoopPingPong(2)
-                .setIgnoreTimeScale(true)
-                .setOnComplete(() =>
-                {
-                    continueButton.transform.rotation = Quaternion.identity; // reset rotation
-                });
-        }
-    }
-
-    /*    void DestroyGO(GameObject gameObject)
-        {
-            Destroy(gameObject);
-        }
-
-        void InactiveGO(GameObject gameObject)
-        {
-            gameObject.SetActive(false);
-        }*/
-
-    private void UpdatePrices()
-    {
-        foreach (SetUpgradeScript upgradeScript in upgradeScripts)
-        {
-            upgradeScript.SetPrice(upgradeCost);
+            foreach (SetUpgradeScript upgradeScript in upgradeScripts)
+            {
+                upgradeScript.SetPrice(cost);
+            }
         }
     }
 
@@ -240,6 +282,7 @@ public class LevelUpPanelScript : MonoBehaviour
         AudioManager.Instance.PlaySoundFX("buttonClickSound", transform.position, 1f, 0.75f, 1.25f);
         wholeLevelUpPanel.SetActive(false);
         GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
+        HealthCost = false;
     }
 
 
@@ -258,7 +301,6 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void AnimatedDeletion(GameObject GO)
     {
-
         LeanTween.cancel(GO);
         LeanTween.scale(GO, Vector3.zero, 0.5f)
             .setIgnoreTimeScale(true)
@@ -280,6 +322,42 @@ public class LevelUpPanelScript : MonoBehaviour
                 {
                     refreshButtonGO.SetActive(false);
                 });
+        }
+    }
+
+
+    private void SetNavigationGO(GameObject upgradeCoice)
+    {
+        StartCoroutine(SelectNextFrame(upgradeCoice));
+    }
+
+    private System.Collections.IEnumerator SelectNextFrame(GameObject go)
+    {
+        yield return null; // wait for layout/tween
+
+        if (go == null) yield break;
+
+        var es = EventSystem.current;
+        if (es == null) yield break;
+
+        // Make absolutely sure it stays selected
+        es.sendNavigationEvents = true;
+        es.SetSelectedGameObject(null);
+        es.SetSelectedGameObject(go);
+
+        if (go.TryGetComponent<Button>(out var btn))
+            btn.Select();
+
+        Debug.Log("FORCED SELECTION ---> " + go.name);
+    }
+
+    private void ShowCatUi()
+    {
+        int catsCollected = GlobalVariables.Instance != null ? GlobalVariables.Instance.catsCollected : 0;
+        int catsToShow = Mathf.Min(catsCollected, catsGOParent.childCount);
+        for (int i = 0; i < catsGOParent.childCount; i++)
+        {
+            catsGOParent.GetChild(i).gameObject.SetActive(i < catsToShow);
         }
     }
 }

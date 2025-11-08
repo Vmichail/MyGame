@@ -199,9 +199,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
-  radius: 1.5
-  rotationSpeed: 90
-  duration: 15
+  OnDestroyParticles: {fileID: 4197466411371465953, guid: 20c28e5b60f297d4c8287dc3be2800cf, type: 3}
+  childSpellSpawner: {fileID: 0}
   orbit: 1
   couroutineSound: 1
-  couroutineSoundName: rotatingBlades
+  StayOnPlayer: 0

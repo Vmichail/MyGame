@@ -8,8 +8,8 @@ using UnityEngine.SocialPlatforms.Impl;
 public abstract class EnemyBaseScript : MonoBehaviour
 {
     [SerializeField] GameObject particles;
-    [SerializeField] GameObject damageTextPopUp;
     [SerializeField] GameObject receivedDamagePopUp;
+    [SerializeField] GameObject playerWasHitDamage;
     [SerializeField] private bool canApplyKnockback;
     [SerializeField] protected GlobalVariables.EnemyRarity rarity = GlobalVariables.EnemyRarity.None;
     [SerializeField] protected bool hasAttackAnimation = false;
@@ -17,16 +17,16 @@ public abstract class EnemyBaseScript : MonoBehaviour
     [Header("--!!RangeAtributes!!--")]
     private EnemyRangeAttackScript rangeScript;
     private bool hasRangeAttack = false;
-    [SerializeField] GameObject projectile;
+    [SerializeField] protected GameObject projectile;
     [SerializeField] Transform projectilePosition;
     [SerializeField] Transform projectileParent;
     [SerializeField] private bool projectileCanRotate = true;
-    private float attackCooldownTimer = 0f;
+    protected float attackCooldownTimer = 0f;
     public virtual float ProjectileSpeed { get => GlobalVariables.Instance.goblinTNTProjectileSpeed; }
 
     protected Transform player;
     public bool hasReachedPlayer;
-    [SerializeField] private Animator animator;
+    [SerializeField] protected Animator animator;
     public void SetAnimatorValue(string animatorValue, bool status)
     {
         animator.SetBool(animatorValue, status);
@@ -66,13 +66,17 @@ public abstract class EnemyBaseScript : MonoBehaviour
     }
     public virtual float Damage { get => GlobalVariables.Instance.skeletonDamage; }
     public virtual float AttackCooldown { get => GlobalVariables.Instance.skeletonAttackCooldown; }
-    public virtual float CoinDropChance { get => GlobalVariables.Instance.skeletonAttackCooldown; }
+
     public virtual GlobalVariables.CoinDropEnum CoinDropEnum { get => GlobalVariables.CoinDropEnum.Yellow; }
     public virtual float MinExp { get => GlobalVariables.Instance.skeletonMinExp; }
     public virtual float MaxExp { get => GlobalVariables.Instance.skeletonMaxExp; }
     public virtual float AttackRange { get => GlobalVariables.Instance.goblinTNTRange; }
     public virtual float MultipleAttackChance { get => GlobalVariables.Instance.goblinTNTMultipleAttackChance; }
     public virtual bool KnockbackEffect { get; set; }
+    //Collectables 
+    public virtual float CoinDropChance { get => GlobalVariables.Instance.skeleonCoinDropChance; }
+    public virtual float HealthPotionChance { get => GlobalVariables.Instance.skeleonCoinDropChance; }
+    public virtual float ManaPotionChance { get => GlobalVariables.Instance.skeleonCoinDropChance; }
     public virtual GlobalVariables.EnemyTypes EnemyType { get; set; }
     public virtual string DeathSoundClip { get => "skeletonDeadSound"; }
     AnimatorStateInfo stateInfo;
@@ -120,13 +124,13 @@ public abstract class EnemyBaseScript : MonoBehaviour
             spriteTransform = spriteRenderer.transform;
         else
             Debug.LogWarning("No Sprite was found!");
-        findPlayer();
+        FindPlayer();
 
 
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void findPlayer()
+    private void FindPlayer()
     {
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -135,23 +139,16 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
-    private void InstantiateVariables()
-    {
-        maxHealth = GlobalVariables.Instance.defaultEnemyHealth;
-        knockbackResistance = GlobalVariables.Instance.defaultKnockbackResistance;
-        Speed = GlobalVariables.Instance.defaultEnemySpeed;
-    }
-
     protected virtual void Update()
     {
         if (attackCooldownTimer > 0f)
             attackCooldownTimer -= Time.deltaTime;
 
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (CurrentHealth <= 0 && !IsDead)
+        if (CurrentHealth < 1 && !IsDead)
         {
             IsDead = true;
-            TryDropCoin();
+            DropCollectables();
             Instantiate(particles, transform.position, transform.rotation);
             AudioManager.Instance.PlaySoundFX(DeathSoundClip, transform.position, 1f, 0.75f, 1.25f);
             EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
@@ -202,7 +199,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         float damage = EnemyGenericFunctions.DamagePlayer(Damage);
         Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
         Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;
-        GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
+        GameObject dmgText = Instantiate(playerWasHitDamage, spawnPosition, Quaternion.identity);
         DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
         dt.SetDamage(damage, false, Color.red);
     }
@@ -346,7 +343,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
         Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
         Vector2 spawnPosition = (Vector2)transform.position + randomOffset;
-        GameObject dmgText = Instantiate(damageTextPopUp, spawnPosition, Quaternion.identity);
+        GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
 
         DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
         dt.SetDamage(spellDamage, isCritical, color);
@@ -371,19 +368,53 @@ public abstract class EnemyBaseScript : MonoBehaviour
     }
 
 
-    private void TryDropCoin()
+    private void DropCollectables()
     {
         Vector3 dropPosition = transform.position;
+        //Coins
         if (Random.value <= CoinDropChance)
         {
             if (GlobalVariables.CoinDropEnum.Yellow.Equals(CoinDropEnum))
             {
-                GameObject coin = CoinPoolScript.Instance.GetCoin();
-                coin.transform.position = dropPosition;
+                GameObject coin = CoinPool.Instance.GetCoin();
+                if (coin.TryGetComponent(out YellowCoinScript yellowCoinScript))
+                {
+                    yellowCoinScript.Initialize(dropPosition);
+                }
             }
         }
-        GameObject shard = ShardPoolScript.Instance.GetShard((int)MinExp, (int)MaxExp);
-        shard.transform.position = dropPosition;
+        //Mana Potion
+        if (Random.value <= HealthPotionChance)
+        {
+            GameObject manaPotion = ManaPotionPool.Instance.GetManaPotion();
+            if (manaPotion.TryGetComponent(out ManaPotionScript manaPotionScript))
+            {
+                manaPotionScript.Initialize(dropPosition);
+            }
+            else
+            {
+                Debug.LogWarning("manaPotionScript component not found on the manaPotion prefab!");
+            }
+        }
+        //Health Potion
+        if (Random.value <= ManaPotionChance)
+        {
+            GameObject healthPotion = HealthPotionPool.Instance.GetHealthPotion();
+            if (healthPotion.TryGetComponent(out HealthPotionScript healthPotionScript))
+            {
+                healthPotionScript.Initialize(dropPosition);
+            }
+            else
+            {
+                Debug.LogWarning("HealthPotion component not found on the healthPotion prefab!");
+            }
+        }
+        //Shards
+        GameObject shard = ShardPool.Instance.GetShard((int)MinExp, (int)MaxExp);
+        if (shard.TryGetComponent(out ParentShardScript parentShardScript))
+        {
+            parentShardScript.Initialize(dropPosition);
+        }
     }
 
     //RangeAttack
@@ -412,7 +443,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
-    public void EndAttackAnimation()
+    public virtual void EndAttackAnimation()
     {
         if (Random.value > MultipleAttackChance)
         {
@@ -440,6 +471,12 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 animator.SetBool("Attack", true);
             }
         }
+    }
+
+    //SpecialAttack
+    public virtual void SpecialAttack()
+    {
+        Debug.LogWarning("SpecialAttack most be overrided for now");
     }
 
 }

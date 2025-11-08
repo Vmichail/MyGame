@@ -1,0 +1,693 @@
+fileFormatVersion: 2
+guid: 7304e6101b638d646b2ce86da97b63a3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2308632901347869633
+    second: ManaPotionEffect_0
+  - first:
+      213: -1650629541602142472
+    second: ManaPotionEffect_1
+  - first:
+      213: 8800685606418926378
+    second: ManaPotionEffect_2
+  - first:
+      213: -880652638333561705
+    second: ManaPotionEffect_3
+  - first:
+      213: -8569462934253945916
+    second: ManaPotionEffect_4
+  - first:
+      213: -7587552238324739311
+    second: ManaPotionEffect_5
+  - first:
+      213: -7449975168925922192
+    second: ManaPotionEffect_6
+  - first:
+      213: 4839871451782137033
+    second: ManaPotionEffect_7
+  - first:
+      213: 2402414186625675486
+    second: ManaPotionEffect_8
+  - first:
+      213: -2765788125082704439
+    second: ManaPotionEffect_9
+  - first:
+      213: -7502881388563158763
+    second: ManaPotionEffect_10
+  - first:
+      213: 208301533373007516
+    second: ManaPotionEffect_11
+  - first:
+      213: -4563434370802514906
+    second: ManaPotionEffect_12
+  - first:
+      213: -38746378863861369
+    second: ManaPotionEffect_13
+  - first:
+      213: 6355847947637523925
+    second: ManaPotionEffect_14
+  - first:
+      213: 4464540281437762577
+    second: ManaPotionEffect_15
+  - first:
+      213: -8489930382273461835
+    second: ManaPotionEffect_16
+  - first:
+      213: -5296107123271243391
+    second: ManaPotionEffect_17
+  - first:
+      213: -8626136380500612668
+    second: ManaPotionEffect_18
+  - first:
+      213: -3341402108618526021
+    second: ManaPotionEffect_19
+  - first:
+      213: -499660512152153799
+    second: ManaPotionEffect_20
+  - first:
+      213: 2339253235722183460
+    second: ManaPotionEffect_21
+  - first:
+      213: 6776051809238209262
+    second: ManaPotionEffect_22
+  - first:
+      213: -6518790449502884061
+    second: ManaPotionEffect_23
+  - first:
+      213: 2564612836226995404
+    second: ManaPotionEffect_24
+  - first:
+      213: -907904290193570839
+    second: ManaPotionEffect_25
+  - first:
+      213: 6071369564513925064
+    second: ManaPotionEffect_26
+  - first:
+      213: -5182047660011694843
+    second: ManaPotionEffect_27
+  - first:
+      213: 2158505062953136708
+    second: ManaPotionEffect_28
+  - first:
+      213: -7137938123573736445
+    second: ManaPotionEffect_29
+  - first:
+      213: -4367159388398016757
+    second: ManaPotionEffect_30
+  - first:
+      213: 2759182322666625632
+    second: ManaPotionEffect_31
+  - first:
+      213: 6666549010072651782
+    second: ManaPotionEffect_32
+  - first:
+      213: 7786650301148002250
+    second: ManaPotionEffect_33
+  - first:
+      213: -7715995494941769289
+    second: ManaPotionEffect_34
+  - first:
+      213: 5942832615794976332
+    second: ManaPotionEffect_35
+  - first:
+      213: -7260772631522370869
+    second: ManaPotionEffect_36
+  - first:
+      213: 2250934104188824206
+    second: ManaPotionEffect_37
+  - first:
+      213: 846585401565860687
+    second: ManaPotionEffect_38
+  - first:
+      213: -3819761822858868630
+    second: ManaPotionEffect_39
+  - first:
+      213: -5250048954957916971
+    second: ManaPotionEffect_40
+  - first:
+      213: 870663771895019957
+    second: ManaPotionEffect_41
+  - first:
+      213: 4252202715070591704
+    second: ManaPotionEffect_42
+  - first:
+      213: 7257691376076784474
+    second: ManaPotionEffect_43
+  - first:
+      213: 4427361675956956871
+    second: ManaPotionEffect_44
+  - first:
+      213: 5961465991470631106
+    second: ManaPotionEffect_45
+  - first:
+      213: 7150266082419141639
+    second: ManaPotionEffect_46
+  - first:
+      213: -5151270778291264804
+    second: ManaPotionEffect_47
+  - first:
+      213: 6879343157318099600
+    second: ManaPotionEffect_48
+  - first:
+      213: -3815317875845360288
+    second: ManaPotionEffect_49
+  - first:
+      213: 2011948037869125944
+    second: ManaPotionEffect_50
+  - first:
+      213: 4648322248926397570
+    second: ManaPotionEffect_51
+  - first:
+      213: -4046645524397549000
+    second: ManaPotionEffect_52
+  - first:
+      213: 6438718302762977792
+    second: ManaPotionEffect_53
+  - first:
+      213: -7348780397444677626
+    second: ManaPotionEffect_54
+  - first:
+      213: 3921089514354103134
+    second: ManaPotionEffect_55
+  - first:
+      213: -692273887259391013
+    second: ManaPotionEffect_56
+  - first:
+      213: 8373880017855059037
+    second: ManaPotionEffect_57
+  - first:
+      213: -2199097385970356779
+    second: ManaPotionEffect_58
+  - first:
+      213: 1919949602318803084
+    second: ManaPotionEffect_59
+  - first:
+      213: 5905530788654690663
+    second: ManaPotionEffect_60
+  - first:
+      213: -2090124100810372575
+    second: ManaPotionEffect_61
+  - first:
+      213: 4449811349613762619
+    second: ManaPotionEffect_62
+  - first:
+      213: -8736195913150190745
+    second: ManaPotionEffect_63
+  - first:
+      213: 5727806309563295382
+    second: ManaPotionEffect_64
+  - first:
+      213: 7917502897731920624
+    second: ManaPotionEffect_65
+  - first:
+      213: -1828238716217279410
+    second: ManaPotionEffect_66
+  - first:
+      213: -5373813105960159618
+    second: ManaPotionEffect_67
+  - first:
+      213: 3843861923403324569
+    second: ManaPotionEffect_68
+  - first:
+      213: -5915600901101437483
+    second: ManaPotionEffect_69
+  - first:
+      213: 427183190536074394
+    second: ManaPotionEffect_70
+  - first:
+      213: -1535303880936443481
+    second: ManaPotionEffect_71
+  - first:
+      213: 5469649637625817317
+    second: ManaPotionEffect_72
+  - first:
+      213: 1731700444017088120
+    second: ManaPotionEffect_73
+  - first:
+      213: -2406997731170910087
+    second: ManaPotionEffect_74
+  - first:
+      213: -7267318700411796802
+    second: ManaPotionEffect_75
+  - first:
+      213: -8841068047108233317
+    second: ManaPotionEffect_76
+  - first:
+      213: 1803836890507144790
+    second: ManaPotionEffect_77
+  - first:
+      213: 2649231791627855963
+    second: ManaPotionEffect_78
+  - first:
+      213: 1381779024268561293
+    second: ManaPotionEffect_79
+  - first:
+      213: 2419087265827817995
+    second: ManaPotionEffect_80
+  - first:
+      213: 7627165767801705944
+    second: ManaPotionEffect_81
+  - first:
+      213: 8116371533088423428
+    second: ManaPotionEffect_82
+  - first:
+      213: 1334431856120262814
+    second: ManaPotionEffect_83
+  - first:
+      213: -6473210056818384020
+    second: ManaPotionEffect_84
+  - first:
+      213: -8256944921694808110
+    second: ManaPotionEffect_85
+  - first:
+      213: 6044113659106537807
+    second: ManaPotionEffect_86
+  - first:
+      213: 5258931666529462685
+    second: ManaPotionEffect_87
+  - first:
+      213: 6737807786939814820
+    second: ManaPotionEffect_88
+  - first:
+      213: 8706779479646837711
+    second: ManaPotionEffect_89
+  - first:
+      213: -4915070539539219307
+    second: ManaPotionEffect_90
+  - first:
+      213: 7418104419699098758
+    second: ManaPotionEffect_91
+  - first:
+      213: 4621677102288634603
+    second: ManaPotionEffect_92
+  - first:
+      213: 798484693696060167
+    second: ManaPotionEffect_93
+  - first:
+      213: 8527503929331466554
+    second: ManaPotionEffect_94
+  - first:
+      213: 6538084554242018512
+    second: ManaPotionEffect_95
+  - first:
+      213: -1698374913142793925
+    second: ManaPotionEffect_96
+  - first:
+      213: -862698683434761642
+    second: ManaPotionEffect_97
+  - first:
+      213: -2105535455524263529
+    second: ManaPotionEffect_98
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ManaPotionEffect_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3c716e9b9616ffd0800000000000000
+      internalID: -2308632901347869633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f6d9056d29c719e0800000000000000
+      internalID: -1650629541602142472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2b4e765ee0522a70800000000000000
+      internalID: 8800685606418926378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7941e91671b47c3f0800000000000000
+      internalID: -880652638333561705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cbbaef3dd6231980800000000000000
+      internalID: -8569462934253945916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1131fe7907993b690800000000000000
+      internalID: -7587552238324739311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_6
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07c80b63e0f5c9890800000000000000
+      internalID: -7449975168925922192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_7
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c44702517daa2340800000000000000
+      internalID: 4839871451782137033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_8
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed0be2569f6175120800000000000000
+      internalID: 2402414186625675486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_9
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c5a370aa52fd99d0800000000000000
+      internalID: -2765788125082704439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaPotionEffect_10
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 519adca012960e790800000000000000
+      internalID: -7502881388563158763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 2b01a73ff07482942aebcf523fa9feb8
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ManaPotionEffect_0: -2308632901347869633
+      ManaPotionEffect_1: -1650629541602142472
+      ManaPotionEffect_10: -7502881388563158763
+      ManaPotionEffect_2: 8800685606418926378
+      ManaPotionEffect_3: -880652638333561705
+      ManaPotionEffect_4: -8569462934253945916
+      ManaPotionEffect_5: -7587552238324739311
+      ManaPotionEffect_6: -7449975168925922192
+      ManaPotionEffect_7: 4839871451782137033
+      ManaPotionEffect_8: 2402414186625675486
+      ManaPotionEffect_9: -2765788125082704439
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

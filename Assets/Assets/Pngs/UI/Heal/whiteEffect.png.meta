@@ -1,0 +1,693 @@
+fileFormatVersion: 2
+guid: 9fae705b7604fca4c8a066a30903d56e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5299908694839317923
+    second: whiteEffect_0
+  - first:
+      213: 3407691582307407690
+    second: whiteEffect_1
+  - first:
+      213: -412121615208222991
+    second: whiteEffect_2
+  - first:
+      213: 737515710133103281
+    second: whiteEffect_3
+  - first:
+      213: -5462225971220963688
+    second: whiteEffect_4
+  - first:
+      213: 1879127172885783138
+    second: whiteEffect_5
+  - first:
+      213: -2118606441092997939
+    second: whiteEffect_6
+  - first:
+      213: 820816699948074622
+    second: whiteEffect_7
+  - first:
+      213: -8845214334203066123
+    second: whiteEffect_8
+  - first:
+      213: -6489370193955770150
+    second: whiteEffect_9
+  - first:
+      213: -2246935513295125180
+    second: whiteEffect_10
+  - first:
+      213: 3957442645785472323
+    second: whiteEffect_11
+  - first:
+      213: -8609712766134495420
+    second: whiteEffect_12
+  - first:
+      213: 6423561385975254212
+    second: whiteEffect_13
+  - first:
+      213: -1900344164062862800
+    second: whiteEffect_14
+  - first:
+      213: -6784139135819352624
+    second: whiteEffect_15
+  - first:
+      213: 5230709602485134322
+    second: whiteEffect_16
+  - first:
+      213: -8668289372502639488
+    second: whiteEffect_17
+  - first:
+      213: 5177642072761733207
+    second: whiteEffect_18
+  - first:
+      213: 4300488510107933989
+    second: whiteEffect_19
+  - first:
+      213: -1264804043116096475
+    second: whiteEffect_20
+  - first:
+      213: 6102260868817225673
+    second: whiteEffect_21
+  - first:
+      213: 5040012580992231726
+    second: whiteEffect_22
+  - first:
+      213: -4487431096297726359
+    second: whiteEffect_23
+  - first:
+      213: -1340824921381757813
+    second: whiteEffect_24
+  - first:
+      213: -2951444434291235933
+    second: whiteEffect_25
+  - first:
+      213: 358697449475238084
+    second: whiteEffect_26
+  - first:
+      213: -2317081390241893382
+    second: whiteEffect_27
+  - first:
+      213: 781519587150083600
+    second: whiteEffect_28
+  - first:
+      213: 4163723245036847344
+    second: whiteEffect_29
+  - first:
+      213: -6800747340407370068
+    second: whiteEffect_30
+  - first:
+      213: -5414581915996900231
+    second: whiteEffect_31
+  - first:
+      213: -5147311649681260741
+    second: whiteEffect_32
+  - first:
+      213: 2749714799970650779
+    second: whiteEffect_33
+  - first:
+      213: 8112554129992455864
+    second: whiteEffect_34
+  - first:
+      213: -7335097907308269339
+    second: whiteEffect_35
+  - first:
+      213: 6954454661542764865
+    second: whiteEffect_36
+  - first:
+      213: -3370170417411362456
+    second: whiteEffect_37
+  - first:
+      213: -6704493026806680148
+    second: whiteEffect_38
+  - first:
+      213: 4552245170653184441
+    second: whiteEffect_39
+  - first:
+      213: -3061987527527533248
+    second: whiteEffect_40
+  - first:
+      213: -1642103961304890887
+    second: whiteEffect_41
+  - first:
+      213: -3370589658943161445
+    second: whiteEffect_42
+  - first:
+      213: -3290628710559452447
+    second: whiteEffect_43
+  - first:
+      213: -5001957387839058641
+    second: whiteEffect_44
+  - first:
+      213: -1206406537261992903
+    second: whiteEffect_45
+  - first:
+      213: 6490828800432952371
+    second: whiteEffect_46
+  - first:
+      213: -7412609050081795100
+    second: whiteEffect_47
+  - first:
+      213: 5338010648789133503
+    second: whiteEffect_48
+  - first:
+      213: -8286884680848318567
+    second: whiteEffect_49
+  - first:
+      213: -151515401132688678
+    second: whiteEffect_50
+  - first:
+      213: -7623736577277254643
+    second: whiteEffect_51
+  - first:
+      213: 6450457450151502404
+    second: whiteEffect_52
+  - first:
+      213: 2532416772363232169
+    second: whiteEffect_53
+  - first:
+      213: -5999442467551342176
+    second: whiteEffect_54
+  - first:
+      213: 3790970657708786985
+    second: whiteEffect_55
+  - first:
+      213: -5179502861128086804
+    second: whiteEffect_56
+  - first:
+      213: 2724840980586551997
+    second: whiteEffect_57
+  - first:
+      213: 1306313002554918825
+    second: whiteEffect_58
+  - first:
+      213: 1367731343182135855
+    second: whiteEffect_59
+  - first:
+      213: -9143580883386521485
+    second: whiteEffect_60
+  - first:
+      213: 3188140525746787760
+    second: whiteEffect_61
+  - first:
+      213: 2250694327555472329
+    second: whiteEffect_62
+  - first:
+      213: -7646409641303629121
+    second: whiteEffect_63
+  - first:
+      213: -841107293758136690
+    second: whiteEffect_64
+  - first:
+      213: 6188227800854292384
+    second: whiteEffect_65
+  - first:
+      213: -3827507714708588732
+    second: whiteEffect_66
+  - first:
+      213: 7810734400473445541
+    second: whiteEffect_67
+  - first:
+      213: -6288334666403802644
+    second: whiteEffect_68
+  - first:
+      213: 3623769782488772061
+    second: whiteEffect_69
+  - first:
+      213: 5024779442059464397
+    second: whiteEffect_70
+  - first:
+      213: -4466301724099970544
+    second: whiteEffect_71
+  - first:
+      213: 7571073476194531208
+    second: whiteEffect_72
+  - first:
+      213: 5169774281648098216
+    second: whiteEffect_73
+  - first:
+      213: 4700343525107829289
+    second: whiteEffect_74
+  - first:
+      213: 3594843084029697851
+    second: whiteEffect_75
+  - first:
+      213: -3514374362705159412
+    second: whiteEffect_76
+  - first:
+      213: 8059879467987857736
+    second: whiteEffect_77
+  - first:
+      213: 51922885854776565
+    second: whiteEffect_78
+  - first:
+      213: -5078308983891728029
+    second: whiteEffect_79
+  - first:
+      213: 2436656750297531738
+    second: whiteEffect_80
+  - first:
+      213: 996339270563432473
+    second: whiteEffect_81
+  - first:
+      213: 3222067181711918871
+    second: whiteEffect_82
+  - first:
+      213: 6380256145847748982
+    second: whiteEffect_83
+  - first:
+      213: 2849381975841525673
+    second: whiteEffect_84
+  - first:
+      213: -327410466126125750
+    second: whiteEffect_85
+  - first:
+      213: -2501965724772266085
+    second: whiteEffect_86
+  - first:
+      213: 1097190949093988800
+    second: whiteEffect_87
+  - first:
+      213: 1641094276141968804
+    second: whiteEffect_88
+  - first:
+      213: 2687827026390345891
+    second: whiteEffect_89
+  - first:
+      213: -8584056558209922905
+    second: whiteEffect_90
+  - first:
+      213: 657172016073131362
+    second: whiteEffect_91
+  - first:
+      213: -8837240030898885113
+    second: whiteEffect_92
+  - first:
+      213: -1633227071027813299
+    second: whiteEffect_93
+  - first:
+      213: 4628372419263711204
+    second: whiteEffect_94
+  - first:
+      213: -4075388452981486236
+    second: whiteEffect_95
+  - first:
+      213: 2862128604154342511
+    second: whiteEffect_96
+  - first:
+      213: 7108490556922663332
+    second: whiteEffect_97
+  - first:
+      213: -2478462315945794451
+    second: whiteEffect_98
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: whiteEffect_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5a29164f11f276b0800000000000000
+      internalID: -5299908694839317923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a47958b707d8a4f20800000000000000
+      internalID: 3407691582307407690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fee0411399d74af0800000000000000
+      internalID: -412121615208222991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bae0ce71ae2c3a00800000000000000
+      internalID: 737515710133103281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89e16765b664234b0800000000000000
+      internalID: -5462225971220963688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26224ab2530041a10800000000000000
+      internalID: 1879127172885783138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_6
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcc1ccbaaa23992e0800000000000000
+      internalID: -2118606441092997939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_7
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e760d129070246b00800000000000000
+      internalID: 820816699948074622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_8
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f802af4d6c7f3580800000000000000
+      internalID: -8845214334203066123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_9
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad03245d03021f5a0800000000000000
+      internalID: -6489370193955770150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: whiteEffect_10
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44585d03e0841d0e0800000000000000
+      internalID: -2246935513295125180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: befbfceaf7a142741b5fee5b63a870f3
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      whiteEffect_0: -5299908694839317923
+      whiteEffect_1: 3407691582307407690
+      whiteEffect_10: -2246935513295125180
+      whiteEffect_2: -412121615208222991
+      whiteEffect_3: 737515710133103281
+      whiteEffect_4: -5462225971220963688
+      whiteEffect_5: 1879127172885783138
+      whiteEffect_6: -2118606441092997939
+      whiteEffect_7: 820816699948074622
+      whiteEffect_8: -8845214334203066123
+      whiteEffect_9: -6489370193955770150
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

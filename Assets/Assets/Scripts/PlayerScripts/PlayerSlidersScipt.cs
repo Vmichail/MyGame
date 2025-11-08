@@ -30,7 +30,14 @@ public class PlayerSlidersScipt : MonoBehaviour
         if (GlobalVariables.Instance.currentExp >= GlobalVariables.Instance.maxExp)
         {
             GlobalVariables.Instance.currentExp = GlobalVariables.Instance.currentExp - GlobalVariables.Instance.maxExp;
-            GlobalVariables.Instance.maxExp = (float)(GlobalVariables.Instance.maxExp + 1.2 * GlobalVariables.Instance.level);
+            if (GlobalVariables.Instance.maxExp > 50)
+            {
+                GlobalVariables.Instance.maxExp += (float)0.2 * GlobalVariables.Instance.maxExp;
+            }
+            else
+            {
+                GlobalVariables.Instance.maxExp += 10;
+            }
             GlobalVariables.Instance.level++;
             levelUpPanel.SetActive(true);
         }

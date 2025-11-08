@@ -23,4 +23,9 @@ public class EnemyAnimatorScript : MonoBehaviour
     {
         enemyBaseScript.EndAttackAnimation();
     }
+
+    public void SpecialAttack()
+    {
+        enemyBaseScript.SpecialAttack();
+    }
 }

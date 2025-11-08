@@ -1,31 +1,51 @@
-using UnityEngine;
-
 public class GoblinTNT : EnemyBaseScript
 {
+    // Difficulty shortcuts with null-safety
+    private static DifficultyManager DM => DifficultyManager.Instance;
+    private static float EnemyHealthMult => (DM != null) ? DM.enemyHealthMultiplier : 1f;
+    private static float EnemyDamageMult => (DM != null) ? DM.enemyDamageMultiplier : 1f;
+    private static float EnemySpeedMult => (DM != null) ? DM.enemySpeedMultiplier : 1f;
 
     protected override void Start()
     {
         base.Start();
+        ApplyBaseAndDifficulty();
+        hasAttackAnimation = true;
+    }
+
+    // Important for pooled enemies
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        ApplyBaseAndDifficulty();
+        CurrentHealth = MaxHealth;
+    }
+
+    private void ApplyBaseAndDifficulty()
+    {
+        // Base stats
         maxHealth = GlobalVariables.Instance.goblinTNTHealth;
         knockbackResistance = GlobalVariables.Instance.goblinTNTKnockbackResistance;
+
+        // Rarity first (so difficulty stacks after)
         if (GlobalVariables.EnemyRarity.Green.Equals(rarity))
         {
             maxHealth *= GlobalVariables.Instance.greenHealthMultiplier;
             knockbackResistance *= GlobalVariables.Instance.greenKnockbackMultiplier;
             spriteTransform.localScale *= GlobalVariables.Instance.greenScaleMultiplier;
         }
+
+        // Difficulty
+        maxHealth *= EnemyHealthMult;
+
         currentHealth = maxHealth;
-        hasAttackAnimation = true;
-    }
-    public override GlobalVariables.EnemyTypes EnemyType
-    {
-        get => GlobalVariables.EnemyTypes.GoblinTNT;
     }
 
+    public override GlobalVariables.EnemyTypes EnemyType
+        => GlobalVariables.EnemyTypes.GoblinTNT;
+
     public override float Speed
-    {
-        get => GlobalVariables.Instance.goblinTNTSpeed;
-    }
+        => GlobalVariables.Instance.goblinTNTSpeed * EnemySpeedMult;
 
     public override float MaxHealth
     {
@@ -40,36 +60,29 @@ public class GoblinTNT : EnemyBaseScript
     }
 
     public override float Damage
-    {
-        get => GlobalVariables.Instance.goblinTNTDamage;
-    }
+        => GlobalVariables.Instance.goblinTNTDamage * EnemyDamageMult;
 
     public override float AttackCooldown
-    {
-        get => GlobalVariables.Instance.goblinTNTAttackCooldown;
-    }
+        => GlobalVariables.Instance.goblinTNTAttackCooldown;
 
     public override float CoinDropChance
-    {
-        get => GlobalVariables.Instance.goblinTNTCoinDropChance;
-    }
+        => GlobalVariables.Instance.goblinTNTCoinDropChance;
+
+    public override float HealthPotionChance
+        => GlobalVariables.Instance.goblinTNTHealthPotionChance;
+
+    public override float ManaPotionChance
+        => GlobalVariables.Instance.goblinTNTManaPotionChance;
 
     public override float ProjectileSpeed
-    {
-        get => GlobalVariables.Instance.goblinTNTProjectileSpeed;
-    }
+        => GlobalVariables.Instance.goblinTNTProjectileSpeed * EnemySpeedMult;
 
     public override GlobalVariables.CoinDropEnum CoinDropEnum
-    {
-        get => GlobalVariables.Instance.goblinTNTCoinEnum;
-    }
-    public override float MinExp
-    {
-        get => GlobalVariables.Instance.goblinTNTExp;
-    }
-    public override float AttackRange
-    {
-        get => GlobalVariables.Instance.goblinTNTRange;
-    }
+        => GlobalVariables.Instance.goblinTNTCoinEnum;
 
+    public override float MinExp
+        => GlobalVariables.Instance.goblinTNTExp;
+
+    public override float AttackRange
+        => GlobalVariables.Instance.goblinTNTRange;
 }

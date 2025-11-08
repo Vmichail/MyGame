@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13268346f900c814cb73d29659582d9e, type: 3}
+  m_Name: 10DMovement Speed
+  m_EditorClassIdentifier: 
+  image: {fileID: 21300000, guid: 9743027eef70218438ef20d3f0a2fe94, type: 3}
+  icon: {fileID: 21300000, guid: ec84fea7600f06b47b2ce320f81f0bb0, type: 3}
+  cost: 0
+  locked: 0
+  unlockCost: 0
+  upgradeCategory: 1
+  upgradeCode: 9
+  bonuses:
+  - {fileID: 11400000, guid: ba31c8f91d7cbb84b901a73f78e19bde, type: 2}

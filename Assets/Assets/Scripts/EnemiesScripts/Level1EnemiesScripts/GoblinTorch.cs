@@ -1,30 +1,52 @@
-using UnityEngine;
-
-public class GoblinTorchScript : EnemyBaseScript
+﻿public class GoblinTorchScript : EnemyBaseScript
 {
+    // Difficulty multipliers (null-safe)
+    private static DifficultyManager DM => DifficultyManager.Instance;
+    private static float EnemyHealthMult => (DM != null) ? DM.enemyHealthMultiplier : 1f;
+    private static float EnemyDamageMult => (DM != null) ? DM.enemyDamageMultiplier : 1f;
+    private static float EnemySpeedMult => (DM != null) ? DM.enemySpeedMultiplier : 1f;
 
     protected override void Start()
     {
         base.Start();
+        ApplyBaseAndDifficulty();
+        hasAttackAnimation = true;
+    }
+
+    // Important for pooled enemies
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        ApplyBaseAndDifficulty();
+        CurrentHealth = MaxHealth;
+    }
+
+    private void ApplyBaseAndDifficulty()
+    {
+        // Base stats
         maxHealth = GlobalVariables.Instance.goblinTorchHealth;
         knockbackResistance = GlobalVariables.Instance.goblinTorchKnockbackResistance;
+
+        // Rarity first (stacking order)
         if (GlobalVariables.EnemyRarity.Green.Equals(rarity))
         {
             maxHealth *= GlobalVariables.Instance.greenHealthMultiplier;
             knockbackResistance *= GlobalVariables.Instance.greenKnockbackMultiplier;
             spriteTransform.localScale *= GlobalVariables.Instance.greenScaleMultiplier;
         }
+
+        // Difficulty multipliers
+        maxHealth *= EnemyHealthMult;
+
         currentHealth = maxHealth;
-        hasAttackAnimation = true;
     }
+
     public override GlobalVariables.EnemyTypes EnemyType
-    {
-        get => GlobalVariables.EnemyTypes.GoblinTourch;
-    }
+        => GlobalVariables.EnemyTypes.GoblinTourch; // keeping your enum key
+
     public override float Speed
-    {
-        get => GlobalVariables.Instance.goblinTNTSpeed;
-    }
+        => GlobalVariables.Instance.goblinTorchSpeed * EnemySpeedMult;
+
     public override float MaxHealth
     {
         get => maxHealth;
@@ -38,27 +60,25 @@ public class GoblinTorchScript : EnemyBaseScript
     }
 
     public override float Damage
-    {
-        get => GlobalVariables.Instance.goblinDamage;
-    }
+        => GlobalVariables.Instance.goblinTorchDamage * EnemyDamageMult;
 
     public override float AttackCooldown
-    {
-        get => GlobalVariables.Instance.goblinAttackCooldown;
-    }
+        => GlobalVariables.Instance.goblinTorchAttackCooldown;
 
     public override float CoinDropChance
-    {
-        get => GlobalVariables.Instance.goblinTorchCoinDropChance;
-    }
+        => GlobalVariables.Instance.goblinTorchCoinDropChance;
+
+    public override float HealthPotionChance
+        => GlobalVariables.Instance.goblinTorchHealthPotionChance;
+
+    public override float ManaPotionChance
+        => GlobalVariables.Instance.goblinTorchManaPotionChance;
 
     public override GlobalVariables.CoinDropEnum CoinDropEnum
-    {
-        get => GlobalVariables.Instance.goblinCoinEnum;
-    }
+        => GlobalVariables.Instance.goblinTorchCoinEnum;
 
     public override float MinExp
-    {
-        get => GlobalVariables.Instance.goblinTorchExp;
-    }
+        => GlobalVariables.Instance.goblinTorchExp;
+
+    // No ranged attack → no ProjectileSpeed override needed
 }

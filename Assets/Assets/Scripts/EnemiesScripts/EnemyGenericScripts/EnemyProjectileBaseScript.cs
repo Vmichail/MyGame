@@ -7,6 +7,7 @@ public class EnemyProjectileBaseScript : MonoBehaviour
     [SerializeField] GameObject particles;
     [SerializeField] GameObject receivedDamagePopUp;
     private GameObject player;
+    public bool hasDirection = false;
 
     public virtual float Damage { get; set; }
     public virtual float Speed { get; set; }
@@ -19,15 +20,18 @@ public class EnemyProjectileBaseScript : MonoBehaviour
         if (Speed <= 0)
             Speed = speed;
 
-        player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        if (!hasDirection)
         {
-            direction = (player.transform.position - transform.position).normalized;
-        }
-        else
-        {
-            direction = Vector2.zero;
-            Debug.LogWarning("Player not found!");
+            player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                direction = (player.transform.position - transform.position).normalized;
+            }
+            else
+            {
+                direction = Vector2.zero;
+                Debug.LogWarning("Player not found!");
+            }
         }
     }
 
@@ -45,10 +49,9 @@ public class EnemyProjectileBaseScript : MonoBehaviour
         {
             AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.2f, 0.9f, 1.1f);
             Destroy(gameObject);
-            Instantiate(particles, transform.position, Quaternion.identity);
             float damage = EnemyGenericFunctions.DamagePlayer(Damage);
             Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
-            Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;
+            Vector2 spawnPosition = (Vector2)other.transform.position + randomOffset;
             GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
             DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
             dt.SetDamage(damage, false, Color.red);
@@ -56,9 +59,17 @@ public class EnemyProjectileBaseScript : MonoBehaviour
         else if (other.CompareTag("PlayerSpell"))
         {
             AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.5f, 0.9f, 1.1f);
-            Instantiate(particles, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
+        else if (other.CompareTag("Wall"))
+        {
+            AudioManager.Instance.PlaySoundFX("wallHitSpell", transform.position, 0.8f, 0.9f, 1.1f, false, true);
+            Destroy(gameObject);
+        }
+    }
 
+    private void OnDestroy()
+    {
+        Instantiate(particles, transform.position, Quaternion.identity);
     }
 }

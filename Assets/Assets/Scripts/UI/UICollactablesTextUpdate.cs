@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class UICollactablesTextUpdate : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI coinsCollectedText;
+    [SerializeField] private TextMeshProUGUI catsCollectedText;
     [SerializeField] private TextMeshProUGUI permanentCoinsCollectedText;
     [SerializeField] private TextMeshProUGUI diamondsCollectedText;
 
@@ -12,6 +13,7 @@ public class UICollactablesTextUpdate : MonoBehaviour
     void Update()
     {
         coinsCollectedText.text = FormatValues((int)GlobalVariables.Instance.coinsCollected);
+        catsCollectedText.text = GlobalVariables.Instance.catsCollected.ToString();
         permanentCoinsCollectedText.text = GlobalVariables.Instance.permanentCoinsCollected.ToString();
         diamondsCollectedText.text = GlobalVariables.Instance.diamondsCollected.ToString();
     }
