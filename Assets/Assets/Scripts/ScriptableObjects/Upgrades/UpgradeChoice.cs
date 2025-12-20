@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "New Upgrade Choice", menuName = "Upgrades/NewChoice")]
 public class UpgradeChoice : ScriptableObject
@@ -12,20 +11,27 @@ public class UpgradeChoice : ScriptableObject
     [SerializeField] private int cost;
     [SerializeField] private bool locked;
     [SerializeField] private int unlockCost;
-    [SerializeField] private GlobalVariables.UpgradeCategory upgradeCategory;
-    [SerializeField] private GlobalVariables.UpgradeCode upgradeCode;
+    [SerializeField] private HeroUpgrades.UpgradeCategory upgradeCategory;
+    [SerializeField] private HeroUpgrades.UpgradeCode upgradeCode;
 
     [Header("Bonus Values")]
-    [SerializeField] private List<UpgradeValueDataSO> bonuses = new();
+    [SerializeField] private UpgradeValueData upgradeValueData;
 
-    // ✅ Properties
     public Sprite Image => image;
     public Sprite Icon => icon;
     public int Cost => cost;
     public bool Locked => locked;
     public int UnlockCost => unlockCost;
-    public GlobalVariables.UpgradeCategory UpgradeCategory => upgradeCategory;
-    public GlobalVariables.UpgradeCode UpgradeCode => upgradeCode;
+    public HeroUpgrades.UpgradeCategory UpgradeCategory => upgradeCategory;
+    public HeroUpgrades.UpgradeCode UpgradeCode => upgradeCode;
+    public UpgradeValueData UpgradeValue => upgradeValueData;
 
-    public List<UpgradeValueDataSO> Bonuses => bonuses;
+    // 👇 Nested serializable class
+    [System.Serializable]
+    public class UpgradeValueData
+    {
+        [Header("Value Settings")]
+        public float value;
+        public bool percentage;
+    }
 }

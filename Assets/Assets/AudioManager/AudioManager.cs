@@ -16,6 +16,7 @@ public class AudioManager : MonoBehaviour
     private int currentMusicIndex = 0;
     private bool isMusicPlaying = false;
     private Transform playerTransform;
+    private List<AudioSource> activeSFX = new();
 
 
     private List<AudioSource> audioSourcePool;
@@ -128,7 +129,7 @@ public class AudioManager : MonoBehaviour
         float distanceFactor = Mathf.Clamp01(1 - (distance - minDistance) / (maxDistance - minDistance));
         if (applyDistance)
         {
-            Debug.Log($"AudioManager: Playing '{clipName}' at distance {distance} with volume factor {distanceFactor}");
+            //Debug.Log($"AudioManager: Playing '{clipName}' at distance {distance} with volume factor {distanceFactor} and total volume:{volume * distanceFactor * GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.SFXVolume}");
             source.volume = volume * distanceFactor * GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.SFXVolume;
         }
         else
@@ -138,6 +139,8 @@ public class AudioManager : MonoBehaviour
         source.pitch = Random.Range(minPitch, maxPitch);
         source.loop = loop;
         source.gameObject.SetActive(true);
+        if (!activeSFX.Contains(source))
+            activeSFX.Add(source);
 
         if (loop)
         {
@@ -157,6 +160,9 @@ public class AudioManager : MonoBehaviour
     public void StopSound(AudioSource source)
     {
         if (source == null) return;
+
+        if (activeSFX.Contains(source))
+            activeSFX.Remove(source);
 
         source.Stop();
         source.loop = false;
@@ -180,6 +186,8 @@ public class AudioManager : MonoBehaviour
     private System.Collections.IEnumerator DisableAfter(AudioSource source, float time)
     {
         yield return new WaitForSeconds(time);
+        if (activeSFX.Contains(source))
+            activeSFX.Remove(source);
         source.gameObject.SetActive(false);
     }
 
@@ -231,5 +239,17 @@ public class AudioManager : MonoBehaviour
         {
             musicSource.volume = GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.musicVolume;
         }
+    }
+
+    public void PauseAllSFX()
+    {
+        foreach (var s in activeSFX)
+            if (s != null) s.Pause();
+    }
+
+    public void ResumeAllSFX()
+    {
+        foreach (var s in activeSFX)
+            if (s != null) s.UnPause();
     }
 }

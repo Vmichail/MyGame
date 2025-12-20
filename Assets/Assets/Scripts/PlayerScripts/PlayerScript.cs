@@ -201,7 +201,7 @@ public class PlayerScript : MonoBehaviour
             CastForthSpell();
 
 
-        CastSpell(closestEnemy.transform.position, firstSpell);
+        CastAttack(closestEnemy.transform.position, firstSpell);
 
     }
 
@@ -223,7 +223,7 @@ public class PlayerScript : MonoBehaviour
             return;
         }
 
-        CastSpell(enemyPosition, secondSpell);
+        CastAttack(enemyPosition, secondSpell);
 
     }
 
@@ -247,7 +247,7 @@ public class PlayerScript : MonoBehaviour
             return;
         }
 
-        CastSpell(enemyPosition, thirdSpell);
+        CastAttack(enemyPosition, thirdSpell);
 
     }
 
@@ -275,7 +275,7 @@ public class PlayerScript : MonoBehaviour
             return;
         }
 
-        CastSpell(enemyPosition, forthSpell);
+        CastAttack(enemyPosition, forthSpell);
 
     }
 
@@ -343,7 +343,7 @@ public class PlayerScript : MonoBehaviour
         spotLight.gameObject.SetActive(false);
     }
 
-    private void CastSpell(Vector3 enemyPosition, GameObject spell)
+    private void CastAttack(Vector3 enemyPosition, GameObject spell)
     {
         GameObject newSpell = Instantiate(spell, transform.position, Quaternion.identity);
         AudioManager.Instance.PlaySoundFX("playerAttack", transform.position, 0.2f, 0.80f, 1.25f);
@@ -352,7 +352,7 @@ public class PlayerScript : MonoBehaviour
         newSpell.transform.rotation = Quaternion.Euler(0, 0, angle);
         PlayerSpellBaseScript playerSpellBaseScript = newSpell.GetComponent<PlayerSpellBaseScript>();
         if (playerSpellBaseScript)
-            playerSpellBaseScript.SetVelocity(direction, false);
+            playerSpellBaseScript.SetVelocity(direction, true);
     }
 
     private void ActivateDeactivateTarget()
@@ -410,19 +410,19 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    public void EnableUpgradeSpell(GlobalVariables.UpgradeCode upgradeCode)
+    public void EnableUpgradeSpell(HeroUpgrades.UpgradeCode upgradeCode)
     {
-        if (GlobalVariables.UpgradeCode.FireBlade.Equals(upgradeCode))
+        if (HeroUpgrades.UpgradeCode.Spells_FireBlade.Equals(upgradeCode))
         {
             manaSpells[0].spellData.IsActive = true;
             manaSpells[0].ui.ActivateSpell();
         }
-        else if (GlobalVariables.UpgradeCode.RotatingBlades.Equals(upgradeCode))
+        else if (HeroUpgrades.UpgradeCode.Spells_RotatingBlades.Equals(upgradeCode))
         {
             manaSpells[1].spellData.IsActive = true;
             manaSpells[1].ui.ActivateSpell();
         }
-        else if (GlobalVariables.UpgradeCode.Shield.Equals(upgradeCode))
+        else if (HeroUpgrades.UpgradeCode.Spells_Shield.Equals(upgradeCode))
         {
             manaSpells[2].spellData.IsActive = true;
             manaSpells[2].ui.ActivateSpell();
@@ -440,6 +440,8 @@ public class PlayerScript : MonoBehaviour
             moveSpeed /= speedUpdate;
         else
             moveSpeed *= speedUpdate;
+
+        Debug.Log($"Player speed updated to: {moveSpeed}");
     }
 
 

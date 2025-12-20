@@ -206,6 +206,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  hasDamageParticles: 0
+  damageParticles: {fileID: 5588695382944192682, guid: 3cf3e2e6560568a4d8e69595259985e8, type: 3}
+  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
   receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
   playerWasHitDamage: {fileID: 0}
   canApplyKnockback: 0
@@ -216,6 +219,9 @@ MonoBehaviour:
   projectilePosition: {fileID: 6327042533695370261}
   projectileParent: {fileID: 0}
   projectileCanRotate: 1
+  normalAttackFX: {fileID: 0}
+  specialAttackFX: {fileID: 0}
+  isGeneratedByPool: 1
   hasReachedPlayer: 0
   animator: {fileID: 8683147018546817332}
   projectileSpeed: 10
@@ -408,6 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c6ad8983054b649bf5e6e4f3cbc85b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canShowHealth: 1
 --- !u!1 &6502996838448132756
 GameObject:
   m_ObjectHideFlags: 0

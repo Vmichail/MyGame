@@ -9,5 +9,6 @@ public class BladeScript : PlayerSpellBaseScript
     public override float CriticalChance => GlobalVariables.Instance.bladeCriticalChance;
     public override float CriticalMultiplier => GlobalVariables.Instance.bladeCriticalMultiplier;
     public override Color BaseColor => GlobalVariables.Instance.bladeDefaultColor;
+    public override string OnHitSound => "hitEffect";
 
 }

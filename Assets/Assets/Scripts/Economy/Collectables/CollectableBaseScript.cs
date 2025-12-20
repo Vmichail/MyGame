@@ -10,6 +10,7 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
     public float maxSpeed = 80f;          // limit max speed
     public float stopDistance = 0.1f;
     protected BoxCollider2D boxCollider;
+    public bool isAffectedByMagnet = false;
 
     protected virtual void Awake()
     {
@@ -26,6 +27,11 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
     protected virtual void Update()
     {
         if (player == null) return;
+
+        if (isAffectedByMagnet && GlobalVariables.Instance.magnetIsActive)
+        {
+            Collect();
+        }
 
         if (IsCollected)
         {

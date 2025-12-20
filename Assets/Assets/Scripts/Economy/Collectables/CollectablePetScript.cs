@@ -26,7 +26,7 @@ public class CollectablePetScript : CollectableBaseScript
     {
         while (isActive)
         {
-            AudioManager.Instance.PlayRandomSoundFX(CatMeowSounds, transform.position, 0.5f, 1f, 1f, applyDistance: true);
+            //AudioManager.Instance.PlayRandomSoundFX(CatMeowSounds, transform.position, 0.1f, 1f, 1f, applyDistance: true);
 
             await UniTask.Delay(5000, DelayType.DeltaTime, PlayerLoopTiming.Update, this.GetCancellationTokenOnDestroy());
         }

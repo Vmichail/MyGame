@@ -27,11 +27,11 @@ public class LevelUpPanelScript : MonoBehaviour
     public bool HealthCost = false;
     private Image levelUpPanelImage;
     private Color normalColor;
-    private Color redColor = new Color(1f, 0f, 0f, 0.3f);
+    private Color redColor = new(1f, 0f, 0f, 0.3f);
     private string[] levelUpSounds = new[] { "levelup1", "levelup2", "levelup3" };
     private void Awake()
     {
-        allSpells = upgradeChoices.Where(uc => uc.UpgradeCategory == GlobalVariables.UpgradeCategory.Spells).ToList();
+        allSpells = upgradeChoices.Where(uc => uc.UpgradeCategory == HeroUpgrades.UpgradeCategory.Spells).ToList();
         levelUpPanelImage = wholeLevelUpPanel.GetComponent<Image>();
         normalColor = levelUpPanelImage.color;
     }
@@ -60,7 +60,7 @@ public class LevelUpPanelScript : MonoBehaviour
         randomChoices = GetRandomChoices(numberOfOptions);
         foreach (int i in Enumerable.Range(0, numberOfOptions))
         {
-            UpgradeChoice choiceCopy = randomChoices[i];
+            UpgradeChoice randomFirstUpgrade = randomChoices[i];
             bool isLocked = false;
             int unlockCost = 0;
             GameObject upgradeChoice = Instantiate(upgradeOptionPrefab, upgradeChoicesParentTransform);
@@ -78,19 +78,20 @@ public class LevelUpPanelScript : MonoBehaviour
                     isLocked = true;
                     unlockCost = GlobalVariables.Instance ? GlobalVariables.Instance.upgradeOption5UnlockPrice : 100;
                 }
-                setUpgradeScript.SetUpgradeChoice(randomChoices[i], upgradeCost, isLocked, unlockCost);
+                List<UpgradeChoice> bonusUpgrades = GetBonusBasedOnLuck(randomFirstUpgrade.UpgradeCategory);
+                setUpgradeScript.SetUpgradeChoice(randomFirstUpgrade, upgradeCost, isLocked, unlockCost, bonusUpgrades);
                 //Button
                 Button button = upgradeChoice.GetComponent<Button>();
                 if (button != null)
                 {
                     if (isLocked)
                     {
-                        Debug.Log($"Remove locked run for unlockCost:{unlockCost}, {i}, {button}, {choiceCopy} ");
-                        button.onClick.AddListener(() => RemoveLock(unlockCost, i, button, choiceCopy, setUpgradeScript));
+                        //Debug.Log($"Remove locked run for unlockCost:{unlockCost}, {i}, {button}, {randomFirstUpgrade} ");
+                        button.onClick.AddListener(() => RemoveLock(unlockCost, i, button, randomFirstUpgrade, setUpgradeScript, bonusUpgrades));
                     }
                     else
                     {
-                        button.onClick.AddListener(() => BuyOption(choiceCopy, button.gameObject, setUpgradeScript));
+                        button.onClick.AddListener(() => BuyOption(randomFirstUpgrade, button.gameObject, setUpgradeScript, bonusUpgrades));
                     }
                 }
                 if (i == 0)
@@ -121,7 +122,7 @@ public class LevelUpPanelScript : MonoBehaviour
             {
                 upgradeScripts.Add(setUpgradeScript);
                 setUpgradeScript.HealthCost = true;
-                setUpgradeScript.SetUpgradeChoice(randomChoices[i], healthCost, false, 0);
+                setUpgradeScript.SetUpgradeChoice(randomChoices[i], healthCost, false, 0, new List<UpgradeChoice>());
                 //Button
                 if (upgradeChoice.TryGetComponent<Button>(out var button))
                 {
@@ -196,7 +197,7 @@ public class LevelUpPanelScript : MonoBehaviour
             });
     }
 
-    public void BuyOption(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript)
+    public void BuyOption(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript, List<UpgradeChoice> bonusChoices)
     {
         if (GlobalVariables.Instance.coinsCollected >= upgradeCost)
         {
@@ -212,7 +213,11 @@ public class LevelUpPanelScript : MonoBehaviour
             setUpgradeScript.IsClicked = true;
             AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
             AnimatedDeletion(buttonGO);
-            GlobalVariables.Instance.UpgradeHero(chosenUpgrade.UpgradeCode);
+            HeroUpgrades.Instance.UpgradeHero(chosenUpgrade);
+            foreach (UpgradeChoice bonus in bonusChoices)
+            {
+                HeroUpgrades.Instance.UpgradeHero(bonus);
+            }
             Continue();
         }
         else
@@ -237,22 +242,22 @@ public class LevelUpPanelScript : MonoBehaviour
         healthCost = (int)Mathf.Min(healthCost, GlobalVariables.Instance.playerCurrentHealth - 1);
         healthCost = Mathf.Max(healthCost, 0);
         UpdatePrices(healthCost);
-        EnemyGenericFunctions.DamagePlayer(healthCost);
+        EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(healthCost);
         TriggerBuff();
         setUpgradeScript.IsClicked = true;
         AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
         AnimatedDeletion(buttonGO);
-        GlobalVariables.Instance.UpgradeHero(chosenUpgrade.UpgradeCode);
+        HeroUpgrades.Instance.UpgradeHero(chosenUpgrade);
         Continue();
     }
 
-    private void RemoveLock(int unlockCost, int index, Button button, UpgradeChoice upgradeChoice, SetUpgradeScript setUpgradeScript)
+    private void RemoveLock(int unlockCost, int index, Button button, UpgradeChoice upgradeChoice, SetUpgradeScript setUpgradeScript, List<UpgradeChoice> bonusUpgrades)
     {
         if (GlobalVariables.Instance.coinsCollected >= unlockCost)
         {
             Debug.Log($"Remove Locked Executed!!with index:{index}:buttonGameObjename:{button.gameObject.name}");
             upgradeScripts[index].RemoveLock(button, index, unlockCost);
-            button.onClick.AddListener(() => BuyOption(upgradeChoice, button.gameObject, setUpgradeScript));
+            button.onClick.AddListener(() => BuyOption(upgradeChoice, button.gameObject, setUpgradeScript, bonusUpgrades));
         }
     }
 
@@ -348,7 +353,7 @@ public class LevelUpPanelScript : MonoBehaviour
         if (go.TryGetComponent<Button>(out var btn))
             btn.Select();
 
-        Debug.Log("FORCED SELECTION ---> " + go.name);
+        //Debug.Log("FORCED SELECTION ---> " + go.name);
     }
 
     private void ShowCatUi()
@@ -359,5 +364,81 @@ public class LevelUpPanelScript : MonoBehaviour
         {
             catsGOParent.GetChild(i).gameObject.SetActive(i < catsToShow);
         }
+    }
+
+    private List<UpgradeChoice> GetBonusBasedOnLuck(HeroUpgrades.UpgradeCategory upgradeCategory)
+    {
+        var result = new List<UpgradeChoice>();
+
+        if (GlobalVariables.Instance == null || upgradeChoices == null || upgradeChoices.Count == 0)
+            return result;
+
+        int cats = Mathf.Clamp(GlobalVariables.Instance.catsCollected, 0, 15);
+        if (cats <= 0)
+            return result;
+
+        // Get per-cat chances for extra bonuses
+        var (chance1, chance2, chance3) = GetLuckChances(cats);
+
+        // Roll how many extra bonuses we get (0–3)
+        int bonusCount = 0;
+
+        if (Random.value <= chance1)
+            bonusCount++;
+
+        if (bonusCount >= 1 && Random.value <= chance2)
+            bonusCount++;
+
+        if (bonusCount >= 2 && Random.value <= chance3)
+            bonusCount++;
+
+        if (bonusCount == 0)
+            return result;
+
+        // Filter valid choices from the same category that actually have bonuses
+        var validChoices = upgradeChoices
+            .Where(uc =>
+                uc != null &&
+                uc.UpgradeCategory == upgradeCategory)
+            .OrderBy(_ => Random.value) // shuffle
+            .ToList();
+
+        if (validChoices.Count == 0)
+            return result;
+
+        // Take as many as we rolled (clamped to available)
+        bonusCount = Mathf.Min(bonusCount, 3);
+
+        for (int i = 0; i < bonusCount; i++)
+        {
+            result.Add(validChoices[i]);
+            //Debug.Log($"Cat Luck Bonus: Added extra upgrade choice '{validChoices[i].name}' for category {upgradeCategory} (cats={cats}," +
+            //    $" bonusCount={bonusCount}, UPGRADECODE:{validChoices[i].UpgradeCode})");
+        }
+
+        return result;
+    }
+
+    private (float chance1, float chance2, float chance3) GetLuckChances(int cats)
+    {
+        return cats switch
+        {
+            1 => (0.20f, 0.00f, 0.00f),
+            2 => (0.30f, 0.10f, 0.00f),
+            3 => (0.35f, 0.20f, 0.05f),
+            4 => (0.40f, 0.25f, 0.08f),
+            5 => (0.45f, 0.30f, 0.10f),
+            6 => (0.50f, 0.35f, 0.12f),
+            7 => (0.55f, 0.40f, 0.15f),
+            8 => (0.60f, 0.45f, 0.18f),
+            9 => (0.65f, 0.50f, 0.22f),
+            10 => (0.70f, 0.55f, 0.26f),
+            11 => (0.75f, 0.60f, 0.30f),
+            12 => (0.80f, 0.65f, 0.35f),
+            13 => (0.85f, 0.70f, 0.40f),
+            14 => (0.90f, 0.75f, 0.45f),
+            15 => (0.95f, 0.80f, 0.50f),
+            _ => (0f, 0f, 0f),
+        };
     }
 }

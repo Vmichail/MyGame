@@ -4,7 +4,7 @@ public class EnemyAnimatorScript : MonoBehaviour
 {
     private EnemyBaseScript enemyBaseScript;
 
-    private void Start()
+    private void OnEnable()
     {
         enemyBaseScript = GetComponentInParent<EnemyBaseScript>();
     }
@@ -28,4 +28,30 @@ public class EnemyAnimatorScript : MonoBehaviour
     {
         enemyBaseScript.SpecialAttack();
     }
+
+    public void SummonStarts()
+    {
+        enemyBaseScript.SummonStarts();
+    }
+
+    public void SummonEndsSound()
+    {
+        enemyBaseScript.SummonEndsSound();
+    }
+
+    public void NormalAttackFX()
+    {
+        enemyBaseScript.NormalAttackFX();
+    }
+
+    public void PreAttackSound()
+    {
+        enemyBaseScript.PreAttackSound();
+    }
+
+    public void SpecialAttackFX()
+    {
+        enemyBaseScript.SpecialAttackFX();
+    }
+
 }

@@ -1,6 +1,8 @@
 using Coffee.UIEffects;
 using System;
+using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -12,8 +14,8 @@ public class SetUpgradeScript : BaseButtonScript
     public Sprite Icon { get; set; }
     public Boolean HealthCost { get; set; }
     public string Text { get; set; }
-    public GlobalVariables.UpgradeCode UpgradeCode { get; set; }
-    public GlobalVariables.UpgradeCategory UpgradeCatecory { get; set; }
+    public HeroUpgrades.UpgradeCode UpgradeCode { get; set; }
+    public HeroUpgrades.UpgradeCategory UpgradeCatecory { get; set; }
     //Other public values
     public int Cost { get; set; }
     public bool IsLocked { get; set; }
@@ -32,20 +34,60 @@ public class SetUpgradeScript : BaseButtonScript
     private Mask maskComponent;
 
 
-    public void SetUpgradeChoice(UpgradeChoice upgradeChoice, int cost, bool locked, int unlockPrice)
+    public void SetUpgradeChoice(UpgradeChoice upgradeChoice, int cost, bool locked, int unlockPrice, List<UpgradeChoice> additionalChoices)
     {
         cardImage.sprite = upgradeChoice.Image;
         iconImage.sprite = upgradeChoice.Icon;
-        costText.text = cost.ToString();
-        for (int i = 0; i < upgradeChoice.Bonuses.Count; i++)
+        if (cost > 0)
         {
-            bonuses[i].SetActive(true);
-            // Get the first and second child TextMeshPro components
-            TextMeshProUGUI titleText = bonuses[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            TextMeshProUGUI valueText = bonuses[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+            costText.enabled = true;
+        }
+        else
+        {
+            costText.enabled = false;
+        }
+        costText.text = cost.ToString();
+        bonuses[0].SetActive(true);
 
-            titleText.text = GlobalVariables.GetUpgradeTitle(upgradeChoice.Bonuses[i].upgradeCode);
-            valueText.text = upgradeChoice.Bonuses[i].value.ToString() + (upgradeChoice.Bonuses[i].percentage ? "%" : "");
+        TextMeshProUGUI titleText = bonuses[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI valueText = bonuses[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        if (additionalChoices.Count == 1)
+        {
+            cardImage.color = new Color(0f, 1f, 0f, 1f);
+        }
+        else if (additionalChoices.Count == 2)
+        {
+            cardImage.color = new Color(1f, 1f, 0f, 1f);
+        }
+        else if (additionalChoices.Count == 3)
+        {
+            cardImage.color = new Color(0f, 1f, 1f, 1f);
+        }
+        titleText.text = HeroUpgrades.GetUpgradeTitle(upgradeChoice.UpgradeCode);
+        float displayValue = upgradeChoice.UpgradeValue.percentage
+        ? upgradeChoice.UpgradeValue.value * 100f
+        : upgradeChoice.UpgradeValue.value;
+
+        valueText.text = displayValue.ToString("0.#") + (upgradeChoice.UpgradeValue.percentage ? "%" : "");
+        int additionalBonusIndex = 1;
+        foreach (UpgradeChoice additionalChoice in additionalChoices)
+        {
+            if (additionalBonusIndex >= bonuses.Length || additionalBonusIndex > 3)
+                break;
+
+            bonuses[additionalBonusIndex].SetActive(true);
+
+            TextMeshProUGUI titleText1 = bonuses[additionalBonusIndex].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI valueText1 = bonuses[additionalBonusIndex].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+
+            titleText1.text = HeroUpgrades.GetUpgradeTitle(additionalChoice.UpgradeCode);
+            float displayValue1 = additionalChoice.UpgradeValue.percentage
+             ? additionalChoice.UpgradeValue.value * 100f
+             : additionalChoice.UpgradeValue.value;
+
+            valueText1.text = displayValue1.ToString("0.#") + (additionalChoice.UpgradeValue.percentage ? "%" : "");
+
+            additionalBonusIndex++;
         }
 
         maskedGameObject.SetActive(locked);

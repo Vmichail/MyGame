@@ -46,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -60,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 12
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,10 +81,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -138,9 +138,9 @@ TextureImporter:
       name: spr_coin_strip4_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 0
         y: 0
-        width: 12
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -148,9 +148,9 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: afc45a4a2102c0b60800000000000000
+      spriteID: 3298a28fb33e6fd41804ca9ef0e8119f
       internalID: 7713575526222613754
       vertices: []
       indices: 
@@ -160,9 +160,9 @@ TextureImporter:
       name: spr_coin_strip4_1
       rect:
         serializedVersion: 2
-        x: 18
+        x: 16
         y: 0
-        width: 12
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -170,9 +170,9 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9322c067acbe23000800000000000000
+      spriteID: 1ca44485b46145540ad95010cafea6d8
       internalID: 14333003631960633
       vertices: []
       indices: 
@@ -182,9 +182,9 @@ TextureImporter:
       name: spr_coin_strip4_2
       rect:
         serializedVersion: 2
-        x: 34
+        x: 32
         y: 0
-        width: 12
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -192,9 +192,9 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8610ee41fdc2e9d90800000000000000
+      spriteID: 51a4620429a370b4d80c5e6d75ea33dc
       internalID: -7089179426794110616
       vertices: []
       indices: 
@@ -204,9 +204,9 @@ TextureImporter:
       name: spr_coin_strip4_3
       rect:
         serializedVersion: 2
-        x: 50
+        x: 48
         y: 0
-        width: 12
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -214,9 +214,9 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d553bc8a186db03c0800000000000000
+      spriteID: d4ede776768b2ad4b9d90bcb4c7c534d
       internalID: -4392181159198771875
       vertices: []
       indices: 
@@ -226,7 +226,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6f0ea6c0fb30c154784f57bed6b67e62
     internalID: 0
     vertices: []
     indices: 
@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      spr_coin_strip4_0: 7713575526222613754
+      spr_coin_strip4_1: 14333003631960633
+      spr_coin_strip4_2: -7089179426794110616
+      spr_coin_strip4_3: -4392181159198771875
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

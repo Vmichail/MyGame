@@ -1,13 +1,12 @@
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class GlobalVariables : MonoBehaviour
 {
-    [Header("SerializeFields")]
-    [SerializeField] private Transform playerRangeTransform;
-    [SerializeField] private PlayerScript playerScript;
+
     public static GlobalVariables Instance { get; private set; }
 
     private void Update()
@@ -54,12 +53,15 @@ public class GlobalVariables : MonoBehaviour
     public float upgradeEnemiesTimer = 40f;
     public float upgradeEnemiesTimerIncreaseValue = 5f;
     [Header("Player Collectables")]
+    public bool magnetIsActive = false;
     public bool isSpawningCollectablePets = true;
     public int catsCollected = 0;
     public float coinsCollected = 100;
     public int permanentCoinsCollected = 100;
     public int diamondsCollected = 100;
     public float yellowCoinValue = 1;
+    public float greenRubyCoinValue = 10;
+    public float greenRubyExpValue = 10;
     //Player Stats
     [Header("Player Stats")]
     [Header("Player Attack")]
@@ -117,6 +119,9 @@ public class GlobalVariables : MonoBehaviour
     public float skeletonsSpawningTime = 2f;
     public float skeletonArchersSpawningTime = 2f;
     public float vampireType3SpawningTime = 15f;
+    public float vampireMiniBossSpawningTime = 15f;
+    public float skeletonKingBossSpawningTime = 15f;
+    public float thirdBossSpawningTime = 15f;
     public int aliveEnemies = 0;
     public int killedEnemies = 0;
     public int score = 0;
@@ -182,6 +187,21 @@ public class GlobalVariables : MonoBehaviour
     public float vampireType2Range = 10f;
     public float vampireType2Exp = 20f;
     public float vampireType2MultipleAttackChance = 0.3f;
+    [Header("SkeletonKing")]
+    public float skeletonKingSpeed = 3f;
+    public float skeletonKingHealth = 250f;
+    public float skeletonKingKnockbackResistance = 5f;
+    public float skeletonKingDamage = 2f;
+    public float skeletonKingAttackCooldown = 2f;
+    public float skeletonKingCoinDropChance = 1f;
+    public float skeletonKingHealthPotionChance = 1f;
+    public float skeletonKingManaPotionChance = 1f;
+    public CoinDropEnum skeletonKing2CoinEnum = CoinDropEnum.Red;
+    public Color skeletonKingDefaultColor = Color.white;
+    public float skeletonKingProjectileSpeed = 16f;
+    public float skeletonKingRange = 8f;
+    public float skeletonKingExp = 20f;
+    public float skeletonKingMultipleAttackChance = 0.3f;
     [Header("GoblinTorch")]
     public float goblinTorchSpeed = 3f;
     public float goblinTorchHealth = 250f;
@@ -245,7 +265,7 @@ public class GlobalVariables : MonoBehaviour
     public string orbitCouroutineSound = "rotatingBlades";
     [Header("!!Shield!!")]
     public float shieldSpellDuration = 3f;
-    public float shieldSpellSpeed = 5f;
+    public float shieldSpellSpeed = 1.5f;
     public float shieldSpellDamage = 1;
     public float shieldSpellKnockbackForce = 20f;
     public float shieldSpellCriticalChance = 0f;
@@ -316,59 +336,7 @@ public class GlobalVariables : MonoBehaviour
         Orange,
     }
 
-    public enum UpgradeCategory
-    {
-        Attack,
-        Defence,
-        Economy,
-        Spells,
-    }
 
-    public enum UpgradeCode
-    {
-        //Attack
-        Attack,
-        AttackSpeed,
-        AttackRange,
-        CriticalChance,
-        CriticalDamage,
-        Bounce,
-        //Health-Defence-Speed
-        Health,
-        HealthRegen,
-        Armor,
-        MovementSpeed,
-        //Economy
-        CoinsValue,
-        MoreCoins,
-        //Spells,
-        FireBlade,
-        RotatingBlades,
-        Shield,
-
-    }
-    public static readonly Dictionary<GlobalVariables.UpgradeCode, string> UpgradesTitles =
-       new Dictionary<GlobalVariables.UpgradeCode, string>
-       {
-            { GlobalVariables.UpgradeCode.Attack, "Attack" },
-            { GlobalVariables.UpgradeCode.AttackSpeed, "Atk Speed" },
-            { GlobalVariables.UpgradeCode.AttackRange, "Atk Range" },
-            { GlobalVariables.UpgradeCode.CriticalChance, "Cr.Chance" },
-            { GlobalVariables.UpgradeCode.CriticalDamage, "Cr.Dmg" },
-            { GlobalVariables.UpgradeCode.Bounce, "Bounce" },
-            { GlobalVariables.UpgradeCode.Health, "Health" },
-            { GlobalVariables.UpgradeCode.HealthRegen, "Hlth Reg." },
-            { GlobalVariables.UpgradeCode.Armor, "Armor" },
-            { GlobalVariables.UpgradeCode.MovementSpeed, "Mvmnt Spd" },
-            { GlobalVariables.UpgradeCode.CoinsValue, "Coin Value" },
-            { GlobalVariables.UpgradeCode.MoreCoins, "More Coins" },
-            { GlobalVariables.UpgradeCode.FireBlade, "Fire Blade" },
-            { GlobalVariables.UpgradeCode.RotatingBlades, "Rot.Blades" },
-            { GlobalVariables.UpgradeCode.Shield, "Shield" },
-       };
-
-    public static string GetUpgradeTitle(UpgradeCode code)
-        => UpgradesTitles.TryGetValue(code, out var title) ? title : code.ToString();
     public enum SpellCode
     {
         //Shoule be same with UpgradeCode
@@ -398,6 +366,8 @@ public class GlobalVariables : MonoBehaviour
         Level1Skeleton,
         SkeletonArcher,
         VampireType3,
+        VampireBoss,
+        SkeletonKing,
         GoblinTourch,
         GoblinTNT,
     }
@@ -421,6 +391,7 @@ public class GlobalVariables : MonoBehaviour
             {
                 gameIsPaused = true;
                 Time.timeScale = 0;
+                AudioManager.Instance.PauseAllSFX();
             }
         }
     }
@@ -434,167 +405,10 @@ public class GlobalVariables : MonoBehaviour
             {
                 Time.timeScale = 1;
                 gameIsPaused = false;
+                AudioManager.Instance.ResumeAllSFX();
             }
         }
     }
-
-
-    private bool fireBladeSpellEnabled = false;
-    private bool rotatingBladesSpellEnabled = false;
-    private bool shieldSpellEnabled = false;
-    private int fireBladeUpgrades = 0;
-    private int rotatingBladesUpgrades = 0;
-    private int shieldUpgrades = 0;
-    public void UpgradeHero(UpgradeCode upgradeCode)
-    {
-        /*
-        Attack,
-        AttackSpeed,
-        AttackRange,
-        CriticalChance,
-        CriticalDamage,
-        Health,
-        Armor,
-        */
-        //Attack
-        if (UpgradeCode.AttackRange.Equals(upgradeCode))
-        {
-            playerAttackRange += 10f;
-            float scale = playerAttackRangeBaseScale *
-                (playerAttackRange / playerAttackRangeBase);
-            playerRangeTransform.localScale = new Vector3(scale, scale, 1f);
-        }
-        else if (UpgradeCode.Attack.Equals(upgradeCode))
-        {
-            playerAttackDamage += 1;
-        }
-        else if (UpgradeCode.AttackSpeed.Equals(upgradeCode))
-        {
-            playerAttackSpeed *= 1.2f;
-        }
-        else if (UpgradeCode.CriticalChance.Equals(upgradeCode))
-        {
-            globalCriticalChance += 0.5f;
-        }
-        else if (UpgradeCode.CriticalDamage.Equals(upgradeCode))
-        {
-            globalCriticalMultiplier += 0.1f;
-        }
-        else if (UpgradeCode.Bounce.Equals(upgradeCode))
-        {
-            defaultSpellBounces += 1;
-        }
-        //Health-Defence-Speed
-        else if (UpgradeCode.MovementSpeed.Equals(upgradeCode))
-        {
-            UpdatePlayerSpeed(1.2f);
-        }
-        else if (UpgradeCode.Health.Equals(upgradeCode))
-        {
-            playerMaxHealth += 5f;
-            playerCurrentHealth += 5f;
-        }
-        else if (UpgradeCode.HealthRegen.Equals(upgradeCode))
-        {
-            playerHealthRegen *= 1.1f;
-            playerHealthRegenInterval *= 0.9f;
-        }
-        else if (UpgradeCode.Armor.Equals(upgradeCode))
-        {
-            playerArmor += 1f;
-        }
-        //Economy
-        else if (UpgradeCode.CoinsValue.Equals(upgradeCode))
-        {
-            yellowCoinValue *= 1.2f;
-        }
-        else if (UpgradeCode.CoinsValue.Equals(upgradeCode))
-        {
-            IncreaseCoinDropChance();
-        }
-        else if (UpgradeCode.Armor.Equals(upgradeCode))
-        {
-            playerArmor += 1f;
-        }
-        //Spells
-        else if (UpgradeCode.FireBlade.Equals(upgradeCode))
-        {
-            if (!fireBladeSpellEnabled)
-            {
-                fireBladeSpellEnabled = true;
-                playerScript.EnableUpgradeSpell(upgradeCode);
-                return;
-            }
-            else
-            {
-                fireBladeManaTotal += 2;
-                if (fireBladeUpgrades % 2 == 0 && fireBladeDelay > 0.2f)
-                    fireBladeDelay -= 0.05f;
-                fireBladeManaSpellDamageMutli += 0.2f;
-                fireBladeManaSpellCriticalChance += 0.1f;
-                fireBladeManaSpellCriticalMultiplier += 0.1f;
-                fireBladeManaSpellPiercing += 5;
-            }
-
-        }
-        else if (UpgradeCode.RotatingBlades.Equals(upgradeCode))
-        {
-            if (!rotatingBladesSpellEnabled)
-            {
-                rotatingBladesSpellEnabled = true;
-                playerScript.EnableUpgradeSpell(upgradeCode);
-                return;
-            }
-            else
-            {
-                totalOrbitBlades += 2;
-                orbitBladeDuration += 2f;
-                if (orbitBladeRotationSpeed < 150)
-                    orbitBladeRotationSpeed += 20f;
-                orbitBladeRadius += 0.4f;
-                orbidBladeSpellDamageMutli += 0.5f;
-                orbidBladeSpellCriticalChance += 0.1f;
-                orbidBladeSpellCriticalMultiplier += 0.1f;
-                if (rotatingBladesUpgrades % 2 == 0)
-                    orbidBladeSpellPiercing += 1;
-            }
-        }
-        else if (UpgradeCode.Shield.Equals(upgradeCode))
-        {
-            if (!shieldSpellEnabled)
-            {
-                shieldSpellEnabled = true;
-                playerScript.EnableUpgradeSpell(upgradeCode);
-                return;
-            }
-            else
-            {
-                shieldSpellDamage += 2;
-                shieldSpellDuration += 1f;
-                shieldSpellPiercing += 2;
-                shieldSpellSpeedMultiply += 0.1f;
-            }
-        }
-        else
-        {
-            Debug.Log($"No upgradeCode was found for {upgradeCode}");
-        }
-    }
-
-    private void IncreaseCoinDropChance()
-    {
-        skeleonCoinDropChance *= 1.2f;
-        vampireType3CoinDropChance *= 1.2f;
-        goblinTNTCoinDropChance *= 1.2f;
-        goblinTorchCoinDropChance *= 1.2f;
-    }
-
-    public void UpdatePlayerSpeed(float speedIncrease, bool decrease = false)
-    {
-        playerScript.UpdatePlayerSpeed(speedIncrease, decrease);
-    }
-
-
 
     //BACKUP VALUES 
     private Dictionary<string, object> _initialValues = new();
@@ -627,4 +441,17 @@ public class GlobalVariables : MonoBehaviour
             field?.SetValue(this, kvp.Value);
         }
     }
+
+    public void ActivateMagnet()
+    {
+        StartCoroutine(DisableMagnetAfterDelay(1f)); // 1 second delay
+    }
+
+    private IEnumerator DisableMagnetAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        magnetIsActive = false;
+    }
+
+
 }

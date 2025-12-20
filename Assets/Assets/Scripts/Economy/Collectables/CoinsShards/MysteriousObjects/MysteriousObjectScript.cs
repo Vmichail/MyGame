@@ -33,7 +33,7 @@ public class MysteriousObjectScript : MonoBehaviour, ICollectable
     private void OnEnable()
     {
         LeanTween.cancel(gameObject);
-        audioSource = AudioManager.Instance.PlaySoundFX("teleportSound", transform.position, 0.8f, 0.75f, 1.25f, true, true);
+        //audioSource = AudioManager.Instance.PlaySoundFX("teleportSound", transform.position, 0.8f, 0.75f, 1.25f, loop: false, true);
         player = GameObject.FindGameObjectWithTag("Player").transform;
         LeanTween.moveY(gameObject, transform.position.y + 0.3f, 1f)
         .setEaseInOutSine()
@@ -52,13 +52,14 @@ public class MysteriousObjectScript : MonoBehaviour, ICollectable
 
     private void CollectEnds()
     {
-        AudioManager.Instance.StopSound(audioSource);
+        //AudioManager.Instance.StopSound(audioSource);
         AudioManager.Instance.PlaySoundFX("Exorcism_cast", transform.position, 0.4f, 0.75f, 1.25f);
         levelUpPanel.TryGetComponent<LevelUpPanelScript>(out var levelUpPanelScript);
         levelUpPanelScript.HealthCost = true;
         levelUpPanel.SetActive(true);
-        gameObject.SetActive(false);
         IsCollected = false;
         enemySpawningScript.SpawnMobsOnSpecificPosition(null, 1);
+        DoorScript.Instance.DoorUp();
+        gameObject.SetActive(false);
     }
 }

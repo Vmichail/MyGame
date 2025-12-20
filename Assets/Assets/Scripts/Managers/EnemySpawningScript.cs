@@ -20,6 +20,7 @@ public class EnemySpawningScript : MonoBehaviour
     [SerializeField] private Transform parent;
     [SerializeField] private int allowedLength;
     [SerializeField] private GameObject spawnIndicatorPrefab;
+    [SerializeField] private GameObject spawnBossIndicatorPrefab;
     [SerializeField] private Transform[] specificEnemyPosition;
     [SerializeField] private Light2D globalLight;
     private int enemyUpgradeCounter = 0;
@@ -30,6 +31,11 @@ public class EnemySpawningScript : MonoBehaviour
     [SerializeField] private GameObject collectableCat;
     [SerializeField] private Transform[] collectableCatSpawnPotitions;
     [SerializeField] private float collectableSpawnDelay = 20f;
+    [SerializeField] private bool changeVampireMiniBossMusic = true;
+    private bool firstBossSpawned;
+    private bool secondBossSpawned;
+    private bool thirdBossSpawned;
+
     void Start()
     {
         foreach (var prefab in enemyPrefabs)
@@ -83,16 +89,28 @@ public class EnemySpawningScript : MonoBehaviour
     }
 
 
-    private void SpawnBoss()
+    private void SpawnVampireMiniBoss()
     {
         if (!GlobalVariables.Instance.level1BossActive)
         {
-            AudioManager.Instance.PlayMusic(3);
-            GlobalVariables.Instance.level1BossActive = true;
-            GlobalVariables.Instance.spawningMobsIsEnabled = false;
+            changeVampireMiniBossMusic = false;
             globalLight.intensity = 0.8f;
             globalLight.color = new Color(1f, 0.7f, 0.7f);
-            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[3], new Vector2(0, 0)));
+            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[3], new Vector2(0, 0), true, 3));
+        }
+    }
+
+
+    private void SpawnSkeletonKingBoss()
+    {
+        if (!GlobalVariables.Instance.level1BossActive)
+        {
+            if (changeVampireMiniBossMusic)
+                AudioManager.Instance.PlayMusic(3);
+            changeVampireMiniBossMusic = false;
+            globalLight.intensity = 0.7f;
+            globalLight.color = new Color(0.9f, 0.75f, 0.65f);
+            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[4], new Vector2(0, 0), true, 4));
         }
     }
 
@@ -100,10 +118,10 @@ public class EnemySpawningScript : MonoBehaviour
     {
         AudioManager.Instance.PlaySoundFX("sharp-pop", transform.position, 0.4f, 0.75f, 1.25f);
         CinemachineScript.Instance.Shake(0.15f, 0.15f);
-        StartCoroutine(SpawnIndicatorThenEnemy(pool, position));
+        StartCoroutine(SpawnIndicatorThenEnemy(pool, position, false, 1));
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         //Skeleton Archer spawn
         if (GlobalVariables.Instance.spawnedSkeletons > 1 && GlobalVariables.Instance.skeletonArchersEnabled == false)
@@ -121,12 +139,28 @@ public class EnemySpawningScript : MonoBehaviour
 
         if (GlobalVariables.Instance.gameTime >= GlobalVariables.Instance.upgradeEnemiesTimer)
         {
-            if (enemyUpgradeCounter > 3)
-            {
-                SpawnBoss();
-            }
             UpgradeEnemies();
             GlobalVariables.Instance.upgradeEnemiesTimer += GlobalVariables.Instance.upgradeEnemiesTimerIncreaseValue;
+        }
+
+        if (GlobalVariables.Instance.gameTime >= GlobalVariables.Instance.vampireMiniBossSpawningTime && !firstBossSpawned)
+        {
+            firstBossSpawned = true;
+            SpawnVampireMiniBoss();
+        }
+
+        if (GlobalVariables.Instance.gameTime >= GlobalVariables.Instance.skeletonKingBossSpawningTime && !secondBossSpawned)
+        {
+            secondBossSpawned = true;
+            SpawnSkeletonKingBoss();
+        }
+
+        if (GlobalVariables.Instance.gameTime >= GlobalVariables.Instance.thirdBossSpawningTime && !thirdBossSpawned)
+        {
+            thirdBossSpawned = true;
+            SpawnVampireMiniBoss();
+            SpawnSkeletonKingBoss();
+
         }
     }
 
@@ -152,22 +186,22 @@ public class EnemySpawningScript : MonoBehaviour
         mob.SetActive(true);
     }
 
-    private IEnumerator SpawnRandomMobs()
-    {
-        while (GlobalVariables.Instance.spawningMobsIsEnabled)
-        {
-            yield return new WaitForSeconds(GlobalVariables.Instance.mobsSpawningTime);
-            // Choose pool index
-            int index = Random.Range(0, allowedLength > 0 ? allowedLength : enemyPools.Count);
-            Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
-            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
-        }
-    }
+    //private IEnumerator SpawnRandomMobs()
+    //{
+    //    while (GlobalVariables.Instance.spawningMobsIsEnabled)
+    //    {
+    //        yield return new WaitForSeconds(GlobalVariables.Instance.mobsSpawningTime);
+    //        // Choose pool index
+    //        int index = Random.Range(0, allowedLength > 0 ? allowedLength : enemyPools.Count);
+    //        Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
+    //        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
+    //    }
+    //}
 
     private IEnumerator SpawnSpecificMobs(int index, float maxWidth = 20f, float minWidth = -20f, float maxHeight = 17f, float minHeight = -17f)
     {
         Vector2 position = new(Random.Range(minWidth, maxWidth), Random.Range(minHeight, maxHeight));
-        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
+        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position, false, index));
         float spawningTime = GlobalVariables.Instance.spawnTime;
         if (index == 0)
         {
@@ -185,13 +219,17 @@ public class EnemySpawningScript : MonoBehaviour
         {
             position = new(Random.Range(minWidth, maxWidth), Random.Range(minHeight, maxHeight));
             yield return new WaitForSeconds(spawningTime);
-            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position));
+            StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[index], position, false, index));
         }
     }
 
-    private IEnumerator SpawnIndicatorThenEnemy(ObjectPool<GameObject> pool, Vector2 position)
+    private IEnumerator SpawnIndicatorThenEnemy(ObjectPool<GameObject> pool, Vector2 position, bool isBoss = false, int index = -1)
     {
-        GameObject indicator = Instantiate(spawnIndicatorPrefab, position, Quaternion.identity, parent);
+        GameObject indicator = null;
+        if (isBoss)
+            indicator = Instantiate(spawnBossIndicatorPrefab, position, Quaternion.identity, parent);
+        else
+            indicator = Instantiate(spawnIndicatorPrefab, position, Quaternion.identity, parent);
         SpawnIndicator indicatorScript = indicator.GetComponent<SpawnIndicator>();
 
         yield return new WaitUntil(() => indicatorScript.IsReadyToSpawn);
@@ -199,6 +237,7 @@ public class EnemySpawningScript : MonoBehaviour
         Destroy(indicator);
 
         GameObject mob = pool.Get();
+        //Debug.Log($"Spawned {(isBoss ? "Boss" : "Enemy")}: {mob.name} at {position} with pool index = {index}");
         mob.transform.position = position;
     }
 
@@ -222,6 +261,11 @@ public class EnemySpawningScript : MonoBehaviour
         // Cancel automatically if GameObject destroyed
         var token = this.GetCancellationTokenOnDestroy();
 
+        if (GlobalVariables.Instance.isSpawningCollectablePets)
+        {
+            SpawnCollectableCat();
+        }
+
         while (GlobalVariables.Instance.isSpawningCollectablePets && !token.IsCancellationRequested)
         {
             await UniTask.Delay(
@@ -231,28 +275,29 @@ public class EnemySpawningScript : MonoBehaviour
                 token
             );
 
-            if (collectableCat == null || collectableCatSpawnPotitions == null || collectableCatSpawnPotitions.Length == 0)
-                continue;
-
-            Transform randomPos = collectableCatSpawnPotitions[Random.Range(0, collectableCatSpawnPotitions.Length)];
-
-            if (randomPos == null)
-                continue;
-
-            GameObject collactableCat = CollectableCatPool.Instance.GetCat();
-            if (collactableCat.TryGetComponent(out CollectablePetScript collectablePetScript))
-            {
-                collectablePetScript.Initialize(randomPos.position);
-            }
-            else
-            {
-                Debug.LogWarning("CollectablePetScript component not found on the CollectableCat prefab!");
-            }
-
-            // Optional: play effect or sound
-            //AudioManager.Instance.PlaySoundFX("spawn-puff", randomPos.position, 0.6f, 0.9f, 1.1f, applyDistance: true);
-            // Optional: small visual feedback
-            //CinemachineScript.Instance.Shake(0.1f, 0.1f);
+            SpawnCollectableCat();
         }
     }
+
+    private void SpawnCollectableCat()
+    {
+        if (collectableCat == null || collectableCatSpawnPotitions == null || collectableCatSpawnPotitions.Length == 0)
+            return;
+
+        Transform randomPos = collectableCatSpawnPotitions[Random.Range(0, collectableCatSpawnPotitions.Length)];
+
+        if (randomPos == null)
+            return;
+
+        GameObject collactableCat = CollectableCatPool.Instance.GetCat();
+        if (collactableCat.TryGetComponent(out CollectablePetScript collectablePetScript))
+        {
+            collectablePetScript.Initialize(randomPos.position);
+        }
+        else
+        {
+            Debug.LogWarning("CollectablePetScript component not found on the CollectableCat prefab!");
+        }
+    }
+
 }

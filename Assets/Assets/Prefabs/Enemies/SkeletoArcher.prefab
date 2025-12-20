@@ -236,6 +236,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  hasDamageParticles: 0
+  damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
   receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
   playerWasHitDamage: {fileID: 0}
   canApplyKnockback: 1
@@ -246,6 +249,9 @@ MonoBehaviour:
   projectilePosition: {fileID: 8900454292553871189}
   projectileParent: {fileID: 0}
   projectileCanRotate: 1
+  normalAttackFX: {fileID: 0}
+  specialAttackFX: {fileID: 0}
+  isGeneratedByPool: 1
   hasReachedPlayer: 0
   animator: {fileID: 2281992545639576568}
 --- !u!1 &5898984310480124000

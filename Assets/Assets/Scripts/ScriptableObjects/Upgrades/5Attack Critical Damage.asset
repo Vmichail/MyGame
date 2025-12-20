@@ -19,5 +19,6 @@ MonoBehaviour:
   unlockCost: 0
   upgradeCategory: 0
   upgradeCode: 4
-  bonuses:
-  - {fileID: 11400000, guid: d109a49b62cdc934c8b24cd357b1ed94, type: 2}
+  upgradeValueData:
+    value: 0.15
+    percentage: 1

@@ -14,17 +14,29 @@ public class EnemyManagerScript : MonoBehaviour
 
     public void RegisterEnemy(GameObject enemy, GlobalVariables.EnemyTypes enemyType)
     {
-        ActiveEnemies.Add(enemy);
-        GlobalVariables.Instance.aliveEnemies++;
-        AddSpecificType(enemyType);
+        if (enemy == null)
+            return;
+
+        if (!ActiveEnemies.Contains(enemy))
+        {
+            ActiveEnemies.Add(enemy);
+            GlobalVariables.Instance.aliveEnemies++;
+            AddSpecificType(enemyType);
+        }
     }
 
     public void UnregisterEnemy(GameObject enemy)
     {
-        ActiveEnemies.Remove(enemy);
-        GlobalVariables.Instance.aliveEnemies--;
-        GlobalVariables.Instance.killedEnemies++;
-        GlobalVariables.Instance.score++;
+        if (enemy == null)
+            return;
+
+        if (ActiveEnemies.Contains(enemy))
+        {
+            ActiveEnemies.Remove(enemy);
+            GlobalVariables.Instance.aliveEnemies--;
+            GlobalVariables.Instance.killedEnemies++;
+            GlobalVariables.Instance.score++;
+        }
     }
 
     private void AddSpecificType(GlobalVariables.EnemyTypes enemyType)

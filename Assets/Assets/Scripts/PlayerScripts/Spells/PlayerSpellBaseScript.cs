@@ -38,7 +38,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
     public virtual string ChildSummonSoundName => GlobalVariables.Instance.orbitCouroutineSound;
     public virtual string CouroutineSoundName => GlobalVariables.Instance.orbitCouroutineSound;
     public virtual string SpellCastSound => null;
-    public virtual string OnHitSound => null;
+    public virtual string OnHitSound => "hitEffect";
     private float shieldSpeed;
 
     public void SetAngle(float startAngle)
@@ -77,7 +77,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
         {
             GlobalVariables.Instance.playerInvulnerableReasons.Add(GlobalVariables.InvulnerableReasonEnum.ShieldSpell);
             shieldSpeed = GlobalVariables.Instance.shieldSpellSpeed;
-            GlobalVariables.Instance.UpdatePlayerSpeed(shieldSpeed);
+            HeroUpgrades.Instance.UpdatePlayerSpeed(shieldSpeed);
         }
         if (SpellCastSound != null)
         {
@@ -210,7 +210,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
         if (IsShield)
         {
             GlobalVariables.Instance.playerInvulnerableReasons.Remove(GlobalVariables.InvulnerableReasonEnum.ShieldSpell);
-            GlobalVariables.Instance.UpdatePlayerSpeed(shieldSpeed, true);
+            HeroUpgrades.Instance.UpdatePlayerSpeed(shieldSpeed, true);
         }
         if (OnDestroyEffect)
         {

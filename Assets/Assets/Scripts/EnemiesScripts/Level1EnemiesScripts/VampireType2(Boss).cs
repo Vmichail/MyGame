@@ -8,6 +8,9 @@ public class VampireType2Boss : EnemyBaseScript
     private static float EnemyDamageMult => (DM != null) ? DM.enemyDamageMultiplier : 1f;
     private static float EnemySpeedMult => (DM != null) ? DM.enemySpeedMultiplier : 1f;
 
+    public override GlobalVariables.EnemyTypes EnemyType
+    => GlobalVariables.EnemyTypes.VampireBoss;
+
     protected override void Start()
     {
         base.Start();

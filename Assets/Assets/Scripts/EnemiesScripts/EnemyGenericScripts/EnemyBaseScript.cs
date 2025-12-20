@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.SocialPlatforms.Impl;
+using Random = UnityEngine.Random;
+
 
 public abstract class EnemyBaseScript : MonoBehaviour
 {
     [SerializeField] GameObject particles;
+    [SerializeField] bool hasDamageParticles = false;
+    [SerializeField] GameObject damageParticles;
+    [SerializeField] GameObject criticalParticles;
     [SerializeField] GameObject receivedDamagePopUp;
     [SerializeField] GameObject playerWasHitDamage;
     [SerializeField] private bool canApplyKnockback;
@@ -23,6 +26,12 @@ public abstract class EnemyBaseScript : MonoBehaviour
     [SerializeField] private bool projectileCanRotate = true;
     protected float attackCooldownTimer = 0f;
     public virtual float ProjectileSpeed { get => GlobalVariables.Instance.goblinTNTProjectileSpeed; }
+    [Header("Special attacks - mostly bosses")]
+    [SerializeField] protected GameObject normalAttackFX;
+    [SerializeField] protected GameObject specialAttackFX;
+    [SerializeField] protected bool isGeneratedByPool = true;
+    protected virtual string[] HurtSounds => new string[0];
+    private String criticalHitSound = "criticalHitSound";
 
     protected Transform player;
     public bool hasReachedPlayer;
@@ -147,13 +156,21 @@ public abstract class EnemyBaseScript : MonoBehaviour
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         if (CurrentHealth < 1 && !IsDead)
         {
-            IsDead = true;
-            DropCollectables();
-            Instantiate(particles, transform.position, transform.rotation);
-            AudioManager.Instance.PlaySoundFX(DeathSoundClip, transform.position, 1f, 0.75f, 1.25f);
-            EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
-            _pool.Release(gameObject);
+            OnDeath();
         }
+    }
+
+    protected virtual void OnDeath()
+    {
+        IsDead = true;
+        DropCollectables();
+        Instantiate(particles, transform.position, transform.rotation);
+        AudioManager.Instance.PlaySoundFX(DeathSoundClip, transform.position, 1f, 0.75f, 1.25f);
+        EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
+        if (isGeneratedByPool)
+            _pool.Release(gameObject);
+        else
+            Destroy(gameObject);
     }
 
     protected virtual void FixedUpdate()
@@ -194,14 +211,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     public void DoDamage()
     {
-        if (GlobalVariables.Instance.playerInvulnerableReasons.Count > 0)
-            return;
-        float damage = EnemyGenericFunctions.DamagePlayer(Damage);
-        Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
-        Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;
-        GameObject dmgText = Instantiate(playerWasHitDamage, spawnPosition, Quaternion.identity);
-        DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
-        dt.SetDamage(damage, false, Color.red);
+        EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(Damage);
     }
 
     protected void MoveTowardPlayer()
@@ -217,28 +227,46 @@ public abstract class EnemyBaseScript : MonoBehaviour
         {
             rb.linearVelocity = direction * Speed;
         }
-        if (spriteIsFacingLeft)
-        {
-            if (direction.x < 0)
-                spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
-            else
-            {
-                spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-        }
-        else
-        {
-            if (direction.x < 0)
-                spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
-            else
-            {
-                spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
+        RotateEnemy(direction);
         if (hasAttackAnimation && !hasRangeAttack && attackCooldownTimer <= 0 && !stateInfo.IsName("Attack"))
         {
             /*GetAttackDirection(direction);*/
             animator.SetBool("Attack", true);
+        }
+    }
+
+    private void RotateEnemy(Vector2 direction)
+    {
+        if (rb.linearVelocity != Vector2.zero)
+        {
+            if (spriteIsFacingLeft)
+            {
+                if (direction.x < 0)
+                {
+                    spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
+                    RotateAlsoFX(0);
+                }
+
+                else
+                {
+                    spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
+                    RotateAlsoFX(180);
+                }
+            }
+            else
+            {
+                if (direction.x < 0)
+                {
+                    spriteTransform.rotation = Quaternion.Euler(0, 180, 0);
+                    RotateAlsoFX(180);
+
+                }
+                else
+                {
+                    spriteTransform.rotation = Quaternion.Euler(0, 0, 0);
+                    RotateAlsoFX(0);
+                }
+            }
         }
     }
 
@@ -301,11 +329,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 Debug.LogWarning("PlayerSpellBaseScript component not found on PlayerSpell object!");
             else
             {
-                if (spellScript.OnHitSound != null)
-                {
-                    AudioManager.Instance.PlaySoundFX(spellScript.OnHitSound, transform.position, 0.4f, 0.75f, 1.25f);
-                }
-                ReceiveDamage(spellScript.Damage, criticalChance: spellScript.CriticalChance, criticalMultiplier: spellScript.CriticalMultiplier, color: spellScript.BaseColor);
+                ReceiveDamage(spellScript.Damage, criticalChance: GlobalVariables.Instance.globalCriticalChance, criticalMultiplier: GlobalVariables.Instance.globalCriticalMultiplier, color: spellScript.BaseColor, hitSound: spellScript.OnHitSound);
                 if (canApplyKnockback)
                     ApplyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
             }
@@ -329,7 +353,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
     }
 
-    public void ReceiveDamage(float spellDamage, float criticalChance, float criticalMultiplier, Color color)
+    public void ReceiveDamage(float spellDamage, float criticalChance, float criticalMultiplier, Color color, String hitSound)
     {
         bool isCritical = false;
 
@@ -344,9 +368,29 @@ public abstract class EnemyBaseScript : MonoBehaviour
         Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
         Vector2 spawnPosition = (Vector2)transform.position + randomOffset;
         GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
+        if (isCritical)
+        {
+            AudioManager.Instance.PlaySoundFX(criticalHitSound, transform.position, 0.7f, 0.7f, 1.3f);
+        }
+        else if (hitSound != null)
+        {
+            AudioManager.Instance.PlaySoundFX(hitSound, transform.position, 0.7f, 0.7f, 1.3f);
+        }
+        else
+        {
+            Debug.LogWarning("hitSound is null!");
+        }
+        if (HurtSounds.Length > 0)
+        {
+            AudioManager.Instance.PlayRandomSoundFX(HurtSounds, transform.position, 1.5f, 0.75f, 1.25f);
+        }
 
         DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
         dt.SetDamage(spellDamage, isCritical, color);
+        if (hasDamageParticles)
+            Instantiate(damageParticles, transform.position, Quaternion.identity);
+        if (isCritical)
+            Instantiate(criticalParticles, transform.position, Quaternion.identity);
 
     }
 
@@ -476,7 +520,46 @@ public abstract class EnemyBaseScript : MonoBehaviour
     //SpecialAttack
     public virtual void SpecialAttack()
     {
-        Debug.LogWarning("SpecialAttack most be overrided for now");
+        Debug.LogWarning("SpecialAttack must be overrided for now");
     }
 
+    public virtual void SummonStarts()
+    {
+        Debug.LogWarning("SummonStarts must be overrided for now");
+    }
+
+    public virtual void SummonEndsSound()
+    {
+        Debug.LogWarning("SummonEndsSound must be overrided for now");
+    }
+    public virtual void PreAttackSound()
+    {
+        Debug.LogWarning("PreAttackFX must be overrided for now");
+    }
+    public virtual void NormalAttackFX()
+    {
+        normalAttackFX.SetActive(true);
+    }
+
+    public virtual void SpecialAttackFX()
+    {
+        specialAttackFX.SetActive(true);
+    }
+
+
+    private void RotateAlsoFX(int yRotation)
+    {
+        if (normalAttackFX != null)
+        {
+            normalAttackFX.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+        if (specialAttackFX != null)
+        {
+            specialAttackFX.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+        if (projectilePosition != null)
+        {
+            projectilePosition.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
+    }
 }
