@@ -176,6 +176,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &2975327295088901955
 Rigidbody2D:
   serializedVersion: 5
@@ -379,6 +380,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &2454884048143005122
 Rigidbody2D:
   serializedVersion: 5
@@ -834,6 +836,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &1607727555296037176
 Rigidbody2D:
   serializedVersion: 5
@@ -1205,6 +1208,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &4687303206697550683
 Rigidbody2D:
   serializedVersion: 5
@@ -1408,6 +1412,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &1797561947114139953
 Rigidbody2D:
   serializedVersion: 5
@@ -1695,6 +1700,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &4921112983644983639
 Rigidbody2D:
   serializedVersion: 5
@@ -1898,6 +1904,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &1073927199750855512
 Rigidbody2D:
   serializedVersion: 5
@@ -2269,6 +2276,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &6653891812688275307
 Rigidbody2D:
   serializedVersion: 5
@@ -2556,6 +2564,7 @@ MonoBehaviour:
   speedIncreaseRate: 4
   maxSpeed: 80
   stopDistance: 0.15
+  isAffectedByMagnet: 1
 --- !u!50 &9211133122411825755
 Rigidbody2D:
   serializedVersion: 5

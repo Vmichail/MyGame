@@ -53,6 +53,7 @@ public class CoinsBaseScript : CollectableBaseScript, ICollectable
 
     private void ApplyMagnetEffect()
     {
+        Debug.Log("Magnet effect applied!");
         GlobalVariables.Instance.ActivateMagnet();
     }
 

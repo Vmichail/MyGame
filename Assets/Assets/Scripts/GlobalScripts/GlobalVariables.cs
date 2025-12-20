@@ -444,7 +444,8 @@ public class GlobalVariables : MonoBehaviour
 
     public void ActivateMagnet()
     {
-        StartCoroutine(DisableMagnetAfterDelay(1f)); // 1 second delay
+        magnetIsActive = true;
+        StartCoroutine(DisableMagnetAfterDelay(1f));
     }
 
     private IEnumerator DisableMagnetAfterDelay(float delay)
