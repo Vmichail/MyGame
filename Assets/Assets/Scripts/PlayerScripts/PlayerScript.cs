@@ -15,6 +15,9 @@ public class SpellDataFull
     [SerializeField] public UICooldownScript ui;
     [SerializeField] public GameObject spellPrefab;
     [SerializeField] public SpellData spellData;
+    [Header("Runtime State")]
+    public bool IsOnCooldown;
+    public bool IsActive;
 }
 
 public class PlayerScript : MonoBehaviour
@@ -22,7 +25,7 @@ public class PlayerScript : MonoBehaviour
     private Animator animator;
 
     [Header("--!!Mana Spell Variables!!--")]
-    [SerializeField] private Light2D spotLight;
+    [SerializeField] private Light2D manaSpellTarget;
     private List<GameObject> activeBlades = new();
     [Header("Spells Setup")]
     [SerializeField] private SpellDataFull[] manaSpells;
@@ -42,13 +45,13 @@ public class PlayerScript : MonoBehaviour
     private GameObject forthClosestEnemy;
     private Transform spriteTransform;
     [Header("--!!Move Functionallity!!--")]
-    public float moveSpeed = 5f;
     public bool playerCanMove = true;
     private Vector2 movementInput;
     private Rigidbody2D rb;
 
     [Header("--!!ETC!!--")]
     [SerializeField] private GameObject target;
+    [SerializeField] private float rotatationFlatFix = -0.305f;
 
     public GameObject ClosestEnemy => closestEnemy;
 
@@ -94,11 +97,11 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            GlobalVariables.Instance.currentExp += 100;
+            PlayerStatsManager.Instance.CurrentExp += 100;
         }
         if (Input.GetKeyDown(KeyCode.G))
         {
-            GlobalVariables.Instance.coinsCollected += 100;
+            CurrencyManager.instance.Add(1000);
         }
 
         if (playerCanMove)
@@ -139,7 +142,7 @@ public class PlayerScript : MonoBehaviour
         ActivateDeactivateTarget();
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 0 = Base Layer
         if (stateInfo.IsName("Attack"))
-            animator.speed = 1f * GlobalVariables.Instance.playerAttackSpeed;
+            animator.speed = 1f * PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_AttackSpeed);
         else
             animator.speed = 1f;
 
@@ -147,7 +150,7 @@ public class PlayerScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movementInput.normalized * moveSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + movementInput.normalized * PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_MovementSpeed) * Time.fixedDeltaTime);
     }
 
     private void RotatePlayer()
@@ -155,7 +158,7 @@ public class PlayerScript : MonoBehaviour
         if (movementInput.x < 0)
         {
             spriteTransform.SetPositionAndRotation(
-                transform.position + new Vector3(-0.37f, 0, 0),
+                transform.position + new Vector3(rotatationFlatFix, 0, 0),
                 Quaternion.Euler(0, 180, 0));
         }
         else
@@ -174,7 +177,7 @@ public class PlayerScript : MonoBehaviour
         if (closestEnemy.transform.position.x < transform.position.x)
         {
             spriteTransform.SetPositionAndRotation(
-                transform.position + new Vector3(-0.37f, 0, 0),
+                transform.position + new Vector3(rotatationFlatFix, 0, 0),
                 Quaternion.Euler(0, 180, 0));
         }
         else
@@ -281,19 +284,19 @@ public class PlayerScript : MonoBehaviour
 
     public void CastManaSpell(int index)
     {
-        if (GlobalVariables.Instance.gameIsPaused)
+        if (GlobalVariables.Instance.gameIsPaused || GlobalVariables.Instance.blockGameplayInput || GlobalVariables.Instance.mainMenuScene)
         {
             return;
         }
-        if (manaSpells[index].spellData.IsOnCooldown || GlobalVariables.Instance.playerCurrentMana < manaSpells[index].spellData.manaCost || !manaSpells[index].spellData.IsActive)
+        if (manaSpells[index].IsOnCooldown || PlayerStatsManager.Instance.CurrentMana < manaSpells[index].spellData.startingManaCost || !manaSpells[index].IsActive)
         {
             AudioManager.Instance.PlaySoundFX("uiDeny", transform.position, 0.8f, 0.9f, 1.1f);
             return;
         }
         CinemachineScript.Instance.Shake(0.5f, 0.15f);
         SpellDataFull spell = manaSpells[index];
-        GlobalVariables.Instance.playerCurrentMana -= spell.spellData.manaCost;
-        Debug.Log($"Casting mana spell {spell.spellData.SpellCode}, mana cost: {spell.spellData.manaCost}, cooldown:{spell.spellData.cooldownTime}");
+        PlayerStatsManager.Instance.CurrentMana -= (int)spell.spellData.startingManaCost;
+        Debug.Log($"Casting mana spell {spell.spellData.SpellCode}, mana cost: {spell.spellData.startingManaCost}, cooldown:{spell.spellData.cooldownTime}");
         AudioManager.Instance.PlaySoundFX(spell.spellData.castSound, transform.position, 0.6f, 0.8f, 1.25f);
         if (GlobalVariables.SpellCode.FireBlade.Equals(spell.spellData.SpellCode))
         {
@@ -324,12 +327,12 @@ public class PlayerScript : MonoBehaviour
         for (int i = 0; i < GlobalVariables.Instance.fireBladeManaTotal; i++)
         {
             AudioManager.Instance.PlaySoundFX(spell.spellData.castSound, transform.position, 0.5f, 0.80f, 1.25f);
-            Vector3 spawnPos = spotLight.transform.position;
+            Vector3 spawnPos = manaSpellTarget.transform.position;
             GameObject newSpell = Instantiate(spell.spellPrefab, spawnPos, Quaternion.identity);
 
             if (newSpell.TryGetComponent<PlayerSpellBaseScript>(out var playerSpellBaseScript))
             {
-                Vector2 dir = spotLight.transform.up;
+                Vector2 dir = manaSpellTarget.transform.up;
                 playerSpellBaseScript.SetVelocity(dir, false);
                 Debug.Log("FireBlade casted! with speed: " + playerSpellBaseScript.Speed);
             }
@@ -340,7 +343,7 @@ public class PlayerScript : MonoBehaviour
 
             yield return new WaitForSeconds(GlobalVariables.Instance.fireBladeDelay);
         }
-        spotLight.gameObject.SetActive(false);
+        manaSpellTarget.gameObject.SetActive(false);
     }
 
     private void CastAttack(Vector3 enemyPosition, GameObject spell)
@@ -398,33 +401,34 @@ public class PlayerScript : MonoBehaviour
 
     private IEnumerator StartSpellCooldown(int index)
     {
-        manaSpells[index].spellData.IsOnCooldown = true;
+        manaSpells[index].IsOnCooldown = true;
         manaSpells[index].ui.StartCooldown(manaSpells[index].spellData.cooldownTime);
 
         yield return new WaitForSeconds(manaSpells[index].spellData.cooldownTime);
 
-        manaSpells[index].spellData.IsOnCooldown = false;
+        manaSpells[index].IsOnCooldown = false;
         if (GlobalVariables.SpellCode.FireBlade.Equals(manaSpells[index].spellData.SpellCode))
         {
-            spotLight.gameObject.SetActive(true);
+            manaSpellTarget.gameObject.SetActive(true);
         }
     }
 
-    public void EnableUpgradeSpell(HeroUpgrades.UpgradeCode upgradeCode)
+    public void EnableUpgradeSpell(PlayerStatType upgradeCode)
     {
-        if (HeroUpgrades.UpgradeCode.Spells_FireBlade.Equals(upgradeCode))
+        if (PlayerStatType.Spells_FireBlade.Equals(upgradeCode))
         {
-            manaSpells[0].spellData.IsActive = true;
+            manaSpells[0].IsActive = true;
             manaSpells[0].ui.ActivateSpell();
+            manaSpellTarget.gameObject.SetActive(true);
         }
-        else if (HeroUpgrades.UpgradeCode.Spells_RotatingBlades.Equals(upgradeCode))
+        else if (PlayerStatType.Spells_RotatingBlades.Equals(upgradeCode))
         {
-            manaSpells[1].spellData.IsActive = true;
+            manaSpells[1].IsActive = true;
             manaSpells[1].ui.ActivateSpell();
         }
-        else if (HeroUpgrades.UpgradeCode.Spells_Shield.Equals(upgradeCode))
+        else if (PlayerStatType.Spells_Shield.Equals(upgradeCode))
         {
-            manaSpells[2].spellData.IsActive = true;
+            manaSpells[2].IsActive = true;
             manaSpells[2].ui.ActivateSpell();
         }
         else
@@ -433,31 +437,16 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    //Increase - Decrease player speed
-    public void UpdatePlayerSpeed(float speedUpdate, bool decrease = false)
-    {
-        if (decrease)
-            moveSpeed /= speedUpdate;
-        else
-            moveSpeed *= speedUpdate;
-
-        Debug.Log($"Player speed updated to: {moveSpeed}");
-    }
-
 
 
     private void InitializePlayer()
     {
-        DifficultyScaler();
-        foreach (var spell in manaSpells)
-        {
-            spell.spellData.InitData();
-        }
+        manaSpellTarget.gameObject.SetActive(false);
         // Auto-fetch UI cooldown script from each prefab
         int spellCount = manaSpells.Length;
         for (int i = 0; i < spellCount; i++)
         {
-            manaSpells[i].spellData.IsOnCooldown = false;
+            manaSpells[i].IsOnCooldown = false;
             if (manaSpells[i].UICooldownGO.TryGetComponent(out UICooldownScript uiCooldownScript))
             {
                 manaSpells[i].ui = uiCooldownScript;
@@ -467,25 +456,6 @@ public class PlayerScript : MonoBehaviour
                 Debug.LogWarning($"Spell prefab {manaSpells[i].UICooldownGO.name} is missing UICooldownScript!");
             }
         }
-    }
-
-    public void DifficultyScaler()
-    {
-        float playerGenericMultiplier = DifficultyManager.Instance.playerGenericMultiplier;
-        moveSpeed = GlobalVariables.Instance.playerSpeed * playerGenericMultiplier;
-        GlobalVariables.Instance.playerMaxHealth = GlobalVariables.Instance.playerMaxHealth * playerGenericMultiplier;
-        GlobalVariables.Instance.playerCurrentHealth = GlobalVariables.Instance.playerMaxHealth;
-        GlobalVariables.Instance.playerMaxMana = GlobalVariables.Instance.playerMaxMana * playerGenericMultiplier;
-        GlobalVariables.Instance.playerCurrentMana = GlobalVariables.Instance.playerMaxMana;
-        GlobalVariables.Instance.playerHealthRegen = GlobalVariables.Instance.playerHealthRegen * playerGenericMultiplier;
-        GlobalVariables.Instance.playerManaRegen = GlobalVariables.Instance.playerManaRegen * playerGenericMultiplier;
-        GlobalVariables.Instance.playerAttackSpeed = GlobalVariables.Instance.playerAttackSpeed * playerGenericMultiplier;
-        GlobalVariables.Instance.playerAttackDamage = Mathf.Max(1f, GlobalVariables.Instance.playerAttackDamage * playerGenericMultiplier);
-        GlobalVariables.Instance.healthPotionHealth = GlobalVariables.Instance.healthPotionHealth * playerGenericMultiplier;
-        GlobalVariables.Instance.manaPotionMana = GlobalVariables.Instance.manaPotionMana * playerGenericMultiplier;
-        GlobalVariables.Instance.playerArmor = GlobalVariables.Instance.playerArmor * playerGenericMultiplier;
-        GlobalVariables.Instance.playerHealthRegenInterval = GlobalVariables.Instance.playerHealthRegenInterval / playerGenericMultiplier;
-        GlobalVariables.Instance.playerManaRegenInterval = GlobalVariables.Instance.playerManaRegenInterval / playerGenericMultiplier;
     }
 
 }

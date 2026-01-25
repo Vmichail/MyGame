@@ -58,7 +58,7 @@ public class MysteriousObjectScript : MonoBehaviour, ICollectable
         levelUpPanelScript.HealthCost = true;
         levelUpPanel.SetActive(true);
         IsCollected = false;
-        enemySpawningScript.SpawnMobsOnSpecificPosition(null, 1);
+        enemySpawningScript.SpawnMobsOnSpecificPosition(null, GlobalVariables.EnemyTypes.Level1Skeleton);
         DoorScript.Instance.DoorUp();
         gameObject.SetActive(false);
     }

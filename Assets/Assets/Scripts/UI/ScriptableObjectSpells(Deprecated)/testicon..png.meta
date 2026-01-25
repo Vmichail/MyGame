@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      testicon._0: 332349723827346432
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

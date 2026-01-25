@@ -1,27 +1,32 @@
 using UnityEngine;
+using DG.Tweening;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
 {
     protected Transform player;
     protected bool IsCollected { get; set; }
+
     public float speed = 6f;
-    public float speedIncreaseRate = 1f; // how fast speed increases per second
-    public float maxSpeed = 80f;          // limit max speed
+    public float speedIncreaseRate = 1f;
+    public float maxSpeed = 80f;
     public float stopDistance = 0.1f;
-    protected BoxCollider2D boxCollider;
     public bool isAffectedByMagnet = false;
+
+    protected BoxCollider2D boxCollider;
+
+    private Tween idleTween;
 
     protected virtual void Awake()
     {
-        // Cache reference once
         boxCollider = GetComponent<BoxCollider2D>();
     }
 
     protected virtual void OnEnable()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
         boxCollider.enabled = true;
+        IsCollected = false;
     }
 
     protected virtual void Update()
@@ -33,60 +38,70 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
             Collect();
         }
 
-        if (IsCollected)
+        if (!IsCollected)
+            return;
+
+        speed = Mathf.Min(speed + speedIncreaseRate * Time.deltaTime, maxSpeed);
+
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            player.position,
+            speed * Time.deltaTime
+        );
+
+        if (Vector3.Distance(transform.position, player.position) <= stopDistance)
         {
-            // increase speed gradually until maxSpeed
-            speed = Mathf.Min(speed + speedIncreaseRate * Time.deltaTime, maxSpeed);
-
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                player.position,
-                speed * Time.deltaTime
-            );
-
-            if (Vector3.Distance(transform.position, player.position) <= stopDistance)
-            {
-                CollectEnds();
-            }
+            CollectEnds();
         }
     }
 
     public void Initialize(Vector3 spawnPos)
     {
         transform.position = spawnPos;
-        LeanTween.cancel(gameObject);
-        LeanTween.moveY(gameObject, spawnPos.y + 0.3f, 0.8f)
-                 .setEaseInOutSine()
-                 .setLoopPingPong();
+
+        // Kill old tween safely
+        idleTween?.Kill();
+        transform.DOKill();
+
+        idleTween = transform
+            .DOMoveY(spawnPos.y + 0.3f, 0.8f)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetTarget(this);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnDisable()
     {
-        if (other.CompareTag("Collectable"))
-        {
-            Vector2 direction = (transform.position - other.transform.position);
-
-            // If they are at the same position, apply random direction
-            if (direction == Vector2.zero)
-            {
-                direction = Random.insideUnitCircle.normalized;
-            }
-            else
-            {
-                direction.Normalize();
-            }
-
-            float pushStrength = 0.2f; // adjust as needed
-            transform.position += (Vector3)(direction * pushStrength);
-        }
+        // DOTween safety: always kill
+        idleTween?.Kill();
+        transform.DOKill();
     }
 
     public virtual void Collect()
     {
-        //Debug.Log("Collectable collected: " + gameObject.name);
-        LeanTween.cancel(gameObject);
+        if (IsCollected)
+            return;
+
         IsCollected = true;
         boxCollider.enabled = false;
+
+        idleTween?.Kill();
+        transform.DOKill();
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Collectable"))
+            return;
+
+        Vector2 direction = (Vector2)(transform.position - other.transform.position);
+        direction = direction == Vector2.zero
+            ? Random.insideUnitCircle.normalized
+            : direction.normalized;
+
+        float pushStrength = 0.2f;
+        transform.position += (Vector3)(direction * pushStrength);
+    }
+
     protected abstract void CollectEnds();
 }

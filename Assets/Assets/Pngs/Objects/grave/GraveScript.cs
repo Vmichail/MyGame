@@ -8,6 +8,7 @@ public class GraveScript : MonoBehaviour
     [SerializeField] private GameObject healthPotionPrefab;
     [SerializeField] private GameObject manaPotionPrefab;
     [SerializeField] private Transform potionSpawnPoint;
+    [SerializeField] private bool spawnEnabed = true;
 
     [Header("Settings")]
     [SerializeField] private float fireActivateInterval = 1f;
@@ -41,7 +42,8 @@ public class GraveScript : MonoBehaviour
             // All fires active
             if (currentFireIndex >= fires.Length)
             {
-                SpawnRandomPotion();
+                if (spawnEnabed)
+                    SpawnRandomPotion();
 
                 // Trigger End animation on all fires
                 foreach (var fire in fires)

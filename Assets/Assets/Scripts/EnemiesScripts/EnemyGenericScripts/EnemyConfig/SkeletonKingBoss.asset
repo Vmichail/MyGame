@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ed670397e0b7146b1f3ac97e4cec76, type: 3}
+  m_Name: SkeletonKingBoss
+  m_EditorClassIdentifier: 
+  enemyType: 6
+  baseStats:
+    maxHealth: 200
+    currentHealth: 200
+    damage: 7
+    speed: 5
+    attackCooldown: 0.1
+    canBeKnockedBack: 1
+    knockbackResistance: 5
+    attackRange: 20
+    projectileSpeed: 15
+    coinDropChance: 0.1
+    healthPotionChance: 0.1
+    manaPotionChance: 0.1
+    greenRubyChance: 1
+    redRubyChance: 0
+    coinDropEnum: 1
+    minExp: 1
+    maxExp: 3
+    multipleAttackChance: 0
+    deathSoundClips:
+    - skeletonDeadSound
+    attackSoundClips: []
+    hurtSounds: []

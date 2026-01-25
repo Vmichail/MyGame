@@ -18,9 +18,7 @@ MonoBehaviour:
   locked: 0
   unlockCost: 0
   upgradeCategory: 1
-  upgradeCode: 6
+  upgradeCode: 100
   upgradeValueData:
-    upgradeCategory: 1
-    upgradeCode: 6
     value: 20
     percentage: 0

@@ -121,9 +121,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2120791671725650513}
+  - component: {fileID: 4987868389496363802}
   - component: {fileID: 7920369448232272220}
   - component: {fileID: 8267731754857944262}
-  - component: {fileID: 4987868389496363802}
   m_Layer: 3
   m_Name: SkeletoArcher
   m_TagString: Enemy
@@ -150,6 +150,37 @@ Transform:
   - {fileID: 8900454292553871189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4987868389496363802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4383496846207341390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467fe9e38daa2f546bee430dff164874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 8e68c180b4f40f2408bb806e3c6030c2, type: 2}
+  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  hasDamageParticles: 0
+  damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
+  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
+  playerWasHitDamage: {fileID: 0}
+  rarity: 0
+  hasAttackAnimation: 1
+  spriteIsFacingLeft: 1
+  projectile: {fileID: 2292023470700434093, guid: 630f7ebf30990b84397ac477638de2c4, type: 3}
+  projectilePosition: {fileID: 8900454292553871189}
+  projectileParent: {fileID: 0}
+  projectileCanRotate: 1
+  normalAttackFX: {fileID: 0}
+  specialAttackFX: {fileID: 0}
+  isGeneratedByPool: 1
+  hasReachedPlayer: 0
+  animator: {fileID: 2281992545639576568}
 --- !u!61 &7920369448232272220
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -223,37 +254,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &4987868389496363802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4383496846207341390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 467fe9e38daa2f546bee430dff164874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
-  hasDamageParticles: 0
-  damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
-  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
-  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
-  playerWasHitDamage: {fileID: 0}
-  canApplyKnockback: 1
-  rarity: 0
-  hasAttackAnimation: 1
-  spriteIsFacingLeft: 1
-  projectile: {fileID: 2292023470700434093, guid: 630f7ebf30990b84397ac477638de2c4, type: 3}
-  projectilePosition: {fileID: 8900454292553871189}
-  projectileParent: {fileID: 0}
-  projectileCanRotate: 1
-  normalAttackFX: {fileID: 0}
-  specialAttackFX: {fileID: 0}
-  isGeneratedByPool: 1
-  hasReachedPlayer: 0
-  animator: {fileID: 2281992545639576568}
 --- !u!1 &5898984310480124000
 GameObject:
   m_ObjectHideFlags: 0

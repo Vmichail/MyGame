@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      easySkull_0: 2113443870198970597
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

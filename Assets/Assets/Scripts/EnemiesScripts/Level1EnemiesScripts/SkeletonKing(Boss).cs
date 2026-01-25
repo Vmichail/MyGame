@@ -10,12 +10,7 @@ public class SkeletonKingBoss : EnemyBaseScript
 => GlobalVariables.EnemyTypes.SkeletonKing;
     [SerializeField] private GameObject skeletonBossSpawner;
     [SerializeField] private GameObject health;
-    private BoxCollider2D collider;
-    // Shortcuts with null safety
-    private static DifficultyManager DM => DifficultyManager.Instance;
-    private static float EnemyHealthMult => (DM != null) ? DM.enemyHealthMultiplier : 1f;
-    private static float EnemyDamageMult => (DM != null) ? DM.enemyDamageMultiplier : 1f;
-    private static float EnemySpeedMult => (DM != null) ? DM.enemySpeedMultiplier : 1f;
+    private BoxCollider2D enemyCollider;
     [SerializeField] private float idleSoundInterval = 9f;
     private CancellationTokenSource idleCTS;
     [SerializeField]
@@ -47,7 +42,6 @@ public class SkeletonKingBoss : EnemyBaseScript
     protected override void Start()
     {
         base.Start();
-        ApplyBaseAndDifficulty();
         hasAttackAnimation = true;
         AudioManager.Instance.PlaySoundFX("reincarnation_cast", transform.position, 0.8f, 1f, 1f);
         idleCTS?.Cancel();
@@ -59,22 +53,9 @@ public class SkeletonKingBoss : EnemyBaseScript
     protected override void OnEnable()
     {
         base.OnEnable();
-        collider = GetComponent<BoxCollider2D>();
-        ApplyBaseAndDifficulty();
+        enemyCollider = GetComponent<BoxCollider2D>();
         CurrentHealth = MaxHealth;
     }
-
-    private void ApplyBaseAndDifficulty()
-    {
-        // Base stats
-        maxHealth = GlobalVariables.Instance.skeletonKingHealth;
-        knockbackResistance = GlobalVariables.Instance.skeletonKingKnockbackResistance;
-
-        // Difficulty adjustments
-        maxHealth *= EnemyHealthMult;
-        currentHealth = maxHealth;
-    }
-
     protected override void Update()
     {
         base.Update();
@@ -95,59 +76,8 @@ public class SkeletonKingBoss : EnemyBaseScript
             animator.SetTrigger("SpecialAttack");
     }
 
-    // ------- Scaled properties -------
-    public override float Speed
-        => GlobalVariables.Instance.vampireType2Speed * EnemySpeedMult;
 
-    public override float Damage
-        => GlobalVariables.Instance.skeletonKingDamage * EnemyDamageMult;
-
-    public override float ProjectileSpeed
-        // Reuse speed multiplier for projectile travel (fits current manager)
-        => GlobalVariables.Instance.skeletonKingProjectileSpeed;
-
-    // ------- Unchanged/forwarded properties -------
-    public override float MaxHealth
-    {
-        get => maxHealth;
-        set => maxHealth = value;
-    }
-
-    public override float CurrentHealth
-    {
-        get => currentHealth;
-        set => currentHealth = value;
-    }
-
-    public override float AttackCooldown
-        => GlobalVariables.Instance.skeletonKingAttackCooldown;
-
-    // Collectables
-    public override float CoinDropChance
-        => GlobalVariables.Instance.skeletonKingCoinDropChance;
-
-    public override float HealthPotionChance
-        => GlobalVariables.Instance.skeletonKingHealthPotionChance;
-
-    public override float ManaPotionChance
-        => GlobalVariables.Instance.skeletonKingManaPotionChance;
-
-    public override GlobalVariables.CoinDropEnum CoinDropEnum
-        => GlobalVariables.Instance.vampireType2CoinEnum;
-
-    public override float MinExp
-        => GlobalVariables.Instance.skeletonKingExp;
-
-    public override float MultipleAttackChance
-        => GlobalVariables.Instance.skeletonKingMultipleAttackChance;
-
-    public override float AttackRange
-        => GlobalVariables.Instance.skeletonKingRange;
-
-    public override string DeathSoundClip
-        => "SkeletonKingDeath";
-
-    public override string[] AttackSoundClip
+    public override string[] AttackSoundClips
         => new string[] { "SkeletonKingAttackSound", "SkeletonKingAttackSound" };
 
     public override void SpecialAttack()
@@ -226,13 +156,13 @@ public class SkeletonKingBoss : EnemyBaseScript
 
     public override void SummonStarts()
     {
-        collider.enabled = false;
+        enemyCollider.enabled = false;
         health.SetActive(false);
     }
 
     public override void SummonEndsSound()
     {
-        collider.enabled = true;
+        enemyCollider.enabled = true;
         health.SetActive(true);
         AudioManager.Instance.PlaySoundFX("theboneking", transform.position, 0.8f, 1f, 1f);
     }

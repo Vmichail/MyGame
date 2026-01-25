@@ -24,11 +24,15 @@ public class MovingUIObject : MonoBehaviour
     [Tooltip("Random initial delay so groups don’t move in perfect sync")]
     [SerializeField] private float randomInitialDelayMax = 0.25f;
 
+    [Header("Locker")]
+    [SerializeField] private GameObject locker;
+
     private RectTransform rt;
     private Image img;
     private Vector2 baseAnchoredPos;
     private Vector3 baseScale;
     private Color originalColor;
+    private bool loopsStarted = false;
 
     private void Awake()
     {
@@ -41,7 +45,22 @@ public class MovingUIObject : MonoBehaviour
 
     private void OnEnable()
     {
+        if (locker != null && locker.activeSelf)
+            return;
+
         StartLoops();
+    }
+
+    private void Update()
+    {
+        if (locker != null && !locker.activeSelf && !loopsStarted)
+        {
+            StartLoops();
+        }
+        if (locker != null && locker.activeSelf && loopsStarted)
+        {
+            StopLoops(resetToBase: true);
+        }
     }
 
     private void OnDisable()
@@ -51,6 +70,7 @@ public class MovingUIObject : MonoBehaviour
 
     private void StartLoops()
     {
+        loopsStarted = true;
         // safety: kill any previous tweens
         LeanTween.cancel(gameObject);
 

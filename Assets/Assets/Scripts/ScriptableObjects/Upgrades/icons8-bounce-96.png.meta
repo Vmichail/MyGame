@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icons8-bounce-96_0: 8118640942926784564
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -9,11 +9,11 @@ public class PlayerSpellBaseScript : MonoBehaviour
     public virtual bool IsShield => false;
     public virtual float Damage => GlobalVariables.Instance.defaultSpellDamage;
     public virtual float Speed => GlobalVariables.Instance.defaultSpellSpeed;
-    public virtual int Bounces => GlobalVariables.Instance.defaultSpellBounces;
+    public virtual int Bounces => (int)PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_Bounce);
     public virtual float KnockbackForce => GlobalVariables.Instance.defaultKnockbackforce;
-    public virtual float CriticalChance => GlobalVariables.Instance.globalCriticalChance;
-    public virtual float CriticalMultiplier => GlobalVariables.Instance.globalCriticalMultiplier;
-    public virtual float ManaCost => GlobalVariables.Instance.globalCriticalMultiplier;
+    public virtual float CriticalChance => PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_CriticalChance);
+    public virtual float CriticalMultiplier => PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_CriticalDamage);
+    public virtual float ManaCost => GlobalVariables.Instance.fireBladeManaSpellManaCost;
     public virtual Color BaseColor => GlobalVariables.Instance.defaultColor;
     public virtual int Piercing => GlobalVariables.Instance.defaultSpellPiercing;
     private Transform player;   // who it orbits around

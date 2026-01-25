@@ -3,8 +3,7 @@ using UnityEngine;
 public class FireballScript : PlayerSpellBaseScript
 {
     public override float Speed => GlobalVariables.Instance.fireballSpeed;
-    public override float Damage => GlobalVariables.Instance.playerAttackDamage * GlobalVariables.Instance.fireballDamage;
-    public override int Bounces => GlobalVariables.Instance.fireballBounces;
+    public override float Damage => PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_Attack) * GlobalVariables.Instance.fireballDamage;
     public override float KnockbackForce => GlobalVariables.Instance.fireballKnockbackForce;
     public override float CriticalChance => GlobalVariables.Instance.fireballCriticalChance;
     public override float CriticalMultiplier => GlobalVariables.Instance.fireballCriticalMultiplier;

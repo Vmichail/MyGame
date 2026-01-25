@@ -172,10 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &2975327295088901955
 Rigidbody2D:
@@ -376,10 +376,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &2454884048143005122
 Rigidbody2D:
@@ -832,10 +832,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &1607727555296037176
 Rigidbody2D:
@@ -1204,10 +1204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &4687303206697550683
 Rigidbody2D:
@@ -1408,10 +1408,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &1797561947114139953
 Rigidbody2D:
@@ -1696,10 +1696,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &4921112983644983639
 Rigidbody2D:
@@ -1900,10 +1900,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &1073927199750855512
 Rigidbody2D:
@@ -2272,10 +2272,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &6653891812688275307
 Rigidbody2D:
@@ -2560,10 +2560,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1c7015505cc7488d61071b77520a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
-  speedIncreaseRate: 4
-  maxSpeed: 80
-  stopDistance: 0.15
+  speed: 13
+  speedIncreaseRate: 5
+  maxSpeed: 120
+  stopDistance: 0.8
   isAffectedByMagnet: 1
 --- !u!50 &9211133122411825755
 Rigidbody2D:

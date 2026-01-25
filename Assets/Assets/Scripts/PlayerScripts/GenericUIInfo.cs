@@ -17,13 +17,12 @@ public class GenericUIInfo : MonoBehaviour
     private void Update()
     {
         CountTime();
-        levelText.text = "Level:" + GlobalVariables.Instance.level;
+        levelText.text = "Level:" + PlayerStatsManager.Instance.CurrentLevel;
         aliveEnemies.text = "En.Alive:" + GlobalVariables.Instance.aliveEnemies;
         killedEnemies.text = "En.Killed:" + GlobalVariables.Instance.killedEnemies;
         score.text = "Score:" + GlobalVariables.Instance.score;
         //Specific
         spawnedSkeletonsText.text = "SkeletonsSpawned:" + GlobalVariables.Instance.spawnedSkeletons;
-        level1BossActiveText.text = "Level1Boss:" + GlobalVariables.Instance.level1BossActive;
     }
 
     private void CountTime()

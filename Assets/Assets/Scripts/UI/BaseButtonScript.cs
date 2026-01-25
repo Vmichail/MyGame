@@ -1,10 +1,10 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BaseButtonScript : MonoBehaviour,
-    IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler,
+    IPointerEnterHandler, IPointerExitHandler,
     ISelectHandler, IDeselectHandler
 {
     public bool IsClicked { get; set; }
@@ -45,6 +45,11 @@ public class BaseButtonScript : MonoBehaviour,
 
         if (highlightTarget.localScale.sqrMagnitude < 0.1f * 0.1f)
             highlightTarget.localScale = Vector3.one;
+
+        if (highlightTarget.localScale.x > 1)
+        {
+            ResetScale();
+        }
 
         if (animateButton)
         {

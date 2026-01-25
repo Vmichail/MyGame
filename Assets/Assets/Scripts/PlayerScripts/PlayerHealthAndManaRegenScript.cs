@@ -8,18 +8,18 @@ public class PlayerHealthAndManaRegen : MonoBehaviour
 
     void Update()
     {
-        if (GlobalVariables.Instance.healthRegenIsActive)
+        if (PlayerStatsManager.Instance.RegenIsActive)
             RegenerateHealth();
-        if (GlobalVariables.Instance.healthRegenIsActive)
+        if (PlayerStatsManager.Instance.RegenIsActive)
             RegenerateMana();
     }
 
     public void RegenerateHealth()
     {
         healthRegenTimer += Time.deltaTime;
-        if (healthRegenTimer >= GlobalVariables.Instance.playerHealthRegenInterval)
+        if (healthRegenTimer >= PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_HealthRegenInterval))
         {
-            ApplyHeal(GlobalVariables.Instance.playerHealthRegen, PlayerHealEffectType.PassiveHeal);
+            ApplyHeal((int)PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_HealthRegenValue), PlayerHealEffectType.PassiveHeal);
             healthRegenTimer = 0f;
         }
     }
@@ -27,30 +27,23 @@ public class PlayerHealthAndManaRegen : MonoBehaviour
     public void RegenerateMana()
     {
         manaRegenTimer += Time.deltaTime;
-        if (manaRegenTimer >= GlobalVariables.Instance.playerManaRegenInterval)
+        if (manaRegenTimer >= PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_ManaRegenInterval))
         {
-            ApplyMana(GlobalVariables.Instance.playerManaRegen, PlayerHealEffectType.PassiveMana);
+            ApplyMana(PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_ManaRegen), PlayerHealEffectType.PassiveMana);
             manaRegenTimer = 0f;
         }
     }
 
-
-    /// <summary>
-    /// Applies health restoration. Can be called from anywhere.
-    /// </summary>
-    /// <param name="healValue">Amount of HP to restore</param>
-    /// <param name="effectType">Type of heal effect (for visuals, logic, etc.)</param>
-    public static void ApplyHeal(float healValue, PlayerHealEffectType effectType)
+    public static void ApplyHeal(int healValue, PlayerHealEffectType effectType)
     {
-        GlobalVariables.Instance.playerCurrentHealth =
-            Mathf.Min(GlobalVariables.Instance.playerCurrentHealth + healValue, GlobalVariables.Instance.playerMaxHealth);
-        HealEffectSelector.SelectHealEffect(effectType);
+        PlayerStatsManager.Instance.CurrentHealth =
+            Mathf.Min(PlayerStatsManager.Instance.CurrentHealth + healValue, PlayerStatsManager.Instance.MaxHealth());
+        SelectHealEffect(effectType);
     }
 
     public static void ApplyMana(float manaValue, PlayerHealEffectType effectType)
     {
-        GlobalVariables.Instance.playerCurrentMana =
-            Mathf.Min(GlobalVariables.Instance.playerCurrentMana + manaValue, GlobalVariables.Instance.playerMaxMana);
-        HealEffectSelector.SelectHealEffect(effectType);
+        PlayerStatsManager.Instance.CurrentMana = (int)Mathf.Min(PlayerStatsManager.Instance.CurrentMana + manaValue, PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_Mana));
+        SelectHealEffect(effectType);
     }
 }

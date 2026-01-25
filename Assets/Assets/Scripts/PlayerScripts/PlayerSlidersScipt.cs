@@ -13,39 +13,72 @@ public class PlayerSlidersScipt : MonoBehaviour
     [SerializeField] Slider expSlider;
     [SerializeField] Slider manaSlider;
     [SerializeField] GameObject levelUpPanel;
+    [SerializeField] private Image healthFillImage;
+    [SerializeField] private Image manaFillImage;
+    [SerializeField] private Image expFillImage;
+
+    [SerializeField] private Color lowHealthColor = new Color(0.8f, 0.2f, 0.2f);
+    [SerializeField] private Color lowExpColor = new Color(0.9f, 0.8f, 0.25f); // soft yellow
+    [SerializeField] private Color lowManaColor = new Color(0.25f, 0.8f, 0.8f);
 
 
     void Update()
     {
+        var stats = PlayerStatsManager.Instance;
         //Health
-        GlobalVariables.Instance.playerCurrentHealth = Mathf.Clamp(GlobalVariables.Instance.playerCurrentHealth, 0, GlobalVariables.Instance.playerMaxHealth);
-        healthText.text = (int)GlobalVariables.Instance.playerCurrentHealth + "/" + (int)GlobalVariables.Instance.playerMaxHealth;
-        healthSlider.maxValue = GlobalVariables.Instance.playerMaxHealth;
-        healthSlider.value = GlobalVariables.Instance.playerCurrentHealth;
+        stats.CurrentHealth = Mathf.Clamp(stats.CurrentHealth, 0, stats.MaxHealth());
+        healthText.text = stats.CurrentHealth + "/" + PlayerStatsManager.Instance.MaxHealth();
+        float healthPercent = (float)stats.CurrentHealth / stats.MaxHealth();
+        Color healthColor = Color.Lerp(Color.yellow, Color.green, healthPercent);
+        Color healthColorImage = Color.Lerp(Color.pink, Color.green, healthPercent);
+        healthFillImage.color = healthColorImage;
+        healthText.color = healthColor;
+        healthSlider.maxValue = stats.MaxHealth();
+        healthSlider.value = stats.CurrentHealth;
 
         //Exp
-        expText.text = (int)GlobalVariables.Instance.currentExp + "/" + (int)GlobalVariables.Instance.maxExp;
-        expSlider.maxValue = GlobalVariables.Instance.maxExp;
-        expSlider.value = GlobalVariables.Instance.currentExp;
-        if (GlobalVariables.Instance.currentExp >= GlobalVariables.Instance.maxExp)
+        float expPercent = (float)stats.CurrentExp / stats.MaxExp;
+        expPercent = Mathf.Clamp01(expPercent);
+
+        Color expColor = Color.Lerp(lowExpColor, Color.yellow, expPercent);
+
+        expText.text = $"{stats.CurrentExp}/{stats.MaxExp}";
+
+        expSlider.maxValue = stats.MaxExp;
+        expSlider.value = stats.CurrentExp;
+        expFillImage.color = expColor;
+        if (PlayerStatsManager.Instance.CurrentExp >= PlayerStatsManager.Instance.MaxExp && !levelUpPanel.activeSelf)
         {
-            GlobalVariables.Instance.currentExp = GlobalVariables.Instance.currentExp - GlobalVariables.Instance.maxExp;
-            if (GlobalVariables.Instance.maxExp > 50)
+            PlayerStatsManager.Instance.CurrentExp -= PlayerStatsManager.Instance.MaxExp;
+            if (PlayerStatsManager.Instance.MaxExp >= 100)
             {
-                GlobalVariables.Instance.maxExp += (float)0.2 * GlobalVariables.Instance.maxExp;
+                PlayerStatsManager.Instance.MaxExp = 100;
             }
             else
             {
-                GlobalVariables.Instance.maxExp += 10;
+                PlayerStatsManager.Instance.MaxExp += 10;
             }
-            GlobalVariables.Instance.level++;
+            PlayerStatsManager.Instance.CurrentLevel++;
             levelUpPanel.SetActive(true);
+            stats.IncreaseMaxHealthFromLevels(1);
+            if (PlayerStatsManager.Instance.CurrentLevel % 4 == 0)
+            {
+                stats.RuntimeStats.AddLevelValue(PlayerStatType.Attack_Attack, 1);
+            }
         }
 
         //Mana
-        manaText.text = (int)GlobalVariables.Instance.playerCurrentMana + "/" + (int)GlobalVariables.Instance.playerMaxMana;
-        manaSlider.maxValue = GlobalVariables.Instance.playerMaxMana;
-        manaSlider.value = GlobalVariables.Instance.playerCurrentMana;
+        float maxMana = stats.RuntimeStats.Get(PlayerStatType.Defence_Mana);
+        float manaPercent = stats.CurrentMana / maxMana;
+        manaPercent = Mathf.Clamp01(manaPercent);
+
+        Color manaColor = Color.Lerp(lowManaColor, Color.cyan, manaPercent);
+
+        manaText.text = $"{stats.CurrentMana}/{(int)maxMana}";
+
+        manaSlider.maxValue = maxMana;
+        manaSlider.value = stats.CurrentMana;
+        manaFillImage.color = manaColor;
 
 
     }

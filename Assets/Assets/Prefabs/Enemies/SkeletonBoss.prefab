@@ -58,6 +58,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,9 +81,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 1
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3623357751401863829
 MonoBehaviour:
@@ -141,6 +145,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -199,9 +204,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 211336245102109442}
+  - component: {fileID: 3217837976303396486}
   - component: {fileID: 5040474251055196172}
   - component: {fileID: 4987402683458607623}
-  - component: {fileID: 3217837976303396486}
   m_Layer: 3
   m_Name: SkeletonBoss
   m_TagString: Enemy
@@ -228,6 +233,53 @@ Transform:
   - {fileID: 6567774927226010541}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3217837976303396486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028595446057467532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94bc7e23bc42d6a44a33fd4025461332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 4ccebee4c23dd4947a227dd3950c28e7, type: 2}
+  particles: {fileID: 7222483889795140674, guid: 44c5885145e4cfb43923e87a256db191, type: 3}
+  hasDamageParticles: 1
+  damageParticles: {fileID: 5588695382944192682, guid: 3cf3e2e6560568a4d8e69595259985e8, type: 3}
+  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
+  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
+  playerWasHitDamage: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
+  rarity: 0
+  hasAttackAnimation: 1
+  spriteIsFacingLeft: 0
+  projectile: {fileID: 5935828565091107983, guid: 5e691dfd2bf7f744d8bfb5f14d067acb, type: 3}
+  projectilePosition: {fileID: 7835863399168112519}
+  projectileParent: {fileID: 0}
+  projectileCanRotate: 0
+  normalAttackFX: {fileID: 7040300268674578538}
+  specialAttackFX: {fileID: 2610315765121132087}
+  isGeneratedByPool: 0
+  hasReachedPlayer: 0
+  animator: {fileID: 8593905719210911045}
+  skeletonBossSpawner: {fileID: 6253850994902745200, guid: de1a13f2fb5609e4b9b4ae655dab9591, type: 3}
+  health: {fileID: 757992171316253287}
+  idleSoundInterval: 15
+  skeletonKingSounds:
+  - BeholdYourKing
+  - FleeWhileYouCan
+  - TimeToFight
+  - IWalkAmongYou
+  - TimeToFight
+  - LetsGetItOver
+  skeletonKingDeathSounds:
+  - IRiseAgain
+  - ButTheDeathless
+  - DeathHasNoGrip
+  - NotEvenDeath
+  - SeeYouSooner
 --- !u!61 &5040474251055196172
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -262,7 +314,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.6631651, y: -0.49675214}
+  m_Offset: {x: -0.6333894, y: -0.6128758}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -272,7 +324,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.9496505, y: 2.1848838}
+  m_Size: {x: 1.1707367, y: 2.3202093}
   m_EdgeRadius: 0
 --- !u!50 &4987402683458607623
 Rigidbody2D:
@@ -286,9 +338,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 20
+  m_LinearDamping: 5
+  m_AngularDamping: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -301,53 +353,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &3217837976303396486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1028595446057467532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94bc7e23bc42d6a44a33fd4025461332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particles: {fileID: 7222483889795140674, guid: 44c5885145e4cfb43923e87a256db191, type: 3}
-  hasDamageParticles: 1
-  damageParticles: {fileID: 5588695382944192682, guid: 3cf3e2e6560568a4d8e69595259985e8, type: 3}
-  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
-  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
-  playerWasHitDamage: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
-  canApplyKnockback: 0
-  rarity: 0
-  hasAttackAnimation: 1
-  spriteIsFacingLeft: 0
-  projectile: {fileID: 5935828565091107983, guid: 5e691dfd2bf7f744d8bfb5f14d067acb, type: 3}
-  projectilePosition: {fileID: 7835863399168112519}
-  projectileParent: {fileID: 0}
-  projectileCanRotate: 0
-  normalAttackFX: {fileID: 7040300268674578538}
-  specialAttackFX: {fileID: 2610315765121132087}
-  isGeneratedByPool: 0
-  hasReachedPlayer: 0
-  animator: {fileID: 8593905719210911045}
-  skeletonBossSpawner: {fileID: 6253850994902745200, guid: de1a13f2fb5609e4b9b4ae655dab9591, type: 3}
-  health: {fileID: 757992171316253287}
-  idleSoundInterval: 15
-  skeletonKingSounds:
-  - BeholdYourKing
-  - FleeWhileYouCan
-  - TimeToFight
-  - IWalkAmongYou
-  - TimeToFight
-  - LetsGetItOver
-  skeletonKingDeathSounds:
-  - IRiseAgain
-  - ButTheDeathless
-  - DeathHasNoGrip
-  - NotEvenDeath
-  - SeeYouSooner
 --- !u!1 &2610315765121132087
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,6 +389,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3924385088610282389
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -402,6 +408,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -423,9 +431,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -3747737555937058024, guid: 92c5f46b99807d24ea6274ea78457dae, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -435,7 +445,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &1527669705929914208
 Animator:
@@ -513,6 +522,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1798432002715673698
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -531,6 +541,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -552,9 +564,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
   m_SortingLayer: 2
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 3096574302567730256, guid: 8af087cb699b5774392d569bd05fe1ea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -564,7 +578,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &8593905719210911045
 Animator:
@@ -717,6 +730,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4518164090571865561
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -735,6 +749,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -756,9 +772,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 8196781270583594522, guid: 25e51a50b2adcfa449511728972b902f, type: 3}
   m_Color: {r: 0.9031391, g: 0, b: 1, a: 1}
   m_FlipX: 0
@@ -768,7 +786,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &7387782204378177595
 Animator:

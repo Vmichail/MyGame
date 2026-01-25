@@ -210,7 +210,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icons8-punctuality-100_0: -591686305022656415
+      icons8-punctuality-100_1: -7557083365386108086
+      icons8-punctuality-100_2: 6306948962359010606
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

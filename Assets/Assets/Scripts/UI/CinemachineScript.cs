@@ -47,4 +47,34 @@ public class CinemachineScript : MonoBehaviour
         noise.AmplitudeGain = 0f;
         shakeRoutine = null;
     }
+
+    public void ShakeUnscaled(float intensity, float time)
+    {
+        if (noise == null)
+            return;
+
+        if (shakeRoutine != null)
+            StopCoroutine(shakeRoutine);
+
+        shakeRoutine = StartCoroutine(ShakeRoutineUnscaled(intensity, time));
+    }
+
+    private IEnumerator ShakeRoutineUnscaled(float intensity, float time)
+    {
+        noise.AmplitudeGain = intensity;
+
+        float elapsed = 0f;
+        while (elapsed < time)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = elapsed / time;
+
+            noise.AmplitudeGain = Mathf.Lerp(intensity, 0f, t);
+
+            yield return null;
+        }
+
+        noise.AmplitudeGain = 0f;
+        shakeRoutine = null;
+    }
 }

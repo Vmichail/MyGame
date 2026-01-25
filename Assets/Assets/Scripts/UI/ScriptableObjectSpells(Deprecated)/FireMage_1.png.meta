@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FireMage_1_0: 683606947958741857
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

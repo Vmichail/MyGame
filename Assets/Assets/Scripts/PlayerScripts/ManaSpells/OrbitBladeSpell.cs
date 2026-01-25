@@ -3,11 +3,10 @@ using UnityEngine;
 public class OrbitBlade : PlayerSpellBaseScript
 {
     public override float Speed => GlobalVariables.Instance.orbidBladeSpellSpeed;
-    public override float Damage => GlobalVariables.Instance.playerAttackDamage * GlobalVariables.Instance.orbidBladeSpellDamageMutli;
-    public override int Bounces => GlobalVariables.Instance.orbidBladeSpellBounces + GlobalVariables.Instance.defaultSpellBounces;
+    public override float Damage => PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_Attack) * GlobalVariables.Instance.orbidBladeSpellDamageMutli;
     public override float KnockbackForce => GlobalVariables.Instance.orbidBladeSpellKnockbackForce;
-    public override float CriticalChance => GlobalVariables.Instance.orbidBladeSpellCriticalChance;
-    public override float CriticalMultiplier => GlobalVariables.Instance.orbidBladeSpellCriticalMultiplier;
+    public override float CriticalChance => 0;
+    public override float CriticalMultiplier => 0;
     public override Color BaseColor => GlobalVariables.Instance.orbidBladeSpellDefaultColor;
 
     public override float ManaCost => GlobalVariables.Instance.orbidBladeSpellManaCost;

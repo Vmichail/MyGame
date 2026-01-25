@@ -20,5 +20,5 @@ MonoBehaviour:
   upgradeCategory: 0
   upgradeCode: 4
   upgradeValueData:
-    value: 0.15
+    value: 0.2
     percentage: 1

@@ -19,7 +19,12 @@ public abstract class BasePool<T> : MonoBehaviour where T : BasePool<T>
             Destroy(gameObject);
             return;
         }
-        Instance = (T)this;
+        Instance = this as T;
+        if (Instance == null)
+        {
+            Debug.LogError($"Invalid generic parameter for {GetType().Name}: cannot cast to {typeof(T).Name}.");
+            return;
+        }
 
         objectPool = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(prefab),

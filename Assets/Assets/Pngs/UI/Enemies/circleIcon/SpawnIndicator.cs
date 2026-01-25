@@ -1,24 +1,34 @@
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public class SpawnIndicator : MonoBehaviour
 {
     public Vector3 targetScale = new Vector3(0.3f, 0.3f, 1f);
     public float scaleTime = 0.5f;
-    public LeanTweenType leanTweenType = LeanTweenType.easeInOutQuad;
     public int loopCount = 3;
-    public bool IsReadyToSpawn { get; set; }
 
-    public void Start()
+    public bool IsReadyToSpawn { get; private set; }
+
+    private Tween scaleTween;
+
+    private void OnEnable()
     {
         IsReadyToSpawn = false;
-        LeanTween.scale(gameObject, targetScale, scaleTime)
-           .setEaseInOutSine()
-           .setLoopPingPong(loopCount)
-           .setOnComplete(() =>
-           {
-               IsReadyToSpawn = true;
-           });
+        transform.localScale = Vector3.zero;
+        scaleTween?.Kill();
+
+        scaleTween = transform
+            .DOScale(targetScale, scaleTime)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(loopCount * 2, LoopType.Yoyo) // full pulses
+            .OnComplete(() =>
+            {
+                IsReadyToSpawn = true;
+            });
+    }
+
+    private void OnDisable()
+    {
+        scaleTween?.Kill();
     }
 }

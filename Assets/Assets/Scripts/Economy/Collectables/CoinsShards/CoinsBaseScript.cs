@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 
 public class CoinsBaseScript : CollectableBaseScript, ICollectable
 {
-    protected virtual float CoinValue { get => GlobalVariables.Instance.yellowCoinValue; }
-    protected virtual float ExpValue { get => 0; }
+    protected virtual int CoinValue { get => GlobalVariables.Instance.yellowCoinValue; }
+    protected virtual int ExpValue { get => 0; }
     protected virtual string AudioSound { get => "coinSound"; }
     protected virtual CoinSpecialEffect[] SpecialEffects => new CoinSpecialEffect[] { CoinSpecialEffect.None };
 
@@ -15,9 +15,9 @@ public class CoinsBaseScript : CollectableBaseScript, ICollectable
         AudioManager.Instance.PlaySoundFX(AudioSound, transform.position, 0.4f, 0.75f, 1.25f);
 
         // Add coin value
-        GlobalVariables.Instance.coinsCollected += CoinValue;
+        CurrencyManager.instance.Add(CoinValue);
 
-        GlobalVariables.Instance.currentExp += ExpValue;
+        PlayerStatsManager.Instance.CurrentExp += ExpValue;
 
         // Apply effects
         foreach (var effect in SpecialEffects)
@@ -36,7 +36,7 @@ public class CoinsBaseScript : CollectableBaseScript, ICollectable
                     break;
 
                 case CoinSpecialEffect.DoubleValue:
-                    GlobalVariables.Instance.coinsCollected += CoinValue;
+                    CurrencyManager.instance.Add(CoinValue);
                     break;
 
                 case CoinSpecialEffect.Explosion:
@@ -62,11 +62,11 @@ public class CoinsBaseScript : CollectableBaseScript, ICollectable
         AudioManager.Instance.PlaySoundFX("bottle", transform.position, 1f, 0.75f, 1.25f);
 
         PlayerHealthAndManaRegen.ApplyHeal(
-            GlobalVariables.Instance.playerMaxHealth,
+            PlayerStatsManager.Instance.MaxHealth(),
             HealEffectSelector.PlayerHealEffectType.HealthPotion
         );
         PlayerHealthAndManaRegen.ApplyMana(
-           GlobalVariables.Instance.playerMaxMana,
+           PlayerStatsManager.Instance.MaxMana(),
            HealEffectSelector.PlayerHealEffectType.HealthPotion
        );
     }

@@ -1,0 +1,1547 @@
+fileFormatVersion: 2
+guid: 03c7e4622c36ccc4d9601aab869860aa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -945514239225049270
+    second: Boss_Halloween_A_0
+  - first:
+      213: 36784890132547044
+    second: Boss_Halloween_A_1
+  - first:
+      213: 5716443154885908313
+    second: Boss_Halloween_A_2
+  - first:
+      213: 1378020553699647041
+    second: Boss_Halloween_A_3
+  - first:
+      213: -5404410106282979355
+    second: Boss_Halloween_A_4
+  - first:
+      213: 9071454921429893421
+    second: Boss_Halloween_A_5
+  - first:
+      213: -8992714518091020128
+    second: Boss_Halloween_A_6
+  - first:
+      213: -4599248928340534371
+    second: Boss_Halloween_A_7
+  - first:
+      213: 7666412362773226455
+    second: Boss_Halloween_A_8
+  - first:
+      213: 5878464531007002085
+    second: Boss_Halloween_A_9
+  - first:
+      213: -6772250736206664099
+    second: Boss_Halloween_A_10
+  - first:
+      213: -8866020381552831920
+    second: Boss_Halloween_A_11
+  - first:
+      213: -2621271492447846604
+    second: Boss_Halloween_A_12
+  - first:
+      213: -5556717298422454617
+    second: Boss_Halloween_A_13
+  - first:
+      213: 8573841775298765481
+    second: Boss_Halloween_A_14
+  - first:
+      213: -2254692889365179912
+    second: Boss_Halloween_A_15
+  - first:
+      213: -6571870575875647763
+    second: Boss_Halloween_A_16
+  - first:
+      213: -844998246390040391
+    second: Boss_Halloween_A_17
+  - first:
+      213: 4324725538599334101
+    second: Boss_Halloween_A_18
+  - first:
+      213: 1786544974202040779
+    second: Boss_Halloween_A_19
+  - first:
+      213: -6015930839058798187
+    second: Boss_Halloween_A_20
+  - first:
+      213: -5103924466407339558
+    second: Boss_Halloween_A_21
+  - first:
+      213: 5961478731678247527
+    second: Boss_Halloween_A_22
+  - first:
+      213: -6600631743895051330
+    second: Boss_Halloween_A_23
+  - first:
+      213: 4001038196403889591
+    second: Boss_Halloween_A_24
+  - first:
+      213: -7712184163757744674
+    second: Boss_Halloween_A_25
+  - first:
+      213: -5231781113891374311
+    second: Boss_Halloween_A_26
+  - first:
+      213: -2905607292486007911
+    second: Boss_Halloween_A_27
+  - first:
+      213: 4539441477965184390
+    second: Boss_Halloween_A_28
+  - first:
+      213: 4548867938755006432
+    second: Boss_Halloween_A_29
+  - first:
+      213: 7014066026982066108
+    second: Boss_Halloween_A_30
+  - first:
+      213: 6488276879122710308
+    second: Boss_Halloween_A_31
+  - first:
+      213: 5476511595451876842
+    second: Boss_Halloween_A_32
+  - first:
+      213: -6327171924064883095
+    second: Boss_Halloween_A_33
+  - first:
+      213: 1611107570299502629
+    second: Boss_Halloween_A_34
+  - first:
+      213: 6130670841434942805
+    second: Boss_Halloween_A_35
+  - first:
+      213: -8476974205905470051
+    second: Boss_Halloween_A_36
+  - first:
+      213: 1236070507057404715
+    second: Boss_Halloween_A_37
+  - first:
+      213: 8745815226558746456
+    second: Boss_Halloween_A_38
+  - first:
+      213: -4048087141217924276
+    second: Boss_Halloween_A_39
+  - first:
+      213: 1675691618873814325
+    second: Boss_Halloween_A_40
+  - first:
+      213: -1122790820563361518
+    second: Boss_Halloween_A_41
+  - first:
+      213: -87123642401302291
+    second: Boss_Halloween_A_42
+  - first:
+      213: -8104247626237493270
+    second: Boss_Halloween_A_43
+  - first:
+      213: -7180488306885697999
+    second: Boss_Halloween_A_44
+  - first:
+      213: 726720766313480694
+    second: Boss_Halloween_A_45
+  - first:
+      213: 1076434112170210943
+    second: Boss_Halloween_A_46
+  - first:
+      213: 1870512522628877787
+    second: Boss_Halloween_A_47
+  - first:
+      213: 5112230950652548844
+    second: Boss_Halloween_A_48
+  - first:
+      213: -6438146282523030250
+    second: Boss_Halloween_A_49
+  - first:
+      213: -2882013533486601143
+    second: Boss_Halloween_A_50
+  - first:
+      213: 395744275877196380
+    second: Boss_Halloween_A_51
+  - first:
+      213: -4929977888945572743
+    second: Boss_Halloween_A_52
+  - first:
+      213: 2242904373743072427
+    second: Boss_Halloween_A_53
+  - first:
+      213: -2640272145422968378
+    second: Boss_Halloween_A_54
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Boss_Halloween_A_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 446
+        width: 39
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4fcae81fcbd0e2f0800000000000000
+      internalID: -945514239225049270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 446
+        width: 41
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e5c375a9afa28000800000000000000
+      internalID: 36784890132547044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_2
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 446
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95710b923c2e45f40800000000000000
+      internalID: 5716443154885908313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_3
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 446
+        width: 41
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14e547c7466bf1310800000000000000
+      internalID: 1378020553699647041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_4
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 446
+        width: 41
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5efc87264adaff4b0800000000000000
+      internalID: -5404410106282979355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_5
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 446
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d214ccb303844ed70800000000000000
+      internalID: 9071454921429893421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_6
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 382
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a8cfae8ac5733380800000000000000
+      internalID: -8992714518091020128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_7
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 382
+        width: 41
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9b9aa0b77f2c20c0800000000000000
+      internalID: -4599248928340534371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_8
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 382
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d3e2c0fc61946a60800000000000000
+      internalID: 7666412362773226455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_9
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 384
+        width: 42
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e5d7637850849150800000000000000
+      internalID: 5878464531007002085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_10
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 382
+        width: 41
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5e268a16d12402a0800000000000000
+      internalID: -6772250736206664099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_11
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 382
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0529b2aef6195f480800000000000000
+      internalID: -8866020381552831920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_12
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 318
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43fb9c8377f5f9bd0800000000000000
+      internalID: -2621271492447846604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_13
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 322
+        width: 32
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a6e24ece0392e2b0800000000000000
+      internalID: -5556717298422454617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_14
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 321
+        width: 34
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a266112ba76cf670800000000000000
+      internalID: 8573841775298765481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_15
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 318
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f11ac353c8b5b0e0800000000000000
+      internalID: -2254692889365179912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_16
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 322
+        width: 37
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de6171fc7860cc4a0800000000000000
+      internalID: -6571870575875647763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_17
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 321
+        width: 35
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b8f7186296f544f0800000000000000
+      internalID: -844998246390040391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_18
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 254
+        width: 31
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d0f547c6f2840c30800000000000000
+      internalID: 4324725538599334101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_19
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 254
+        width: 45
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc1729240351bc810800000000000000
+      internalID: 1786544974202040779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_20
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 254
+        width: 48
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 599259096ce138ca0800000000000000
+      internalID: -6015930839058798187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_21
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 254
+        width: 41
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad98d535db73b29b0800000000000000
+      internalID: -5103924466407339558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_22
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 268
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76a6ab9325d6bb250800000000000000
+      internalID: 5961478731678247527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_23
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 254
+        width: 39
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb3e7fb8668d564a0800000000000000
+      internalID: -6600631743895051330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_24
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 267
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b56c6d8a0b868730800000000000000
+      internalID: 4001038196403889591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_25
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 267
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edd93dc2d51d8f490800000000000000
+      internalID: -7712184163757744674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_26
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 254
+        width: 35
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91b38ebcbcaf467b0800000000000000
+      internalID: -5231781113891374311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_27
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 190
+        width: 26
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9934692ef853da7d0800000000000000
+      internalID: -2905607292486007911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_28
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 190
+        width: 56
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68df9c429f55ffe30800000000000000
+      internalID: 4539441477965184390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_29
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 190
+        width: 58
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0efc7a31a43d02f30800000000000000
+      internalID: 4548867938755006432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_30
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 190
+        width: 37
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb7c661b3e7f65160800000000000000
+      internalID: 7014066026982066108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_31
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 196
+        width: 17
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42f3d78f17dfa0a50800000000000000
+      internalID: 6488276879122710308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_32
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 190
+        width: 34
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae5873fb74a700c40800000000000000
+      internalID: 5476511595451876842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_33
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 190
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96ea94968ae5138a0800000000000000
+      internalID: -6327171924064883095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_34
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 126
+        width: 33
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52005a69ccdcb5610800000000000000
+      internalID: 1611107570299502629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_35
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 126
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55d239a06a4841550800000000000000
+      internalID: 6130670841434942805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_36
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 126
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9dfad66fdcbb5a80800000000000000
+      internalID: -8476974205905470051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_37
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 126
+        width: 31
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2b5e72c397672110800000000000000
+      internalID: 1236070507057404715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_38
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 126
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85f8c3a7c906f5970800000000000000
+      internalID: 8745815226558746456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_39
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 126
+        width: 31
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4b01e7513e42d7c0800000000000000
+      internalID: -4048087141217924276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_40
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 63
+        width: 37
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53da21036a0414710800000000000000
+      internalID: 1675691618873814325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_41
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 62
+        width: 37
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 211604f82bb0b60f0800000000000000
+      internalID: -1122790820563361518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_42
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 62
+        width: 35
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de8d12342897acef0800000000000000
+      internalID: -87123642401302291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_43
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 62
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aefbf4ad8bde78f80800000000000000
+      internalID: -8104247626237493270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_44
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 62
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13e5b32cde7c95c90800000000000000
+      internalID: -7180488306885697999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_45
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 62
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f1c307cfa4d51a00800000000000000
+      internalID: 726720766313480694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_46
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 0
+        width: 37
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f76b4003f1340fe00800000000000000
+      internalID: 1076434112170210943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_47
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 0
+        width: 37
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bddc63b9a3565f910800000000000000
+      internalID: 1870512522628877787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_48
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 1
+        width: 37
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce6176fb6fa42f640800000000000000
+      internalID: 5112230950652548844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_49
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 2
+        width: 37
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61d863a111c17a6a0800000000000000
+      internalID: -6438146282523030250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_50
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 4
+        width: 31
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ca9aaf5f70108d0800000000000000
+      internalID: -2882013533486601143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_51
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 37
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c52fd897257fd7500800000000000000
+      internalID: 395744275877196380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_52
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 26
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9747edaea33359bb0800000000000000
+      internalID: -4929977888945572743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_53
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 21
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba4302ef4a5602f10800000000000000
+      internalID: 2242904373743072427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss_Halloween_A_54
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 18
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c994b5f87edb5bd0800000000000000
+      internalID: -2640272145422968378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Boss_Halloween_A_0: -945514239225049270
+      Boss_Halloween_A_1: 36784890132547044
+      Boss_Halloween_A_10: -6772250736206664099
+      Boss_Halloween_A_11: -8866020381552831920
+      Boss_Halloween_A_12: -2621271492447846604
+      Boss_Halloween_A_13: -5556717298422454617
+      Boss_Halloween_A_14: 8573841775298765481
+      Boss_Halloween_A_15: -2254692889365179912
+      Boss_Halloween_A_16: -6571870575875647763
+      Boss_Halloween_A_17: -844998246390040391
+      Boss_Halloween_A_18: 4324725538599334101
+      Boss_Halloween_A_19: 1786544974202040779
+      Boss_Halloween_A_2: 5716443154885908313
+      Boss_Halloween_A_20: -6015930839058798187
+      Boss_Halloween_A_21: -5103924466407339558
+      Boss_Halloween_A_22: 5961478731678247527
+      Boss_Halloween_A_23: -6600631743895051330
+      Boss_Halloween_A_24: 4001038196403889591
+      Boss_Halloween_A_25: -7712184163757744674
+      Boss_Halloween_A_26: -5231781113891374311
+      Boss_Halloween_A_27: -2905607292486007911
+      Boss_Halloween_A_28: 4539441477965184390
+      Boss_Halloween_A_29: 4548867938755006432
+      Boss_Halloween_A_3: 1378020553699647041
+      Boss_Halloween_A_30: 7014066026982066108
+      Boss_Halloween_A_31: 6488276879122710308
+      Boss_Halloween_A_32: 5476511595451876842
+      Boss_Halloween_A_33: -6327171924064883095
+      Boss_Halloween_A_34: 1611107570299502629
+      Boss_Halloween_A_35: 6130670841434942805
+      Boss_Halloween_A_36: -8476974205905470051
+      Boss_Halloween_A_37: 1236070507057404715
+      Boss_Halloween_A_38: 8745815226558746456
+      Boss_Halloween_A_39: -4048087141217924276
+      Boss_Halloween_A_4: -5404410106282979355
+      Boss_Halloween_A_40: 1675691618873814325
+      Boss_Halloween_A_41: -1122790820563361518
+      Boss_Halloween_A_42: -87123642401302291
+      Boss_Halloween_A_43: -8104247626237493270
+      Boss_Halloween_A_44: -7180488306885697999
+      Boss_Halloween_A_45: 726720766313480694
+      Boss_Halloween_A_46: 1076434112170210943
+      Boss_Halloween_A_47: 1870512522628877787
+      Boss_Halloween_A_48: 5112230950652548844
+      Boss_Halloween_A_49: -6438146282523030250
+      Boss_Halloween_A_5: 9071454921429893421
+      Boss_Halloween_A_50: -2882013533486601143
+      Boss_Halloween_A_51: 395744275877196380
+      Boss_Halloween_A_52: -4929977888945572743
+      Boss_Halloween_A_53: 2242904373743072427
+      Boss_Halloween_A_54: -2640272145422968378
+      Boss_Halloween_A_6: -8992714518091020128
+      Boss_Halloween_A_7: -4599248928340534371
+      Boss_Halloween_A_8: 7666412362773226455
+      Boss_Halloween_A_9: 5878464531007002085
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

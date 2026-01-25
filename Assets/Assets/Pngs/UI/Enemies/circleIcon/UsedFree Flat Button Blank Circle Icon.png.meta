@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UsedFree Flat Button Blank Circle Icon_0: -8057703184593243895
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

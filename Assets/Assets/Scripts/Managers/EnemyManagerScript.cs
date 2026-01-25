@@ -49,9 +49,5 @@ public class EnemyManagerScript : MonoBehaviour
         {
             GlobalVariables.Instance.spawnedSkeletonArchers++;
         }
-        else
-        {
-            Debug.Log("Uknown Enemy Type:" + enemyType);
-        }
     }
 }

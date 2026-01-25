@@ -11,8 +11,8 @@ public class UpgradeChoice : ScriptableObject
     [SerializeField] private int cost;
     [SerializeField] private bool locked;
     [SerializeField] private int unlockCost;
-    [SerializeField] private HeroUpgrades.UpgradeCategory upgradeCategory;
-    [SerializeField] private HeroUpgrades.UpgradeCode upgradeCode;
+    [SerializeField] private PlayerStatCategory upgradeCategory;
+    [SerializeField] private PlayerStatType upgradeCode;
 
     [Header("Bonus Values")]
     [SerializeField] private UpgradeValueData upgradeValueData;
@@ -22,8 +22,8 @@ public class UpgradeChoice : ScriptableObject
     public int Cost => cost;
     public bool Locked => locked;
     public int UnlockCost => unlockCost;
-    public HeroUpgrades.UpgradeCategory UpgradeCategory => upgradeCategory;
-    public HeroUpgrades.UpgradeCode UpgradeCode => upgradeCode;
+    public PlayerStatCategory UpgradeCategory => upgradeCategory;
+    public PlayerStatType UpgradeCode => upgradeCode;
     public UpgradeValueData UpgradeValue => upgradeValueData;
 
     // 👇 Nested serializable class

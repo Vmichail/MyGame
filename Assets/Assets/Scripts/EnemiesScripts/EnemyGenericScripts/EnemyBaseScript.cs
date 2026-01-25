@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -7,13 +7,14 @@ using Random = UnityEngine.Random;
 
 public abstract class EnemyBaseScript : MonoBehaviour
 {
+    [SerializeField] protected EnemyConfig config;
+    protected EnemyStats stats;
     [SerializeField] GameObject particles;
     [SerializeField] bool hasDamageParticles = false;
     [SerializeField] GameObject damageParticles;
     [SerializeField] GameObject criticalParticles;
     [SerializeField] GameObject receivedDamagePopUp;
     [SerializeField] GameObject playerWasHitDamage;
-    [SerializeField] private bool canApplyKnockback;
     [SerializeField] protected GlobalVariables.EnemyRarity rarity = GlobalVariables.EnemyRarity.None;
     [SerializeField] protected bool hasAttackAnimation = false;
     [SerializeField] private bool spriteIsFacingLeft;
@@ -25,13 +26,11 @@ public abstract class EnemyBaseScript : MonoBehaviour
     [SerializeField] Transform projectileParent;
     [SerializeField] private bool projectileCanRotate = true;
     protected float attackCooldownTimer = 0f;
-    public virtual float ProjectileSpeed { get => GlobalVariables.Instance.goblinTNTProjectileSpeed; }
     [Header("Special attacks - mostly bosses")]
     [SerializeField] protected GameObject normalAttackFX;
     [SerializeField] protected GameObject specialAttackFX;
     [SerializeField] protected bool isGeneratedByPool = true;
-    protected virtual string[] HurtSounds => new string[0];
-    private String criticalHitSound = "criticalHitSound";
+    private bool KnockbackEffect = false;
 
     protected Transform player;
     public bool hasReachedPlayer;
@@ -52,12 +51,10 @@ public abstract class EnemyBaseScript : MonoBehaviour
     private protected Transform spriteTransform;
     private Coroutine damageCoroutine;
     protected float maxHealth;
-    protected float knockbackResistance;
     protected float currentHealth;
     private float cameraZ;
 
     public virtual bool IsDead { get; set; }
-    public virtual float Speed { get; set; }
     public virtual float MaxHealth
     {
         get => maxHealth;
@@ -73,29 +70,39 @@ public abstract class EnemyBaseScript : MonoBehaviour
         get => currentHealth;
         set => currentHealth = Mathf.Clamp(value, 0, MaxHealth);
     }
-    public virtual float Damage { get => GlobalVariables.Instance.skeletonDamage; }
-    public virtual float AttackCooldown { get => GlobalVariables.Instance.skeletonAttackCooldown; }
 
-    public virtual GlobalVariables.CoinDropEnum CoinDropEnum { get => GlobalVariables.CoinDropEnum.Yellow; }
-    public virtual float MinExp { get => GlobalVariables.Instance.skeletonMinExp; }
-    public virtual float MaxExp { get => GlobalVariables.Instance.skeletonMaxExp; }
-    public virtual float AttackRange { get => GlobalVariables.Instance.goblinTNTRange; }
-    public virtual float MultipleAttackChance { get => GlobalVariables.Instance.goblinTNTMultipleAttackChance; }
-    public virtual bool KnockbackEffect { get; set; }
+    //Stats forwarded from ScriptableObject
+    public virtual float Damage => stats.damage * DifficultyManager.Instance.FinalEnemyDamageMultiplier;
+    public virtual float Speed => stats.speed * DifficultyManager.Instance.FinalEnemySpeedMultiplier;
+    public virtual float ProjectileSpeed => stats.projectileSpeed * DifficultyManager.Instance.FinalEnemySpeedMultiplier;
+    public virtual float KnockbackResistance => stats.knockbackResistance;
+    public virtual bool CanApplyKnockback => stats.canBeKnockedBack;
+    public virtual float AttackCooldown => stats.attackCooldown;
+
+    public virtual GlobalVariables.CoinDropEnum CoinDropEnum => stats.coinDropEnum;
+    public virtual float MinExp => stats.minExp;
+    public virtual float MaxExp => stats.maxExp;
+    public virtual float AttackRange => stats.attackRange;
+    public virtual float MultipleAttackChance => stats.multipleAttackChance;
     //Collectables 
-    public virtual float CoinDropChance { get => GlobalVariables.Instance.skeleonCoinDropChance; }
-    public virtual float HealthPotionChance { get => GlobalVariables.Instance.skeleonCoinDropChance; }
-    public virtual float ManaPotionChance { get => GlobalVariables.Instance.skeleonCoinDropChance; }
-    public virtual GlobalVariables.EnemyTypes EnemyType { get; set; }
-    public virtual string DeathSoundClip { get => "skeletonDeadSound"; }
-    AnimatorStateInfo stateInfo;
+    public virtual float CoinDropChance => stats.coinDropChance * DifficultyManager.Instance.EnemyCoinDropMultiplier;
+    public virtual float HealthPotionChance => stats.healthPotionChance;
+    public virtual float ManaPotionChance => stats.manaPotionChance;
+    public virtual float GreenRubyChance => stats.greenRubyChance * DifficultyManager.Instance.EnemyCoinDropMultiplier;
+    public virtual float RedRubyChance => stats.redRubyChance * DifficultyManager.Instance.EnemyCoinDropMultiplier;
+    public virtual GlobalVariables.EnemyTypes EnemyType => config.enemyType;
+    public virtual string[] DeathSoundClips => stats.deathSoundClips;
 
-    public virtual string[] AttackSoundClip
-    {
-        get => new string[] { "vampireAttackSound1", "vampireAttackSound2" };
-    }
+    public virtual string[] AttackSoundClips => stats.attackSoundClips;
+
+    protected virtual string[] HurtSounds => stats.hurtSounds ?? Array.Empty<string>();
+    //
 
 
+    private String criticalHitSound = "criticalHitSound";
+
+
+    private AnimatorStateInfo stateInfo;
 
     public virtual void RestoreHealth()
     {
@@ -116,14 +123,11 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        BuildStats();
         IsDead = false;
         KnockbackEffect = false;
-        currentHealth = maxHealth;
         hasReachedPlayer = false;
-    }
-
-    protected virtual void Start()
-    {
+        //
         rangeScript = GetComponentInChildren<EnemyRangeAttackScript>();
         hasRangeAttack = rangeScript != null;
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -137,6 +141,10 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
 
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    protected virtual void Start()
+    {
     }
 
     private void FindPlayer()
@@ -165,12 +173,16 @@ public abstract class EnemyBaseScript : MonoBehaviour
         IsDead = true;
         DropCollectables();
         Instantiate(particles, transform.position, transform.rotation);
-        AudioManager.Instance.PlaySoundFX(DeathSoundClip, transform.position, 1f, 0.75f, 1.25f);
+        AudioManager.Instance.PlayRandomSoundFX(DeathSoundClips, transform.position, 1f, 0.75f, 1.25f);
         EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
-        if (isGeneratedByPool)
+        if (isGeneratedByPool && _pool != null)
             _pool.Release(gameObject);
         else
+        {
+            if (isGeneratedByPool)
+                Debug.LogWarning("Enemy is marked as generated by pool but no pool was assigned!");
             Destroy(gameObject);
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -329,9 +341,9 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 Debug.LogWarning("PlayerSpellBaseScript component not found on PlayerSpell object!");
             else
             {
-                ReceiveDamage(spellScript.Damage, criticalChance: GlobalVariables.Instance.globalCriticalChance, criticalMultiplier: GlobalVariables.Instance.globalCriticalMultiplier, color: spellScript.BaseColor, hitSound: spellScript.OnHitSound);
-                if (canApplyKnockback)
-                    ApplyKnockback(collision, spellScript.KnockbackForce - knockbackResistance);
+                ReceiveDamage(spellScript.Damage, criticalChance: PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_CriticalChance), criticalMultiplier: PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Attack_CriticalDamage), color: spellScript.BaseColor, hitSound: spellScript.OnHitSound);
+                if (CanApplyKnockback)
+                    ApplyKnockback(collision, spellScript.KnockbackForce - KnockbackResistance);
             }
 
         }
@@ -367,7 +379,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
         Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
         Vector2 spawnPosition = (Vector2)transform.position + randomOffset;
-        GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
+
         if (isCritical)
         {
             AudioManager.Instance.PlaySoundFX(criticalHitSound, transform.position, 0.7f, 0.7f, 1.3f);
@@ -384,9 +396,12 @@ public abstract class EnemyBaseScript : MonoBehaviour
         {
             AudioManager.Instance.PlayRandomSoundFX(HurtSounds, transform.position, 1.5f, 0.75f, 1.25f);
         }
-
-        DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
-        dt.SetDamage(spellDamage, isCritical, color);
+        if (!GlobalVariables.Instance.mainMenuScene)
+        {
+            GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
+            DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
+            dt.SetDamage(spellDamage, isCritical, color);
+        }
         if (hasDamageParticles)
             Instantiate(damageParticles, transform.position, Quaternion.identity);
         if (isCritical)
@@ -414,6 +429,9 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     private void DropCollectables()
     {
+        if (GlobalVariables.Instance.mainMenuScene)
+            return;
+
         Vector3 dropPosition = transform.position;
         //Coins
         if (Random.value <= CoinDropChance)
@@ -453,6 +471,32 @@ public abstract class EnemyBaseScript : MonoBehaviour
                 Debug.LogWarning("HealthPotion component not found on the healthPotion prefab!");
             }
         }
+        //Green Ruby Drop Chance
+        if (Random.value <= GreenRubyChance)
+        {
+            GameObject greenRuby = GreenRubyPool.Instance.Get();
+            if (greenRuby.TryGetComponent(out CollectableBaseScript collectableBaseScript))
+            {
+                collectableBaseScript.Initialize(dropPosition);
+            }
+            else
+            {
+                Debug.LogWarning("GreenRubyScript component not found on the healthPotion prefab!");
+            }
+        }
+        //Red Ruby Drop Chance
+        if (Random.value <= GreenRubyChance)
+        {
+            GameObject redRuby = RedRubyPool.Instance.Get();
+            if (redRuby.TryGetComponent(out CollectableBaseScript collectableBaseScript))
+            {
+                collectableBaseScript.Initialize(dropPosition);
+            }
+            else
+            {
+                Debug.LogWarning("GreenRubyScript component not found on the healthPotion prefab!");
+            }
+        }
         //Shards
         GameObject shard = ShardPool.Instance.GetShard((int)MinExp, (int)MaxExp);
         if (shard.TryGetComponent(out ParentShardScript parentShardScript))
@@ -464,7 +508,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
     //RangeAttack
     public void RangeAttackProjectile()
     {
-        AudioManager.Instance.PlayRandomSoundFX(AttackSoundClip, transform.position, 0.4f, 0.75f, 1.25f);
+        AudioManager.Instance.PlayRandomSoundFX(AttackSoundClips, transform.position, 0.4f, 0.75f, 1.25f);
 
         GameObject rangeInstance = Instantiate(projectile, projectilePosition.position, Quaternion.identity);
         rangeInstance.transform.SetParent(projectileParent, false);
@@ -561,5 +605,19 @@ public abstract class EnemyBaseScript : MonoBehaviour
         {
             projectilePosition.rotation = Quaternion.Euler(0, yRotation, 0);
         }
+    }
+
+    protected virtual void BuildStats()
+    {
+        if (config == null)
+        {
+            Debug.LogError($"{name} has no EnemyConfig assigned!", this);
+            enabled = false;
+            return;
+        }
+
+        stats = new EnemyStats(config.baseStats);
+        MaxHealth = stats.maxHealth * DifficultyManager.Instance.FinalEnemyHealthMultiplier;
+        CurrentHealth = MaxHealth;
     }
 }

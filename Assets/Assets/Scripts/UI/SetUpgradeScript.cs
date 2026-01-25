@@ -14,8 +14,8 @@ public class SetUpgradeScript : BaseButtonScript
     public Sprite Icon { get; set; }
     public Boolean HealthCost { get; set; }
     public string Text { get; set; }
-    public HeroUpgrades.UpgradeCode UpgradeCode { get; set; }
-    public HeroUpgrades.UpgradeCategory UpgradeCatecory { get; set; }
+    public PlayerStatType UpgradeCode { get; set; }
+    public PlayerStatCategory UpgradeCatecory { get; set; }
     //Other public values
     public int Cost { get; set; }
     public bool IsLocked { get; set; }
@@ -24,7 +24,6 @@ public class SetUpgradeScript : BaseButtonScript
     [SerializeField] private Image cardImage;
     [SerializeField] private Image iconImage;
     [SerializeField] private GameObject maskedGameObject;
-    [SerializeField] private TextMeshProUGUI unlockCostText;
     [SerializeField] private Image coinCost;
     [SerializeField] private Image healthCost;
     [SerializeField] private TextMeshProUGUI costText;
@@ -34,7 +33,7 @@ public class SetUpgradeScript : BaseButtonScript
     private Mask maskComponent;
 
 
-    public void SetUpgradeChoice(UpgradeChoice upgradeChoice, int cost, bool locked, int unlockPrice, List<UpgradeChoice> additionalChoices)
+    public void SetUpgradeChoice(UpgradeChoice upgradeChoice, int cost, bool locked, List<UpgradeChoice> additionalChoices)
     {
         cardImage.sprite = upgradeChoice.Image;
         iconImage.sprite = upgradeChoice.Icon;
@@ -95,7 +94,6 @@ public class SetUpgradeScript : BaseButtonScript
         {
             DisableUIEffect();
             IsLocked = true;
-            unlockCostText.text = unlockPrice.ToString();
             maskComponent.enabled = true;
         }
         if (HealthCost)
@@ -137,30 +135,6 @@ public class SetUpgradeScript : BaseButtonScript
     public void SetPrice(int upgradePrice)
     {
         costText.text = upgradePrice.ToString();
-    }
-
-    public void RemoveLock(Button button, int index, int unlockCost)
-    {
-        if (IsLocked)
-        {
-            IsLocked = false;
-            GlobalVariables.Instance.coinsCollected -= unlockCost;
-            if (index == 3)
-                GlobalVariables.Instance.isUpgradeOption4Unlocked = true;
-            if (index == 4)
-                GlobalVariables.Instance.isUpgradeOption5Unlocked = true;
-            button.interactable = false;
-            if (maskedGameObject == null)
-            {
-                Debug.LogWarning($"maskedGameObject is null inside {gameObject.name}!!!");
-                return;
-            }
-            EnableUIEffect();
-            maskComponent.enabled = false;
-            LeanTween.scale(maskedGameObject, Vector3.zero, 0.5f)
-                .setIgnoreTimeScale(true)
-                .setOnComplete(() => SetActiveAndInteractive(button));
-        }
     }
 
     private void SetActiveAndInteractive(Button button)

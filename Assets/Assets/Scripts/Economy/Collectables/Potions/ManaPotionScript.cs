@@ -6,7 +6,7 @@ public class ManaPotionScript : CollectableBaseScript, ICollectable
 {
     public override void Collect()
     {
-        if (GlobalVariables.Instance.playerCurrentMana < GlobalVariables.Instance.playerMaxMana)
+        if (!PlayerStatsManager.Instance.IsFullMana())
         {
             base.Collect();
         }

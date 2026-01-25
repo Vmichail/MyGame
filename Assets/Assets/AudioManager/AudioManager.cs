@@ -17,10 +17,17 @@ public class AudioManager : MonoBehaviour
     private bool isMusicPlaying = false;
     private Transform playerTransform;
     private List<AudioSource> activeSFX = new();
-
-
     private List<AudioSource> audioSourcePool;
     private Dictionary<string, AudioClip> clipDictionary;
+
+    private readonly List<string> mainMenuSounds = new()
+    {
+        "uiDeny",
+        "UpgradeBoughtSound",
+        "buttonHighlight1Sound",
+        "levelup2",
+        "UnlockSound",
+    };
 
     private void Awake()
     {
@@ -113,6 +120,9 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource PlaySoundFX(string clipName, Vector2 position, float volume = 1f, float minPitch = 1, float maxPitch = 1, bool loop = false, bool applyDistance = false)
     {
+        if (GlobalVariables.Instance.mainMenuScene && !mainMenuSounds.Contains(clipName))
+            return null;
+
         if (string.IsNullOrEmpty(clipName) || !clipDictionary.ContainsKey(clipName))
         {
             Debug.LogWarning($"AudioManager: Clip '{clipName}' not found!");
@@ -205,6 +215,25 @@ public class AudioManager : MonoBehaviour
         musicSource.volume = GlobalVariables.Instance.masterVolume * GlobalVariables.Instance.musicVolume;
         musicSource.Play();
         isMusicPlaying = true;
+    }
+
+    public void PlayMusic(string musicName)
+    {
+        if (string.IsNullOrEmpty(musicName))
+            return;
+
+        for (int i = 0; i < musicClips.Length; i++)
+        {
+            AudioClip clip = musicClips[i];
+
+            if (clip != null && clip.name == musicName)
+            {
+                PlayMusic(i);   // reuse your existing logic
+                return;
+            }
+        }
+
+        Debug.LogWarning($"AudioManager: Music '{musicName}' not found in musicClips!");
     }
 
     public void PlayNextMusic()

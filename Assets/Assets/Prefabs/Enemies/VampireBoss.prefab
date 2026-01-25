@@ -90,9 +90,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4150546697613888274}
+  - component: {fileID: 8028914339369896355}
   - component: {fileID: 7561351563922506943}
   - component: {fileID: 8196059045507383224}
-  - component: {fileID: 8028914339369896355}
   m_Layer: 3
   m_Name: VampireBoss
   m_TagString: Enemy
@@ -120,6 +120,37 @@ Transform:
   - {fileID: 9205726109225830178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8028914339369896355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259332972615110709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95483df64fe41a74d9d94870f15b8bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: bc2474f45ec1e1041bad193940d61abf, type: 2}
+  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  hasDamageParticles: 1
+  damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
+  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
+  playerWasHitDamage: {fileID: 1313466516058393945, guid: 92c5cbf9ae7725b4a9981d32495c9cd3, type: 3}
+  rarity: 0
+  hasAttackAnimation: 1
+  spriteIsFacingLeft: 0
+  projectile: {fileID: 4185138162227280595, guid: f8fd83e79758e934c80ca9908e13e6dc, type: 3}
+  projectilePosition: {fileID: 6327042533695370261}
+  projectileParent: {fileID: 0}
+  projectileCanRotate: 1
+  normalAttackFX: {fileID: 0}
+  specialAttackFX: {fileID: 0}
+  isGeneratedByPool: 1
+  hasReachedPlayer: 0
+  animator: {fileID: 8683147018546817332}
 --- !u!61 &7561351563922506943
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -154,7 +185,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.008835793, y: -0.0029452145}
+  m_Offset: {x: 0.02664113, y: 0.3412869}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -164,7 +195,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.51107407, y: 0.6995757}
+  m_Size: {x: 0.9265275, y: 1.3880401}
   m_EdgeRadius: 0
 --- !u!50 &8196059045507383224
 Rigidbody2D:
@@ -178,9 +209,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.4
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 10
+  m_LinearDamping: 1
+  m_AngularDamping: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -193,38 +224,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &8028914339369896355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3259332972615110709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95483df64fe41a74d9d94870f15b8bf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
-  hasDamageParticles: 0
-  damageParticles: {fileID: 5588695382944192682, guid: 3cf3e2e6560568a4d8e69595259985e8, type: 3}
-  criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
-  receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
-  playerWasHitDamage: {fileID: 0}
-  canApplyKnockback: 0
-  rarity: 0
-  hasAttackAnimation: 1
-  spriteIsFacingLeft: 0
-  projectile: {fileID: 4185138162227280595, guid: f8fd83e79758e934c80ca9908e13e6dc, type: 3}
-  projectilePosition: {fileID: 6327042533695370261}
-  projectileParent: {fileID: 0}
-  projectileCanRotate: 1
-  normalAttackFX: {fileID: 0}
-  specialAttackFX: {fileID: 0}
-  isGeneratedByPool: 1
-  hasReachedPlayer: 0
-  animator: {fileID: 8683147018546817332}
-  projectileSpeed: 10
 --- !u!1 &6419632394620814664
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +282,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -304,9 +305,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 1
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2996830230514402830
 MonoBehaviour:
@@ -366,6 +369,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -566,6 +570,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3749803812370382496
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -584,6 +589,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -605,9 +612,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
   m_SortingLayer: 2
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -8044865268629479598, guid: 05610d46d824b564aa530223400d5284, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -617,7 +626,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &8683147018546817332
 Animator:

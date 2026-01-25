@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class MenuGenericFunctions : MonoBehaviour
+public class UIGenericFunctions : MonoBehaviour
 {
     [Header("Game Menus")]
     [SerializeField] private GameObject wholeGameMenuPanels;
@@ -11,6 +11,7 @@ public class MenuGenericFunctions : MonoBehaviour
     [SerializeField] private GameObject musicPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject difficultyPanel;
+    [SerializeField] private GameObject statsPanel;
 
     [Header("Background Animation")]
     [SerializeField] private Image backgroundImage;
@@ -41,7 +42,7 @@ public class MenuGenericFunctions : MonoBehaviour
 
     private void Update()
     {
-        if (GlobalVariables.Instance.playerCurrentHealth < 1 && GlobalVariables.Instance.playerIsAlive)
+        if (PlayerStatsManager.Instance.CurrentHealth < 1 && GlobalVariables.Instance.playerIsAlive)
         {
             Debug.Log("Player is Dead - Triggering Game Over with sounds");
             GlobalVariables.Instance.playerIsAlive = false;
@@ -49,7 +50,7 @@ public class MenuGenericFunctions : MonoBehaviour
             AudioManager.Instance.PlaySoundFX("gameOverGeneric", transform.position, 1f, 1f, 1.25f);
             GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.PlayerIsDead);
         }
-        else if (GlobalVariables.Instance.playerCurrentHealth > 1 && !GlobalVariables.Instance.playerIsAlive)
+        else if (PlayerStatsManager.Instance.CurrentHealth > 1 && !GlobalVariables.Instance.playerIsAlive)
         {
             GlobalVariables.Instance.playerIsAlive = true;
         }
@@ -70,7 +71,7 @@ public class MenuGenericFunctions : MonoBehaviour
 
     private void TogglePause()
     {
-        if (GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeInHierarchy && !musicPanel.activeInHierarchy)
+        if (GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeInHierarchy && !musicPanel.activeInHierarchy && !GlobalVariables.Instance.gameIsPaused)
         {
             GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
             ShowPauseMenu();
@@ -83,7 +84,7 @@ public class MenuGenericFunctions : MonoBehaviour
 
     private void Unpause()
     {
-        if (GlobalVariables.Instance.playerIsAlive && (pauseOrGameOverPanel.activeInHierarchy || musicPanel.activeInHierarchy))
+        if (GlobalVariables.Instance.playerIsAlive && (GlobalVariables.Instance.pauseReasonsList.Contains(GlobalVariables.PauseReasonEnum.GameMenu)))
         {
             HideAllMenus();
         }
@@ -98,13 +99,12 @@ public class MenuGenericFunctions : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         GlobalVariables.Instance.ResetValues();
-        UpgradePrices.Instance.ResetValues();
         GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.GameReset);
     }
 
     public void MainMenu()
     {
-        Replay();
+        SceneManager.LoadScene(0);
     }
 
     public void Exit()
@@ -118,7 +118,8 @@ public class MenuGenericFunctions : MonoBehaviour
         PauseOrGameOver,
         Music,
         Settings,
-        Difficulty
+        Difficulty,
+        Stats
     }
 
     public void ShowGameMenu(GameMenuType menuType)
@@ -128,6 +129,7 @@ public class MenuGenericFunctions : MonoBehaviour
         musicPanel.SetActive(false);
         settingsPanel.SetActive(false);
         difficultyPanel.SetActive(false);
+        statsPanel.SetActive(false);
         bool show = menuType != GameMenuType.None;
         // Then enable only the requested one
         switch (menuType)
@@ -144,6 +146,9 @@ public class MenuGenericFunctions : MonoBehaviour
             case GameMenuType.Difficulty:
                 difficultyPanel.SetActive(true);
                 break;
+            case GameMenuType.Stats:
+                statsPanel.SetActive(true);
+                break;
             case GameMenuType.None:
                 GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
                 break;
@@ -155,9 +160,17 @@ public class MenuGenericFunctions : MonoBehaviour
     }
 
     public void ShowPauseMenu() => ShowGameMenu(GameMenuType.PauseOrGameOver);
+    public void HideStats()
+    {
+        if (GlobalVariables.Instance.pauseReasonsList.Contains(GlobalVariables.PauseReasonEnum.LevelUpPanel))
+            HideAllMenus();
+        else
+            ShowGameMenu(GameMenuType.PauseOrGameOver);
+    }
     public void ShowMusicMenu() => ShowGameMenu(GameMenuType.Music);
     public void ShowSettingsMenu() => ShowGameMenu(GameMenuType.Settings);
     public void ShowDifficultyMenu() => ShowGameMenu(GameMenuType.Difficulty);
+    public void ShowStatsMenu() => ShowGameMenu(GameMenuType.Stats);
     public void HideAllMenus() => ShowGameMenu(GameMenuType.None);
 
 

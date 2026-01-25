@@ -34,15 +34,17 @@ public class EnemyGenericFunctionsForPlayer : MonoBehaviour
 
     public void DamagePlayer(float damage)
     {
+        if (GlobalVariables.Instance.mainMenuScene)
+            return;
         if (GlobalVariables.Instance.playerInvulnerableReasons.Count > 0)
             return;
         AudioManager.Instance.PlayRandomSoundFX(hurtClipNames, Vector2.zero, 1f, 0.9f, 1.1f);
         CinemachineScript.Instance.Shake(2f, 0.25f);
-        float armor = GlobalVariables.Instance.playerArmor;
+        float armor = PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_Armor);
         float damageMultiplier = 1 - ((0.06f * armor) / (1 + 0.06f * Mathf.Abs(armor)));
-        float finalDamage = damage * damageMultiplier;
+        int finalDamage = Mathf.Max(1, (int)(damage * damageMultiplier));
 
-        GlobalVariables.Instance.playerCurrentHealth -= finalDamage;
+        PlayerStatsManager.Instance.CurrentHealth -= finalDamage;
 
         // 🔴 Trigger hurt screen flash if the HurtEffect exists in the scene
         if (HurtEffect.Instance != null)
@@ -50,7 +52,7 @@ public class EnemyGenericFunctionsForPlayer : MonoBehaviour
             HurtEffect.Instance.Flash(finalDamage);
         }
 
-        if (damage > 0)
+        if (finalDamage >= 1)
         {
             Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
             Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;

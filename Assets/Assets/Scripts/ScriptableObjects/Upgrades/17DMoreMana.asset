@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: 17DMoreMana
   m_EditorClassIdentifier: 
   image: {fileID: 21300000, guid: 9743027eef70218438ef20d3f0a2fe94, type: 3}
-  icon: {fileID: -4633823444179541194, guid: aeca6fe1800e2ba42b137cbb316a4651, type: 3}
+  icon: {fileID: 21300000, guid: a5f6049e25412004eaa51988dbd85990, type: 3}
   cost: 0
   locked: 0
   unlockCost: 0
-  upgradeCategory: 2
-  upgradeCode: 10
+  upgradeCategory: 1
+  upgradeCode: 105
   upgradeValueData:
     value: 20
     percentage: 0

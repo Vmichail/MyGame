@@ -6,7 +6,7 @@ using static DifficultyManager;
 public class DifficultyPanelScript : MonoBehaviour
 {
     [Header("Other scripts")]
-    [SerializeField] private MenuGenericFunctions menuGenericFunctions;
+    [SerializeField] private UIGenericFunctions menuGenericFunctions;
 
     [Header("Buttons (assign)")]
     [SerializeField] private Button easyButton;

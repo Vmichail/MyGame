@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,15 +24,17 @@ public class LevelUpPanelScript : MonoBehaviour
     [SerializeField] private Animator buffAnimator;
     private List<SetUpgradeScript> upgradeScripts = new();
     [SerializeField] private GameObject refreshButtonGO;
-    private int currentRefreshes = 0;
+    [SerializeField] private TextMeshProUGUI refreshButtonTextValue;
+    private int currentRefreshes;
     public bool HealthCost = false;
     private Image levelUpPanelImage;
     private Color normalColor;
     private Color redColor = new(1f, 0f, 0f, 0.3f);
     private string[] levelUpSounds = new[] { "levelup1", "levelup2", "levelup3" };
+    private int maxRefreshes = 0;
     private void Awake()
     {
-        allSpells = upgradeChoices.Where(uc => uc.UpgradeCategory == HeroUpgrades.UpgradeCategory.Spells).ToList();
+        allSpells = upgradeChoices.Where(uc => uc.UpgradeCategory == PlayerStatCategory.Spells).ToList();
         levelUpPanelImage = wholeLevelUpPanel.GetComponent<Image>();
         normalColor = levelUpPanelImage.color;
     }
@@ -39,6 +42,18 @@ public class LevelUpPanelScript : MonoBehaviour
     private void Update()
     {
 
+    }
+
+    private void Start()
+    {
+        currentRefreshes = 0;
+        if (maxRefreshes == 0)
+        {
+            PlayerStat playerStat = PlayerStatsManager.Instance.RuntimeStats.GetStat(PlayerStatType.Reroll);
+            maxRefreshes = Mathf.FloorToInt(playerStat.Value);
+            refreshButtonTextValue.text = maxRefreshes.ToString();
+            UpdateRefreshTextColor();
+        }
     }
 
 
@@ -62,37 +77,27 @@ public class LevelUpPanelScript : MonoBehaviour
         {
             UpgradeChoice randomFirstUpgrade = randomChoices[i];
             bool isLocked = false;
-            int unlockCost = 0;
             GameObject upgradeChoice = Instantiate(upgradeOptionPrefab, upgradeChoicesParentTransform);
             upgradeChoice.name = "UpgradeOption" + i;
             if (upgradeChoice.TryGetComponent(out SetUpgradeScript setUpgradeScript))
             {
                 upgradeScripts.Add(setUpgradeScript);
-                if (i == 3 && (GlobalVariables.Instance == null || !GlobalVariables.Instance.isUpgradeOption4Unlocked))
+                if (i == 3 && !SaveSystem.Data.purchasedUpgrades.Contains("1UpgradeOption"))
                 {
                     isLocked = true;
-                    unlockCost = GlobalVariables.Instance ? GlobalVariables.Instance.upgradeOption4UnlockPrice : 25;
                 }
-                if (i == 4 && (GlobalVariables.Instance == null || !GlobalVariables.Instance.isUpgradeOption5Unlocked))
+                if (i == 4 && !SaveSystem.Data.purchasedUpgrades.Contains("2UpgradeOption"))
                 {
                     isLocked = true;
-                    unlockCost = GlobalVariables.Instance ? GlobalVariables.Instance.upgradeOption5UnlockPrice : 100;
                 }
                 List<UpgradeChoice> bonusUpgrades = GetBonusBasedOnLuck(randomFirstUpgrade.UpgradeCategory);
-                setUpgradeScript.SetUpgradeChoice(randomFirstUpgrade, upgradeCost, isLocked, unlockCost, bonusUpgrades);
+                setUpgradeScript.SetUpgradeChoice(randomFirstUpgrade, upgradeCost, isLocked, bonusUpgrades);
                 //Button
                 Button button = upgradeChoice.GetComponent<Button>();
                 if (button != null)
                 {
-                    if (isLocked)
-                    {
-                        //Debug.Log($"Remove locked run for unlockCost:{unlockCost}, {i}, {button}, {randomFirstUpgrade} ");
-                        button.onClick.AddListener(() => RemoveLock(unlockCost, i, button, randomFirstUpgrade, setUpgradeScript, bonusUpgrades));
-                    }
-                    else
-                    {
+                    if (!isLocked)
                         button.onClick.AddListener(() => BuyOption(randomFirstUpgrade, button.gameObject, setUpgradeScript, bonusUpgrades));
-                    }
                 }
                 if (i == 0)
                 {
@@ -122,7 +127,7 @@ public class LevelUpPanelScript : MonoBehaviour
             {
                 upgradeScripts.Add(setUpgradeScript);
                 setUpgradeScript.HealthCost = true;
-                setUpgradeScript.SetUpgradeChoice(randomChoices[i], healthCost, false, 0, new List<UpgradeChoice>());
+                setUpgradeScript.SetUpgradeChoice(randomChoices[i], healthCost, false, new List<UpgradeChoice>());
                 //Button
                 if (upgradeChoice.TryGetComponent<Button>(out var button))
                 {
@@ -140,7 +145,7 @@ public class LevelUpPanelScript : MonoBehaviour
     public List<UpgradeChoice> GetRandomChoices(int count)
     {
         return upgradeChoices
-            .OrderBy(x => Random.value)  // Random.value gives a float between 0–1
+            .OrderBy(x => Random.value)  // Random.value gives a float between 0â€“1
             .Take(count)
             .ToList();
     }
@@ -148,13 +153,14 @@ public class LevelUpPanelScript : MonoBehaviour
     public List<UpgradeChoice> GetOnlySpells(int count)
     {
         return allSpells
-            .OrderBy(x => Random.value)  // Random.value gives a float between 0–1
+            .OrderBy(x => Random.value)  // Random.value gives a float between 0â€“1
             .Take(count)
             .ToList();
     }
 
     private void OnEnable()
     {
+        GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
         ShowCatUi();
         AudioManager.Instance.PlayRandomSoundFX(levelUpSounds, transform.position, 1f, 1f, 1f);
         // Animate panel
@@ -169,43 +175,31 @@ public class LevelUpPanelScript : MonoBehaviour
         LeanTween.value(wholeLevelUpPanel, 0f, 1f, 0.4f)
             .setIgnoreTimeScale(true)
             .setOnUpdate((float val) => cg.alpha = val);
-
-        // Animate refresh button
-        refreshButtonGO.transform.localScale = Vector3.zero;
-        LeanTween.scale(refreshButtonGO, Vector3.one, 0.3f)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
-
-
-        currentRefreshes = 0;
-        GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
-        refreshButtonGO.SetActive(true);
+        if (currentRefreshes < maxRefreshes)
+        {
+            refreshButtonGO.SetActive(true);
+            refreshButtonGO.transform.localScale = Vector3.zero;
+            LeanTween.scale(refreshButtonGO, Vector3.one, 0.3f)
+                .setEaseOutBack()
+                .setIgnoreTimeScale(true);
+        }
         if (HealthCost)
         {
             ShowChoicesWithHealth();
         }
         else
             RefreshChoices(true);
-        /* GlobalVariables.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);*/
-        //Refresh Button
-        LeanTween.scale(refreshButtonGO, Vector3.one, 0.3f)
-            .setEaseInBack()
-            .setIgnoreTimeScale(true)
-            .setOnComplete(() =>
-            {
-                gameObject.SetActive(true);
-            });
     }
 
     public void BuyOption(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript, List<UpgradeChoice> bonusChoices)
     {
-        if (GlobalVariables.Instance.coinsCollected >= upgradeCost)
+        if (CurrencyManager.instance.Gold >= upgradeCost)
         {
             if (buttonGO.TryGetComponent(out Button button))
             {
                 button.interactable = false;
             }
-            GlobalVariables.Instance.coinsCollected -= upgradeCost;
+            CurrencyManager.instance.Add(-upgradeCost);
             TriggerBuff();
             randomChoices.Remove(chosenUpgrade);
             upgradeCost += 10;
@@ -239,7 +233,7 @@ public class LevelUpPanelScript : MonoBehaviour
         {
             button.interactable = false;
         }
-        healthCost = (int)Mathf.Min(healthCost, GlobalVariables.Instance.playerCurrentHealth - 1);
+        healthCost = Mathf.Min(healthCost, PlayerStatsManager.Instance.CurrentHealth - 1);
         healthCost = Mathf.Max(healthCost, 0);
         UpdatePrices(healthCost);
         EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(healthCost);
@@ -249,16 +243,6 @@ public class LevelUpPanelScript : MonoBehaviour
         AnimatedDeletion(buttonGO);
         HeroUpgrades.Instance.UpgradeHero(chosenUpgrade);
         Continue();
-    }
-
-    private void RemoveLock(int unlockCost, int index, Button button, UpgradeChoice upgradeChoice, SetUpgradeScript setUpgradeScript, List<UpgradeChoice> bonusUpgrades)
-    {
-        if (GlobalVariables.Instance.coinsCollected >= unlockCost)
-        {
-            Debug.Log($"Remove Locked Executed!!with index:{index}:buttonGameObjename:{button.gameObject.name}");
-            upgradeScripts[index].RemoveLock(button, index, unlockCost);
-            button.onClick.AddListener(() => BuyOption(upgradeChoice, button.gameObject, setUpgradeScript, bonusUpgrades));
-        }
     }
 
     private void UpdatePrices(int cost = -1)
@@ -283,7 +267,7 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void Continue()
     {
-        AudioManager.Instance.PlayRandomSoundFX(GlobalVariables.Instance.linaAnnouncementsClips, transform.position, 1f, 1f, 1.25f);
+        AudioManager.Instance.PlayRandomSoundFX(GlobalVariables.Instance.linaAnnouncementsClips, transform.position, 1f, 1f, 1f);
         AudioManager.Instance.PlaySoundFX("buttonClickSound", transform.position, 1f, 0.75f, 1.25f);
         wholeLevelUpPanel.SetActive(false);
         GlobalVariables.Instance.UnPauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
@@ -314,20 +298,47 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void RefreshChoicesButton()
     {
+        CinemachineScript.Instance.ShakeUnscaled(0.5f, 0.15f);
+        Debug.Log($"CurrentRefreses{currentRefreshes} and MaxRefreshed:{maxRefreshes}");
         AudioManager.Instance.PlaySoundFX("rerollSound", transform.position, 1f, 0.75f, 1.25f);
         currentRefreshes++;
+        refreshButtonTextValue.text = (maxRefreshes - currentRefreshes).ToString();
+        UpdateRefreshTextColor();
         RefreshChoices(false);
-        if (currentRefreshes >= GlobalVariables.Instance.maxRefreshBuyOptions)
+        if (currentRefreshes >= maxRefreshes)
         {
-            LeanTween.cancel(refreshButtonGO);
+            Debug.Log("Hiding refresh button");
+            refreshButtonGO.GetComponent<BaseButtonScript>().IsClicked = true;
             LeanTween.scale(refreshButtonGO, Vector3.zero, 0.3f)
                 .setEaseInBack()
                 .setIgnoreTimeScale(true)
                 .setOnComplete(() =>
                 {
+                    refreshButtonGO.GetComponent<BaseButtonScript>().IsClicked = false;
                     refreshButtonGO.SetActive(false);
                 });
         }
+    }
+
+    private void UpdateRefreshTextColor()
+    {
+        if (maxRefreshes <= 0)
+            return;
+
+        float t = Mathf.Clamp01((float)currentRefreshes / maxRefreshes);
+        t = Mathf.Pow(t, 0.7f);
+
+        Color color;
+        if (t < 0.5f)
+        {
+            color = Color.Lerp(Color.green, Color.yellow, t * 2f);
+        }
+        else
+        {
+            color = Color.Lerp(Color.yellow, Color.red, (t - 0.5f) * 2f);
+        }
+
+        refreshButtonTextValue.color = color;
     }
 
 
@@ -366,7 +377,7 @@ public class LevelUpPanelScript : MonoBehaviour
         }
     }
 
-    private List<UpgradeChoice> GetBonusBasedOnLuck(HeroUpgrades.UpgradeCategory upgradeCategory)
+    private List<UpgradeChoice> GetBonusBasedOnLuck(PlayerStatCategory upgradeCategory)
     {
         var result = new List<UpgradeChoice>();
 
@@ -380,7 +391,7 @@ public class LevelUpPanelScript : MonoBehaviour
         // Get per-cat chances for extra bonuses
         var (chance1, chance2, chance3) = GetLuckChances(cats);
 
-        // Roll how many extra bonuses we get (0–3)
+        // Roll how many extra bonuses we get (0â€“3)
         int bonusCount = 0;
 
         if (Random.value <= chance1)

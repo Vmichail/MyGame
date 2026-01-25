@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64661b2aa015f5f4a99456d6c80c855a, type: 3}
   m_Name: Shield
   m_EditorClassIdentifier: 
-  cooldownTime: 5
-  manaCost: 1
+  cooldownTime: 10
+  startingManaCost: 10
   castSound: orbidBladeCastSound
-  IsOnCooldown: 1
-  IsActive: 0
   SpellCode: 2

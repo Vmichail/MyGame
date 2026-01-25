@@ -5,7 +5,7 @@ public class HealthPotionScript : CollectableBaseScript, ICollectable
 {
     public override void Collect()
     {
-        if (GlobalVariables.Instance.playerCurrentHealth < GlobalVariables.Instance.playerMaxHealth)
+        if (!PlayerStatsManager.Instance.IsFullHealth())
         {
             base.Collect();
         }
@@ -15,7 +15,7 @@ public class HealthPotionScript : CollectableBaseScript, ICollectable
     {
         AudioManager.Instance.PlaySoundFX("bottle", transform.position, 1f, 0.75f, 1.25f);
         PlayerHealthAndManaRegen.ApplyHeal(
-            GlobalVariables.Instance.healthPotionHealth,
+            (int)GlobalVariables.Instance.healthPotionHealth,
             HealEffectSelector.PlayerHealEffectType.HealthPotion
         );
         gameObject.SetActive(false);

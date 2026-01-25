@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icons8-economy-100_0: 3178367621907188790
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
