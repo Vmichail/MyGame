@@ -48,9 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonBossPrefab: {fileID: 1028595446057467532, guid: 23caf9494bd882c4c8fa99cd4df5e47c, type: 3}
-  minRespawnIfDead: 50
-  maxRespawnIfDead: 60
-  respawnIfNotDead: 60
+  minRespawnIfDead: 30
+  maxRespawnIfDead: 40
+  respawnIfNotDead: 40
   isDead: 0
 --- !u!212 &7179388046123898689
 SpriteRenderer:
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2406094694242329964, guid: 4cf490621afff6c4d912b2a651a077df, type: 3}

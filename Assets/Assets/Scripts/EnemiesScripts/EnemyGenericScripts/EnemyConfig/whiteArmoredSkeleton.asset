@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 2
   baseStats:
-    maxHealth: 35
-    currentHealth: 35
+    maxHealth: 45
+    currentHealth: 45
     damage: 4
     speed: 5
     attackCooldown: 0.3

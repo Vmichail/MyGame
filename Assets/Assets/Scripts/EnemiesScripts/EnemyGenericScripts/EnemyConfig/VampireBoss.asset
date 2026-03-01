@@ -17,17 +17,17 @@ MonoBehaviour:
     maxHealth: 60
     currentHealth: 60
     damage: 7
-    speed: 8
-    attackCooldown: 0.1
+    speed: 7
+    attackCooldown: 1
     canBeKnockedBack: 1
     knockbackResistance: 5
-    attackRange: 18
-    projectileSpeed: 20
+    attackRange: 20
+    projectileSpeed: 8
     coinDropChance: 0
     healthPotionChance: 0.4
     manaPotionChance: 0.4
     greenRubyChance: 0
-    redRubyChance: 1
+    redRubyChance: 0
     coinDropEnum: 1
     minExp: 1
     maxExp: 3

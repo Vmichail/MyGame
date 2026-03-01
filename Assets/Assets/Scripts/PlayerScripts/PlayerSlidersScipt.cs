@@ -47,26 +47,6 @@ public class PlayerSlidersScipt : MonoBehaviour
         expSlider.maxValue = stats.MaxExp;
         expSlider.value = stats.CurrentExp;
         expFillImage.color = expColor;
-        if (PlayerStatsManager.Instance.CurrentExp >= PlayerStatsManager.Instance.MaxExp && !levelUpPanel.activeSelf)
-        {
-            PlayerStatsManager.Instance.CurrentExp -= PlayerStatsManager.Instance.MaxExp;
-            if (PlayerStatsManager.Instance.MaxExp >= 100)
-            {
-                PlayerStatsManager.Instance.MaxExp = 100;
-            }
-            else
-            {
-                PlayerStatsManager.Instance.MaxExp += 10;
-            }
-            PlayerStatsManager.Instance.CurrentLevel++;
-            levelUpPanel.SetActive(true);
-            stats.IncreaseMaxHealthFromLevels(1);
-            if (PlayerStatsManager.Instance.CurrentLevel % 4 == 0)
-            {
-                stats.RuntimeStats.AddLevelValue(PlayerStatType.Attack_Attack, 1);
-            }
-        }
-
         //Mana
         float maxMana = stats.RuntimeStats.Get(PlayerStatType.Defence_Mana);
         float manaPercent = stats.CurrentMana / maxMana;
@@ -80,6 +60,23 @@ public class PlayerSlidersScipt : MonoBehaviour
         manaSlider.value = stats.CurrentMana;
         manaFillImage.color = manaColor;
 
-
+        if (PlayerStatsManager.Instance.CurrentExp >= PlayerStatsManager.Instance.MaxExp && !levelUpPanel.activeSelf)
+        {
+            PlayerStatsManager.Instance.CurrentExp -= PlayerStatsManager.Instance.MaxExp;
+            if (PlayerStatsManager.Instance.MaxExp >= 100 && stats.CurrentLevel < 20)
+            {
+                PlayerStatsManager.Instance.MaxExp = 100;
+            }
+            else
+            {
+                PlayerStatsManager.Instance.MaxExp += 10;
+            }
+            PlayerStatsManager.Instance.CurrentLevel++;
+            if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.MiranaSprite.ToString()))
+                MiranaSpecificScript.Instance.LevelUpCheck(PlayerStatsManager.Instance.CurrentLevel);
+            if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.LinaSprite.ToString()))
+                LinaSpecificScript.Instance.LevelUpCheck(PlayerStatsManager.Instance.CurrentLevel);
+            levelUpPanel.SetActive(true);
+        }
     }
 }

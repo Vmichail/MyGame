@@ -6,21 +6,37 @@ public class EnemyHealthUpdate : MonoBehaviour
 {
     private TextMeshPro healthText;
     private EnemyBaseScript enemyBaseScript;
-    [SerializeField] private bool canShowHealth = true;
+    [SerializeField] private bool isBoss;
 
-    void Start()
+    private void Awake()
     {
-        if (!canShowHealth)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-        enemyBaseScript = GetComponentInParent<EnemyBaseScript>();
         healthText = GetComponent<TextMeshPro>();
+        enemyBaseScript = GetComponentInParent<EnemyBaseScript>();
     }
 
+    private void OnEnable()
+    {
+        GlobalVariables.Instance.OnShowAllEnemiesHealthChanged += OnHealthVisibilityChanged;
+        OnHealthVisibilityChanged(GlobalVariables.Instance.showAllEnemiesHealth);
+    }
 
-    void Update()
+    private void OnDisable()
+    {
+        GlobalVariables.Instance.OnShowAllEnemiesHealthChanged -= OnHealthVisibilityChanged;
+    }
+
+    private void OnHealthVisibilityChanged(bool show)
+    {
+        if (isBoss)
+        {
+            healthText.enabled = true;
+            return;
+        }
+
+        healthText.enabled = show;
+    }
+
+    private void Update()
     {
         int roundedHealth = Mathf.RoundToInt(enemyBaseScript.CurrentHealth);
         healthText.SetText(roundedHealth.ToString());

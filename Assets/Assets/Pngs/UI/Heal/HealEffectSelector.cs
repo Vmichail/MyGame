@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class HealEffectSelector : MonoBehaviour
 {
@@ -31,6 +32,18 @@ public class HealEffectSelector : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.LinaSprite.ToString()))
+        {
+            transform.localPosition = new Vector2(-0.18f, -0.09f);
+        }
+        else if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.MiranaSprite.ToString()))
+        {
+            transform.localPosition = new Vector2(0.031f, -0.12f);
+        }
     }
 
     public static void SelectHealEffect(PlayerHealEffectType effectType)

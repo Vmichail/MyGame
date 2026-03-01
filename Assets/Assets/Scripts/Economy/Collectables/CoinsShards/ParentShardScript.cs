@@ -44,22 +44,38 @@ public class ParentShardScript : MonoBehaviour
         int effectiveMax = Mathf.Clamp(MaxShardsToSpawn, 1, maxShards);
 
         if (MinShardsToSpawn >= effectiveMax)
-        {
             MinShardsToSpawn = Mathf.Clamp(effectiveMax - 1, 0, effectiveMax);
-        }
 
-        int randomNumber = Random.Range(MinShardsToSpawn, effectiveMax + 1);
+        int shardCount = Random.Range(MinShardsToSpawn, effectiveMax + 1);
 
+        // Disable all shards first
         for (int i = 0; i < maxShards; i++)
             transform.GetChild(i).gameObject.SetActive(false);
 
-        /*Debug.Log($"Spawning {randomNumber} shards out of {maxShards} available.");*/
+        // Layout settings
+        float radius = 0.55f;   // distance from center
+        float jitter = 0.12f;   // small randomness
 
-        for (int i = 0; i < randomNumber; i++)
+        for (int i = 0; i < shardCount; i++)
         {
-            var child = transform.GetChild(i).gameObject;
-            child.SetActive(true);
-            child.transform.localPosition = Random.insideUnitCircle * 0.9f;
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(true);
+
+            // Even angular distribution
+            float angle = (360f / shardCount) * i;
+            float rad = angle * Mathf.Deg2Rad;
+
+            Vector2 basePos = new Vector2(
+                Mathf.Cos(rad),
+                Mathf.Sin(rad)
+            ) * radius;
+
+            Vector2 offset = Random.insideUnitCircle * jitter;
+
+            child.localPosition = basePos + offset;
+
+            // Optional: tiny Z offset to avoid sprite overlap flicker
+            child.localPosition += new Vector3(0f, 0f, -i * 0.001f);
         }
     }
 

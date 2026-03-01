@@ -39,7 +39,6 @@ public class AuthManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()

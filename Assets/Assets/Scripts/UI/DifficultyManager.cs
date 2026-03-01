@@ -45,7 +45,6 @@ public class DifficultyManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()

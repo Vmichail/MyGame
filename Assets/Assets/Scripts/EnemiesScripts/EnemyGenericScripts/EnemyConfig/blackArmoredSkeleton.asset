@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   baseStats:
-    maxHealth: 10
-    currentHealth: 10
+    maxHealth: 20
+    currentHealth: 20
     damage: 3
-    speed: 3
-    attackCooldown: 0.3
+    speed: 6
+    attackCooldown: 0.2
     canBeKnockedBack: 1
     knockbackResistance: 0
     attackRange: 0

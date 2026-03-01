@@ -14,9 +14,4 @@ public class PlayerAnimatorScript : MonoBehaviour
         playerScript.CastFirstSpell();
     }
 
-
-    public void CallRotatePlayer()
-    {
-        return;
-    }
 }

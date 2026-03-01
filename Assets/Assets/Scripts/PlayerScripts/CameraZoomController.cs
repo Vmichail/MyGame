@@ -10,7 +10,7 @@ public class CameraZoomController : MonoBehaviour
 
     private void Update()
     {
-        if (virtualCamera == null || Time.timeScale == 0) return;
+        if (virtualCamera == null || Time.timeScale == 0 || !GlobalVariables.Instance.canZoomMap) return;
 
         float currentSize = virtualCamera.Lens.OrthographicSize;
 

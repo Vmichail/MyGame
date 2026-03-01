@@ -11,7 +11,6 @@ public class CurrencyManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
             if (GlobalVariables.Instance.testMode)
             {
                 Gold = 100000;

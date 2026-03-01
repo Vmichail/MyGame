@@ -114,7 +114,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
             {
                 Debug.LogWarning("Particles prefab not assigned!");
             }
-            if (Bounces > 0 && currentBounces < Bounces)
+            if (Bounces > 0 && currentBounces < Bounces && !orbit)
                 Bounce(collision.gameObject);
             else if (currentPiercing < Piercing)
             {

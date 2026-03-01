@@ -38,5 +38,4 @@ public class MusicPanelScript : MonoBehaviour
     {
         GlobalVariables.Instance.SFXVolume = sfxSlider.value;
     }
-
 }

@@ -92,10 +92,7 @@ public class PlayerStatsManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
         Initialize();
         upgradeDatabase.Initialize();
     }
@@ -214,6 +211,12 @@ public class PlayerStatsManager : MonoBehaviour
     public void IncreaseMaxHealthFromLevels(int amount)
     {
         RuntimeStats.AddLevelValue(PlayerStatType.Defence_Health, amount);
+        CurrentHealth += amount;
+    }
+
+    public void IncreaseMaxManaFromLevels(int amount)
+    {
+        RuntimeStats.AddLevelValue(PlayerStatType.Defence_Mana, amount);
         CurrentHealth += amount;
     }
 

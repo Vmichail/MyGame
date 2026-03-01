@@ -71,9 +71,9 @@ public class LevelUpPanelScript : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-
+        int optionCount = Mathf.Min(numberOfOptions, randomChoices.Count);
         randomChoices = GetRandomChoices(numberOfOptions);
-        foreach (int i in Enumerable.Range(0, numberOfOptions))
+        for (int i = 0; i < optionCount; i++)
         {
             UpgradeChoice randomFirstUpgrade = randomChoices[i];
             bool isLocked = false;

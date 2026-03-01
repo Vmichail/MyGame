@@ -28,13 +28,14 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.29580182, y: 0.016734665, z: -0.053947635, w: 0.953578}
   m_LocalPosition: {x: -10.4382, y: 0.05, z: -0.0000000064176664}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.92045}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 34.468, y: 0, z: -6.476}
 --- !u!212 &6528281637009105742
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -53,6 +54,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -74,19 +77,20 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8057703184593243895, guid: acb57d2ef273d8a4eadaf32971a6f858, type: 3}
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 21300000, guid: acb57d2ef273d8a4eadaf32971a6f858, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.56, y: 2.56}
+  m_Size: {x: 6.4, y: 6.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &646896901595564148
 MonoBehaviour:
@@ -100,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea23da2bf2aa004f92467bf2620cf0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetScale: {x: 0.2, y: 0.2, z: 1}
-  scaleTime: 0.3
-  leanTweenType: 4
+  targetScale: {x: 0.4, y: 0.4, z: 1}
+  startingScale: {x: 0.15, y: 0.15, z: 1}
+  scaleTime: 0.4
   loopCount: 2

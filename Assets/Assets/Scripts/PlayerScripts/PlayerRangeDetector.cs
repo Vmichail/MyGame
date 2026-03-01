@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerRangeDetector : MonoBehaviour
 {
+    [SerializeField] SpriteRenderer rangeCircleSr;
     private List<GameObject> enemiesInRange = new List<GameObject>();
 
     public GameObject ClosestEnemy { get; private set; }
@@ -29,6 +30,23 @@ public class PlayerRangeDetector : MonoBehaviour
     void Update()
     {
         UpdateClosestEnemies();
+    }
+
+    private void OnEnable()
+    {
+        if (gameObject.TryGetComponent(out SpriteRenderer sr) && GlobalVariables.Instance.mainMenuScene && rangeCircleSr != null)
+        {
+            rangeCircleSr.color = new Color(rangeCircleSr.color.r, rangeCircleSr.color.g, rangeCircleSr.color.b, 0f);
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        }
+        if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.LinaSprite.ToString()))
+        {
+            transform.localPosition = new Vector2(-0.22f, -0.29f);
+        }
+        else if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.MiranaSprite.ToString()))
+        {
+            transform.localPosition = new Vector2(0.03f, -0.24f);
+        }
     }
 
     void UpdateClosestEnemies()

@@ -8,8 +8,7 @@ public class UIGenericFunctions : MonoBehaviour
     [Header("Game Menus")]
     [SerializeField] private GameObject wholeGameMenuPanels;
     [SerializeField] private GameObject pauseOrGameOverPanel;
-    [SerializeField] private GameObject musicPanel;
-    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject settingsOptionsPanel;
     [SerializeField] private GameObject difficultyPanel;
     [SerializeField] private GameObject statsPanel;
 
@@ -44,6 +43,13 @@ public class UIGenericFunctions : MonoBehaviour
     {
         if (PlayerStatsManager.Instance.CurrentHealth < 1 && GlobalVariables.Instance.playerIsAlive)
         {
+            FirebaseScoreWriter.WriteUserScore(
+                "SkeletonMap",
+                DifficultyManager.Instance.CurrentDifficulty.ToString(),
+                GlobalVariables.Instance.score,
+                GlobalVariables.Instance.selectedCharacter,
+                (int)GlobalVariables.Instance.gameTime
+            );
             Debug.Log("Player is Dead - Triggering Game Over with sounds");
             GlobalVariables.Instance.playerIsAlive = false;
             AudioManager.Instance.PlayRandomSoundFX(GlobalVariables.Instance.gameOverClips, transform.position, 1f, 1f, 1.25f);
@@ -71,7 +77,7 @@ public class UIGenericFunctions : MonoBehaviour
 
     private void TogglePause()
     {
-        if (GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeInHierarchy && !musicPanel.activeInHierarchy && !GlobalVariables.Instance.gameIsPaused)
+        if (GlobalVariables.Instance.playerIsAlive && !pauseOrGameOverPanel.activeSelf && !settingsOptionsPanel.activeSelf && !GlobalVariables.Instance.gameIsPaused)
         {
             GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.GameMenu);
             ShowPauseMenu();
@@ -126,8 +132,7 @@ public class UIGenericFunctions : MonoBehaviour
     {
         // Turn off all menus first
         pauseOrGameOverPanel.SetActive(false);
-        musicPanel.SetActive(false);
-        settingsPanel.SetActive(false);
+        settingsOptionsPanel.SetActive(false);
         difficultyPanel.SetActive(false);
         statsPanel.SetActive(false);
         bool show = menuType != GameMenuType.None;
@@ -137,11 +142,8 @@ public class UIGenericFunctions : MonoBehaviour
             case GameMenuType.PauseOrGameOver:
                 pauseOrGameOverPanel.SetActive(true);
                 break;
-            case GameMenuType.Music:
-                musicPanel.SetActive(true);
-                break;
             case GameMenuType.Settings:
-                settingsPanel.SetActive(true);
+                settingsOptionsPanel.SetActive(true);
                 break;
             case GameMenuType.Difficulty:
                 difficultyPanel.SetActive(true);
@@ -196,5 +198,4 @@ public class UIGenericFunctions : MonoBehaviour
             isCentered = false;
         }
     }
-
 }

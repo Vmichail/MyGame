@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.UIElements;
 using static GlobalVariables;
+using static UnityEngine.EventSystems.EventTrigger;
 using Random = UnityEngine.Random;
 
 [Serializable]
 public class EnemySpawnConfig
 {
-    public GlobalVariables.EnemyTypes enemyType;
+    public EnemyTypes enemyType;
     public GameObject prefab;
 }
 
@@ -29,7 +29,6 @@ public class EnemySpawningScript : MonoBehaviour
     [SerializeField] private float vampireNormalSpawningTime;
     [SerializeField] private float vampireBossSpawningTimeEndlessMode;
     [Header("Other boss Timers")]
-
     [SerializeField] private float vampireMiniBossSpawningTime;
     [SerializeField] private float skeletonKingBossSpawningTime;
     [SerializeField] private float thirdBossSpawningTime;
@@ -46,13 +45,19 @@ public class EnemySpawningScript : MonoBehaviour
     [SerializeField] private Transform[] specificEnemyPosition;
     [SerializeField] private Light2D globalLight;
 
-    private Dictionary<GlobalVariables.EnemyTypes, ObjectPool<GameObject>> enemyPools = new();
+    private Dictionary<EnemyTypes, ObjectPool<GameObject>> enemyPools = new();
     [Header("Collectable Pets")]
     [SerializeField] private Transform collectableParent;
     [SerializeField] private GameObject collectableCat;
     [SerializeField] private Transform[] collectableCatSpawnPotitions;
     [SerializeField] private float collectableSpawnDelay = 20f;
+    [SerializeField] private bool canSpawnSkeletons = true;
     [SerializeField] private bool changeVampireMiniBossMusic = true;
+    [SerializeField] private bool canSpawnSkeletonArchers = true;
+    [SerializeField] private bool canSpawnBlackArmoredSkeletons = true;
+    [SerializeField] private bool canSpawnWhiteArmoredSkeletons = true;
+    [SerializeField] private bool canSpawnVampires = true;
+    private bool skeletonsEnabled;
     private bool skeletonArchersEnabled;
     private bool blackArmoredSkeletonEnabled;
     private bool whiteArmoredSkeletonEnabled;
@@ -68,7 +73,7 @@ public class EnemySpawningScript : MonoBehaviour
     {
         foreach (var config in enemySpawnConfigs)
         {
-            GlobalVariables.EnemyTypes type = config.enemyType;
+            EnemyTypes type = config.enemyType;
             GameObject prefab = config.prefab;
 
             var pool = new ObjectPool<GameObject>(
@@ -83,7 +88,6 @@ public class EnemySpawningScript : MonoBehaviour
 
             enemyPools[type] = pool;
         }
-        StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.Level1Skeleton));
 
         // Start async spawning loop for collectable cats
         SpawnCollectableCatsLoop().Forget();
@@ -130,7 +134,7 @@ public class EnemySpawningScript : MonoBehaviour
         changeVampireMiniBossMusic = false;
         globalLight.intensity = 0.8f;
         globalLight.color = new Color(1f, 0.9f, 0.9f);
-        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[GlobalVariables.EnemyTypes.VampireBoss], new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f)), true));
+        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[EnemyTypes.VampireBoss], new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f)), true));
     }
 
 
@@ -141,7 +145,7 @@ public class EnemySpawningScript : MonoBehaviour
         changeVampireMiniBossMusic = false;
         globalLight.intensity = 0.7f;
         globalLight.color = new Color(0.9f, 0.75f, 0.65f);
-        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[GlobalVariables.EnemyTypes.SkeletonKing], new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), true));
+        StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[EnemyTypes.SkeletonKing], new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), true));
     }
 
     private void SpawnSpecificEnemyWithEffect(ObjectPool<GameObject> pool, Vector2 position)
@@ -151,48 +155,55 @@ public class EnemySpawningScript : MonoBehaviour
         StartCoroutine(SpawnIndicatorThenEnemy(pool, position, false));
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        //Skeleton Archer spawn
-        if (GlobalVariables.Instance.spawnedSkeletons > 45 && blackArmoredSkeletonEnabled == false)
+        if (canSpawnSkeletons && skeletonsEnabled == false)
         {
-            blackArmoredSkeletonEnabled = true;
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.BlackArmoredSkeleton));
+            skeletonsEnabled = true;
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.Level1Skeleton));
         }
 
-        if (GlobalVariables.Instance.spawnedSkeletons > 35 && whiteArmoredSkeletonEnabled == false)
-        {
-            whiteArmoredSkeletonEnabled = true;
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.WhiteArmoredSkeleton));
-        }
-
-        if (GlobalVariables.Instance.spawnedSkeletons > 25 && skeletonArchersEnabled == false)
+        if (canSpawnSkeletonArchers && Instance.gameTime > 15 && skeletonArchersEnabled == false)
         {
             skeletonArchersEnabled = true;
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.SkeletonArcher));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.SkeletonArcher));
         }
 
-        if (GlobalVariables.Instance.spawnedSkeletons > 100 && vampiresEnabled == false)
+        if (canSpawnBlackArmoredSkeletons && Instance.gameTime > 35 && blackArmoredSkeletonEnabled == false)
+        {
+            blackArmoredSkeletonEnabled = true;
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.BlackArmoredSkeleton));
+        }
+
+        if (canSpawnWhiteArmoredSkeletons && Instance.gameTime > whiteArmoredSkeletonSpawningTime && whiteArmoredSkeletonEnabled == false)
+        {
+            whiteArmoredSkeletonEnabled = true;
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.WhiteArmoredSkeleton));
+        }
+
+
+
+        if (canSpawnVampires && Instance.gameTime > 120 && vampiresEnabled == false)
         {
             vampiresEnabled = true;
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.VampireNormal));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.VampireNormal));
         }
 
-        if (GlobalVariables.Instance.gameTime >= vampireMiniBossSpawningTime && !firstBossSpawned)
+        if (Instance.gameTime >= vampireMiniBossSpawningTime && !firstBossSpawned)
         {
             firstBossSpawned = true;
             SpawnVampireMiniBoss();
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.Level1Skeleton));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.Level1Skeleton));
         }
 
-        if (GlobalVariables.Instance.gameTime >= skeletonKingBossSpawningTime && !secondBossSpawned)
+        if (Instance.gameTime >= skeletonKingBossSpawningTime && !secondBossSpawned)
         {
             secondBossSpawned = true;
             SpawnSkeletonKingBoss();
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.Level1Skeleton));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.Level1Skeleton));
         }
 
-        if (GlobalVariables.Instance.gameTime >= thirdBossSpawningTime && !thirdBossSpawned)
+        if (Instance.gameTime >= thirdBossSpawningTime && !thirdBossSpawned)
         {
             thirdBossSpawned = true;
             SpawnVampireMiniBoss();
@@ -200,27 +211,27 @@ public class EnemySpawningScript : MonoBehaviour
 
         }
 
-        if (GlobalVariables.Instance.gameTime >= loopBossSpawningTime)
+        if (Instance.gameTime >= loopBossSpawningTime)
         {
-            GlobalVariables.Instance.endlessModeOn = true;
+            Instance.endlessModeOn = true;
             loopBossSpawningTime += loopBossSpawningTimeIncrease;
             loopBossSpawningTimeIncrease -= loopBossSpawningTimeIncreaseDeacreaseTime;
             SpawnVampireMiniBoss();
             SpawnSkeletonKingBoss();
             //
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.WhiteArmoredSkeleton));
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.SkeletonArcher));
-            StartCoroutine(SpawnSpecificMobs(GlobalVariables.EnemyTypes.BlackArmoredSkeleton));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.WhiteArmoredSkeleton));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.SkeletonArcher));
+            StartCoroutine(SpawnSpecificMobs(EnemyTypes.BlackArmoredSkeleton));
         }
 
-        if (GlobalVariables.Instance.endlessModeOn && !vampireMiniBossActivated)
+        if (Instance.endlessModeOn && !vampireMiniBossActivated)
         {
             vampireMiniBossActivated = true;
             StartCoroutine(SpawnSpecificMobs(EnemyTypes.VampireBoss));
         }
     }
 
-    private GameObject CreateEnemy(GameObject prefab, GlobalVariables.EnemyTypes type)
+    private GameObject CreateEnemy(GameObject prefab, EnemyTypes type)
     {
         GameObject mob = Instantiate(prefab, parent);
         mob.SetActive(false);
@@ -229,24 +240,35 @@ public class EnemySpawningScript : MonoBehaviour
         {
             enemyBase.SetPool(enemyPools[type]);
         }
+        else
+        {
+            Debug.LogWarning("No enemyBaseScript was found!");
+        }
 
         return mob;
     }
 
     private void OnGet(GameObject mob)
     {
+
+
         if (mob.TryGetComponent<EnemyBaseScript>(out var enemyBase))
         {
             EnemyManagerScript.Instance.RegisterEnemy(mob, enemyBase.EnemyType);
+            if (enemyBase.isGeneratedByPool && enemyBase._pool == null)
+            {
+                Debug.LogError($"{mob.name} pulled from pool but has no pool reference!");
+            }
+
         }
         mob.SetActive(true);
     }
 
     //private IEnumerator SpawnRandomMobs()
     //{
-    //    while (GlobalVariables.Instance.spawningMobsIsEnabled)
+    //    while (Instance.spawningMobsIsEnabled)
     //    {
-    //        yield return new WaitForSeconds(GlobalVariables.Instance.mobsSpawningTime);
+    //        yield return new WaitForSeconds(Instance.mobsSpawningTime);
     //        // Choose pool index
     //        int index = Random.Range(0, allowedLength > 0 ? allowedLength : enemyPools.Count);
     //        Vector2 position = new(Random.Range(-20f, 20f), Random.Range(-17f, 17f));
@@ -254,12 +276,12 @@ public class EnemySpawningScript : MonoBehaviour
     //    }
     //}
 
-    private IEnumerator SpawnSpecificMobs(GlobalVariables.EnemyTypes enemyType, float maxWidth = 20f, float minWidth = -20f, float maxHeight = 17f, float minHeight = -17f)
+    private IEnumerator SpawnSpecificMobs(EnemyTypes enemyType, float maxWidth = 20f, float minWidth = -20f, float maxHeight = 17f, float minHeight = -17f)
     {
         Vector2 position = new(Random.Range(minWidth, maxWidth), Random.Range(minHeight, maxHeight));
         StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[enemyType], position, false));
         float spawningTime = GetSpawnTime(enemyType);
-        while (GlobalVariables.Instance.spawningMobsIsEnabled && GlobalVariables.Instance.aliveEnemies < 150)
+        while (Instance.spawningMobsIsEnabled && Instance.aliveEnemies < 150)
         {
             position = new(Random.Range(minWidth, maxWidth), Random.Range(minHeight, maxHeight));
             yield return new WaitForSeconds(spawningTime);
@@ -267,16 +289,16 @@ public class EnemySpawningScript : MonoBehaviour
         }
     }
 
-    private float GetSpawnTime(GlobalVariables.EnemyTypes enemyType)
+    private float GetSpawnTime(EnemyTypes enemyType)
     {
         return enemyType switch
         {
-            GlobalVariables.EnemyTypes.Level1Skeleton => skeletonsSpawningTime,
-            GlobalVariables.EnemyTypes.BlackArmoredSkeleton => blackArmoredSkeletonSpawningTime,
-            GlobalVariables.EnemyTypes.WhiteArmoredSkeleton => whiteArmoredSkeletonSpawningTime,
-            GlobalVariables.EnemyTypes.SkeletonArcher => skeletonArchersSpawningTime,
-            GlobalVariables.EnemyTypes.VampireNormal => vampireNormalSpawningTime,
-            GlobalVariables.EnemyTypes.VampireBoss => vampireBossSpawningTimeEndlessMode,
+            EnemyTypes.Level1Skeleton => skeletonsSpawningTime,
+            EnemyTypes.BlackArmoredSkeleton => blackArmoredSkeletonSpawningTime,
+            EnemyTypes.WhiteArmoredSkeleton => whiteArmoredSkeletonSpawningTime,
+            EnemyTypes.SkeletonArcher => skeletonArchersSpawningTime,
+            EnemyTypes.VampireNormal => vampireNormalSpawningTime,
+            EnemyTypes.VampireBoss => vampireBossSpawningTimeEndlessMode,
             _ => spawnTimeDefault
         };
     }
@@ -305,12 +327,13 @@ public class EnemySpawningScript : MonoBehaviour
         // Cancel automatically if GameObject destroyed
         var token = this.GetCancellationTokenOnDestroy();
 
-        if (GlobalVariables.Instance.isSpawningCollectablePets)
+        if (Instance.isSpawningCollectablePets && Instance.spawnedPets < 5)
         {
             SpawnCollectableCat();
+            Instance.spawnedPets++;
         }
 
-        while (GlobalVariables.Instance.isSpawningCollectablePets && !token.IsCancellationRequested)
+        while (Instance.isSpawningCollectablePets && !token.IsCancellationRequested)
         {
             await UniTask.Delay(
                 (int)(collectableSpawnDelay * 1000),

@@ -89,19 +89,26 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
         transform.DOKill();
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!other.CompareTag("Collectable"))
-            return;
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (!other.CompareTag("Collectable"))
+    //        return;
 
-        Vector2 direction = (Vector2)(transform.position - other.transform.position);
-        direction = direction == Vector2.zero
-            ? Random.insideUnitCircle.normalized
-            : direction.normalized;
+    //    Vector2 direction = (Vector2)(transform.position - other.transform.position);
+    //    direction = direction == Vector2.zero
+    //        ? Random.insideUnitCircle.normalized
+    //        : direction.normalized;
 
-        float pushStrength = 0.2f;
-        transform.position += (Vector3)(direction * pushStrength);
-    }
+    //    float pushStrength = 0.2f;
+    //    transform.position += (Vector3)(direction * pushStrength);
+    //}
 
     protected abstract void CollectEnds();
+
+    private void OnDestroy()
+    {
+        // DOTween safety: always kill
+        idleTween?.Kill();
+        transform.DOKill();
+    }
 }

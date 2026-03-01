@@ -59,6 +59,7 @@ public class HeroUpgrades : MonoBehaviour
 
             case PlayerStatType.Defence_MovementSpeed:
                 {
+                    Debug.Log($"Applying flat upgrade: {upgradeCode} with value: {upgradeValue}");
                     PlayerStatsManager.Instance.RuntimeStats.AddFlat(upgradeCode, upgradeValue);
                     UpdatePlayerSpeed(upgradeValue);
                     break;

@@ -34,8 +34,6 @@ public abstract class BasePool<T> : MonoBehaviour where T : BasePool<T>
             collectionCheck: false,
             defaultCapacity: 20
         );
-
-        DontDestroyOnLoad(gameObject);
     }
 
     // Generic get method

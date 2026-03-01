@@ -62,11 +62,13 @@ public class BaseButtonScript : MonoBehaviour,
     {
         if (!enableSelectedEffect) return;
         HighlightButton();
+        CursorManagerScript.SetPointer();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!IsClicked) ResetScale();
+        CursorManagerScript.SetDefault();
     }
 
     // ===== KEYBOARD / GAMEPAD SELECT =====
@@ -98,7 +100,7 @@ public class BaseButtonScript : MonoBehaviour,
             .setIgnoreTimeScale(true);
     }
 
-    private void ResetScale()
+    public virtual void ResetScale()
     {
         LeanTween.cancel(highlightTarget.gameObject);
         highlightTarget.localScale = originalScale;

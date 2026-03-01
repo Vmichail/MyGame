@@ -2,10 +2,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.TextCore.Text;
+
+public enum CharacterSprite
+{
+    LinaSprite,
+    MiranaSprite
+}
 
 [Serializable]
 public class SpellDataFull
@@ -20,9 +28,20 @@ public class SpellDataFull
     public bool IsActive;
 }
 
+[Serializable]
+public class CharacterEntry
+{
+    public CharacterSprite characterName;
+    public GameObject characterRoot;
+    public MainHeroConfig mainHeroConfig;
+}
+
 public class PlayerScript : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
     private Animator animator;
+    [SerializeField] private GameObject SpritesGO;
+    [SerializeField] private CharacterEntry[] heroesConfig;
 
     [Header("--!!Mana Spell Variables!!--")]
     [SerializeField] private Light2D manaSpellTarget;
@@ -33,6 +52,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] private PlayerRangeDetector rangeDetector;
     [Header("--!!Attack Spells!!--")]
+    [SerializeField] private bool canAttack = true;
     [SerializeField] private GameObject firstSpell;
     [SerializeField] private GameObject secondSpell;
     [SerializeField] private GameObject thirdSpell;
@@ -43,6 +63,7 @@ public class PlayerScript : MonoBehaviour
     private GameObject secondClosestEnemy;
     private GameObject thirdClosestEnemy;
     private GameObject forthClosestEnemy;
+
     private Transform spriteTransform;
     [Header("--!!Move Functionallity!!--")]
     public bool playerCanMove = true;
@@ -59,19 +80,11 @@ public class PlayerScript : MonoBehaviour
 
     private void Start()
     {
-        InitializePlayer();
-
-
-        rb = GetComponent<Rigidbody2D>();
-        target.transform.SetParent(null);
-
-        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        animator = GetComponentInChildren<Animator>();
-        if (spriteRenderer != null)
-            spriteTransform = spriteRenderer.transform;
-        else
-            Debug.LogWarning("No Sprite was found!");
-
+        if (GlobalVariables.Instance != null && !GlobalVariables.Instance.mainMenuScene)
+        {
+            InitializePlayer();
+        }
+        SetupCharacter();
     }
 
     void Update()
@@ -95,15 +108,6 @@ public class PlayerScript : MonoBehaviour
             CastManaSpell(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            PlayerStatsManager.Instance.CurrentExp += 100;
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            CurrencyManager.instance.Add(1000);
-        }
-
         if (playerCanMove)
         {
             movementInput.x = Input.GetAxisRaw("Horizontal");
@@ -118,14 +122,14 @@ public class PlayerScript : MonoBehaviour
         else
             animator.SetBool("Moving", false);
 
-        if (rangeDetector.ClosestEnemy != null)
+        if (rangeDetector.ClosestEnemy != null && canAttack)
         {
             closestEnemy = rangeDetector.ClosestEnemy;
             secondClosestEnemy = rangeDetector.SecondClosestEnemy;
             thirdClosestEnemy = rangeDetector.ThirdClosestEnemy;
             forthClosestEnemy = rangeDetector.FourthClosestEnemy;
             animator.ResetTrigger("Idle");
-            animator.SetTrigger("Attack");
+            SetTriggetAttack();
 
         }
         else if (movementInput == Vector2.zero)
@@ -187,6 +191,12 @@ public class PlayerScript : MonoBehaviour
                 Quaternion.Euler(0, 0, 0));
         }
 
+    }
+
+    private void SetTriggetAttack()
+    {
+        if (canAttack)
+            animator.SetTrigger("Attack");
     }
 
     public void CastFirstSpell()
@@ -456,6 +466,43 @@ public class PlayerScript : MonoBehaviour
                 Debug.LogWarning($"Spell prefab {manaSpells[i].UICooldownGO.name} is missing UICooldownScript!");
             }
         }
+    }
+
+    private void SetupCharacter()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        if (GlobalVariables.Instance.mainMenuScene)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        target.transform.SetParent(null);
+        string selected = GlobalVariables.Instance.selectedCharacter;
+
+        foreach (CharacterEntry entry in heroesConfig)
+        {
+            bool isSelected = entry.characterName.ToString() == selected;
+
+            entry.characterRoot.SetActive(isSelected);
+
+            if (!isSelected)
+                continue;
+
+            spriteRenderer = entry.characterRoot.GetComponentInChildren<SpriteRenderer>(true);
+            animator = entry.characterRoot.GetComponentInChildren<Animator>(true);
+
+            rotatationFlatFix = entry.mainHeroConfig.rotationFlatFix;
+            canAttack = entry.mainHeroConfig.canAttack;
+        }
+
+        if (animator == null)
+        {
+            Debug.LogError("Selected character missing Animator");
+        }
+
+        if (spriteRenderer != null)
+            spriteTransform = spriteRenderer.transform;
+        else
+            Debug.LogWarning("No Sprite was found!");
     }
 
 }

@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 
 public class GlobalVariables : MonoBehaviour
 {
+    private const string SHOW_ENEMY_HEALTH_KEY = "ShowAllEnemiesHealth";
+    private const string DEV_MODE_KEY = "DeveloperMode";
+    private const string SELECTED_CHAR_KEY = "SelectedCharacter";
     public static GlobalVariables Instance { get; private set; }
 
     private void Update()
@@ -22,15 +25,59 @@ public class GlobalVariables : MonoBehaviour
         }
 
         Instance = this;
+        LoadSettings();
         CacheInitialValues();
     }
+    private void LoadSettings()
+    {
+        showAllEnemiesHealth = PlayerPrefs.GetInt(SHOW_ENEMY_HEALTH_KEY, 0) == 1;
+        developerMode = PlayerPrefs.GetInt(DEV_MODE_KEY, 0) == 1;
+        selectedCharacter = PlayerPrefs.GetString(SELECTED_CHAR_KEY, CharacterSprite.MiranaSprite.ToString());
+    }
+    public void SetSelectedCharacter(string value)
+    {
+        PlayerPrefs.SetString(SELECTED_CHAR_KEY, value);
+        PlayerPrefs.Save();
+    }
+
     //
+    public bool canZoomMap = true;
+    public string selectedCharacter;
     public bool testMode = false;
     public bool mainMenuScene = false;
     [Header("Sound-Music values")]
     public float masterVolume = 1f;
     public float musicVolume = 1f;
     public float SFXVolume = 1f;
+    [Header("Settings Options")]
+    public bool developerMode = false;
+    public bool showAllEnemiesHealth = false;
+    public event Action<bool> OnShowAllEnemiesHealthChanged;
+    public event Action<bool> OnDeveloperModeChanged;
+    public void SetShowAllEnemiesHealth(bool value)
+    {
+        if (showAllEnemiesHealth == value)
+            return;
+
+        showAllEnemiesHealth = value;
+        PlayerPrefs.SetInt(SHOW_ENEMY_HEALTH_KEY, value ? 1 : 0);
+        PlayerPrefs.Save();
+
+        OnShowAllEnemiesHealthChanged?.Invoke(value);
+    }
+
+    public void SetDeveloperMode(bool value)
+    {
+        if (developerMode == value)
+            return;
+
+        developerMode = value;
+        PlayerPrefs.SetInt(SHOW_ENEMY_HEALTH_KEY, value ? 1 : 0);
+        PlayerPrefs.Save();
+
+        OnDeveloperModeChanged?.Invoke(value);
+    }
+
     [Header("Sound-Music Generic Clip Names")]
     public string[] linaAnnouncementsClips = { "linaGame", "linaFireTime", "linaIamOnFire", "linaLetsGetAFireGoing" };
     public string[] gameOverClips = { "gameOver1", "gameOver2", "gameOver3", "gameOver4", "gameOver5" };
@@ -43,6 +90,7 @@ public class GlobalVariables : MonoBehaviour
     [Header("Player Collectables")]
     public bool magnetIsActive = false;
     public bool isSpawningCollectablePets = true;
+    public int spawnedPets = 0;
     public int catsCollected = 0;
     public int yellowCoinValue = 1;
     public int greenRubyCoinValue = 10;
