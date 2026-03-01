@@ -1,0 +1,2 @@
+Assets/Firebase/Plugins/** filter=lfs diff=lfs merge=lfs -text
+Firebase/Plugins/** filter=lfs diff=lfs merge=lfs -text
