@@ -104,7 +104,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6451659011051416826, guid: 93a50c5960a45674bb6b781e34adab1f, type: 3}
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePerTick: 3
   damageInterval: 1
-  lifeTime: 40
+  lifeTime: 30
 --- !u!1 &3815827710088984293
 GameObject:
   m_ObjectHideFlags: 0

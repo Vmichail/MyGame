@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class BaseButtonScript : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
@@ -22,11 +23,11 @@ public class BaseButtonScript : MonoBehaviour,
 
     [Header("Animated Idle Movement")]
     [SerializeField] private bool animateButton = false;
-    [SerializeField] private float moveAmount = 5f; // how far it moves (in pixels)
-    [SerializeField] private float moveDuration = 1.5f; // time for each move cycle
+    [SerializeField] private float moveAmount = 5f;
+    [SerializeField] private float moveDuration = 1.5f;
 
     private Vector3 originalScale;
-    private Transform highlightTarget; // either this or parent
+    private Transform highlightTarget;
 
     private void Awake()
     {
@@ -47,14 +48,10 @@ public class BaseButtonScript : MonoBehaviour,
             highlightTarget.localScale = Vector3.one;
 
         if (highlightTarget.localScale.x > 1)
-        {
             ResetScale();
-        }
 
         if (animateButton)
-        {
             StartIdleAnimation();
-        }
     }
 
     // ===== MOUSE HOVER =====
@@ -89,41 +86,49 @@ public class BaseButtonScript : MonoBehaviour,
         if (highlightTarget == null)
             highlightTarget = isSlider ? transform.parent : transform;
 
-        LeanTween.cancel(highlightTarget.gameObject);
-        AudioManager.Instance.PlaySoundFX("buttonHighlight1Sound", transform.position, 0.3f, 0.75f, 1.25f);
-        if (originalScale.x < 0.1)
-        {
+        highlightTarget.DOKill();
+
+        AudioManager.Instance.PlaySoundFX("buttonHighlight1Sound",
+            transform.position,
+            0.3f,
+            0.75f,
+            1.25f);
+
+        if (originalScale.x < 0.1f)
             originalScale = Vector3.one;
-        }
-        LeanTween.scale(highlightTarget.gameObject, originalScale * highlightScaleMultiplier, highlightTweenDuration)
-            .setEaseInOutSine()
-            .setIgnoreTimeScale(true);
+
+        highlightTarget
+            .DOScale(originalScale * highlightScaleMultiplier, highlightTweenDuration)
+            .SetEase(Ease.InOutSine)
+            .SetUpdate(true);
     }
 
     public virtual void ResetScale()
     {
-        LeanTween.cancel(highlightTarget.gameObject);
+        highlightTarget.DOKill();
         highlightTarget.localScale = originalScale;
     }
 
     // ===== CLICK =====
     public void OnPointerClick(PointerEventData eventData)
     {
+        CursorManagerScript.SetDefault();
         if (!destroyOnClick) return;
-
         if (TryGetComponent(out Button button))
+        {
             button.interactable = false;
-
+        }
         IsClicked = true;
-
-        LeanTween.cancel(highlightTarget.gameObject);
-        LeanTween.scale(highlightTarget.gameObject, Vector3.zero, clickTweenDuration)
-            .setEaseInBack()
-            .setIgnoreTimeScale(true)
-            .setOnComplete(() =>
+        highlightTarget.DOKill();
+        highlightTarget
+            .DOScale(Vector3.zero, clickTweenDuration)
+            .SetEase(Ease.InBack)
+            .SetUpdate(true)
+            .OnComplete(() =>
             {
                 gameObject.SetActive(false);
-                if (TryGetComponent(out Button b)) b.interactable = true;
+                if (TryGetComponent(out Button b))
+                    b.interactable = true;
                 IsClicked = false;
                 ResetScale();
             });
@@ -133,15 +138,18 @@ public class BaseButtonScript : MonoBehaviour,
     {
         Vector3 startPos = highlightTarget.localPosition;
 
-        LeanTween.moveLocalY(highlightTarget.gameObject, startPos.y + moveAmount, moveDuration)
-            .setEaseInOutSine()
-            .setLoopPingPong()
-            .setIgnoreTimeScale(true);
+        highlightTarget.DOKill();
+
+        highlightTarget
+            .DOLocalMoveY(startPos.y + moveAmount, moveDuration)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetUpdate(true);
     }
 
     private void OnDisable()
     {
-        LeanTween.cancel(highlightTarget.gameObject);
+        if (highlightTarget != null)
+            highlightTarget.DOKill();
     }
-
 }

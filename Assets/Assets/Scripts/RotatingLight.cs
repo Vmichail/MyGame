@@ -10,6 +10,14 @@ public class RotatingLight : MonoBehaviour
         {
             gameObject.SetActive(false); // Stop rotation in the main menu
         }
+        if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.LinaSprite.ToString()))
+        {
+            transform.localPosition = new Vector2(-0.22f, -0.29f);
+        }
+        else if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.MiranaSprite.ToString()))
+        {
+            transform.localPosition = new Vector2(0.03f, -0.24f);
+        }
     }
 
     void Update()

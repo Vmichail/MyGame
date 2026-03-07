@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class ParentShardScript : MonoBehaviour
@@ -82,10 +83,10 @@ public class ParentShardScript : MonoBehaviour
     public void Initialize(Vector3 spawnPos)
     {
         transform.position = spawnPos;
-
-        LeanTween.cancel(gameObject);
-        LeanTween.moveY(gameObject, spawnPos.y + 0.3f, 0.8f)
-                 .setEaseInOutSine()
-                 .setLoopPingPong();
+        transform.DOKill();
+        transform.DOMoveY(0.3f, 0.8f)
+                    .SetRelative()
+                    .SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo);
     }
 }

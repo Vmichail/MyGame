@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 1
   m_Sprite: {fileID: 21300000, guid: aabda7faceee57b4290e8d29e6edfb1e, type: 3}
@@ -265,7 +265,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -456,7 +456,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -821572354167042970, guid: 1028862c599fb134f9f8fdc7d200e1f0, type: 3}
@@ -649,13 +649,12 @@ MonoBehaviour:
   enemyBaseScript: {fileID: 5751188592242010165}
   indicatorRoot: {fileID: 7416354500214509763}
   maskTransform: {fileID: 868628058999402490}
-  chargeAdditionalDamage: 2
   chargeUpTime: 1
   chargeSpeed: 20
   chargeDuration: 0.7
   cooldown: 7
-  triggerDistance: 10
-  aimRandomAngle: 8
+  triggerDistance: 15
+  aimRandomAngle: 20
   normalLayer: Enemy
   chargingLayer: ChargingEnemy
 --- !u!1 &7037014607510384808
@@ -736,7 +735,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: aabda7faceee57b4290e8d29e6edfb1e, type: 3}
@@ -862,7 +861,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 228b5a05fb142064aa982554697a24a2, type: 3}

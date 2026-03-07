@@ -11,11 +11,11 @@ public enum DifficultyLevel
 public class DifficultyManager : MonoBehaviour
 {
     [Header("Time Scaling")]
-    [SerializeField] private float minutesPerTier = 2f;
+    [SerializeField] private float secondsPerTier = 2f;
 
-    [SerializeField] private float healthPerTier = 0.15f;
-    [SerializeField] private float damagePerTier = 0.12f;
-    [SerializeField] private float speedPerTier = 0.05f;
+    [SerializeField] private float healthPerTier = 0.2f;
+    [SerializeField] private float damagePerTier = 0.2f;
+    [SerializeField] private float speedPerTier = 0.02f;
 
     private float elapsedTime;
     public int CurrentTier { get; private set; }
@@ -29,6 +29,7 @@ public class DifficultyManager : MonoBehaviour
     public float enemyHealthMultiplier = 1f;
     public float enemyDamageMultiplier = 1f;
     public float enemySpeedMultiplier = 1f;
+    public int scoreMultiplier = 1;
 
     [Header("Player Stat Multipliers")]
     public float playerDamageMultiplier = 1f;
@@ -53,7 +54,7 @@ public class DifficultyManager : MonoBehaviour
             return;
 
         elapsedTime += Time.deltaTime;
-        CurrentTier = Mathf.FloorToInt(elapsedTime / (minutesPerTier * 60f));
+        CurrentTier = Mathf.FloorToInt(elapsedTime / secondsPerTier);
     }
 
     public void SetDifficulty(DifficultyLevel level)
@@ -69,6 +70,7 @@ public class DifficultyManager : MonoBehaviour
                 playerDamageMultiplier = 1.2f;
                 playerGenericMultiplier = 1.5f;
                 playerFlatIncrease = 1;
+                scoreMultiplier = 1;
                 break;
 
             case DifficultyLevel.Normal:
@@ -78,6 +80,7 @@ public class DifficultyManager : MonoBehaviour
                 playerDamageMultiplier = 1f;
                 playerGenericMultiplier = 1f;
                 playerFlatIncrease = 1;
+                scoreMultiplier = 2;
                 break;
 
             case DifficultyLevel.Hard:
@@ -87,6 +90,7 @@ public class DifficultyManager : MonoBehaviour
                 playerDamageMultiplier = 0.9f;
                 playerGenericMultiplier = 0.8f;
                 playerFlatIncrease = 0;
+                scoreMultiplier = 3;
                 break;
 
             case DifficultyLevel.Insane:
@@ -96,6 +100,7 @@ public class DifficultyManager : MonoBehaviour
                 playerDamageMultiplier = 0.8f;
                 playerGenericMultiplier = 0.5f;
                 playerFlatIncrease = 0;
+                scoreMultiplier = 5;
                 break;
         }
         startingDifficultySet = true;

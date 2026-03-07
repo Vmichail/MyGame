@@ -35,7 +35,7 @@ public class EnemyManagerScript : MonoBehaviour
             ActiveEnemies.Remove(enemy);
             GlobalVariables.Instance.aliveEnemies--;
             GlobalVariables.Instance.killedEnemies++;
-            GlobalVariables.Instance.score++;
+            GlobalVariables.Instance.score += DifficultyManager.Instance.scoreMultiplier;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class AchievementUnlockManager : MonoBehaviour
 {
@@ -43,11 +44,14 @@ public class AchievementUnlockManager : MonoBehaviour
     public void ShowAchievement(UnlockKey unlockKey)
     {
         SetText(unlockKey);
+
         // Reset state
         achievementGameObject.SetActive(true);
-        LeanTween.cancel(canvasGroup.gameObject);
+        canvasGroup.DOKill();
+        rectTransform.DOKill();
         rectTransform.anchoredPosition = startPos;
         canvasGroup.alpha = 0f;
+
         PlayAnimation();
     }
 
@@ -70,25 +74,25 @@ public class AchievementUnlockManager : MonoBehaviour
         // 🔊 Sound on show
         AudioManager.Instance.PlaySoundFX("UnlockSound", transform.position, 2f, 1f, 1f);
 
+        Sequence seq = DOTween.Sequence();
+
         // 👁️ Fade IN
-        LeanTween.alphaCanvas(canvasGroup, 1f, fadeInDuration)
-            .setEaseOutSine()
-            .setIgnoreTimeScale(true);
+        seq.Append(canvasGroup.DOFade(1f, fadeInDuration)
+                              .SetEase(Ease.OutSine));
 
-        // Wait → fade out + move down
-        LeanTween.delayedCall(displayDuration, () =>
-        {
-            LeanTween.alphaCanvas(canvasGroup, 0f, fadeDuration)
-                .setIgnoreTimeScale(true);
+        // Wait while visible
+        seq.AppendInterval(displayDuration);
 
-            LeanTween.moveY(rectTransform, startPos.y - moveDistance, fadeDuration)
-                .setEaseInSine()
-                .setIgnoreTimeScale(true)
-                .setOnComplete(() =>
-                {
-                    achievementGameObject.SetActive(false);
-                });
-        }).setIgnoreTimeScale(true);
+        // Fade out + move down
+        seq.Join(canvasGroup.DOFade(0f, fadeDuration));
+        seq.Join(rectTransform.DOAnchorPosY(startPos.y - moveDistance, fadeDuration)
+                              .SetEase(Ease.InSine));
+
+        seq.SetUpdate(true)
+           .OnComplete(() =>
+           {
+               achievementGameObject.SetActive(false);
+           });
     }
 
 

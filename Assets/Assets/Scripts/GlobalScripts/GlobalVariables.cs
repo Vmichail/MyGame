@@ -72,7 +72,7 @@ public class GlobalVariables : MonoBehaviour
             return;
 
         developerMode = value;
-        PlayerPrefs.SetInt(SHOW_ENEMY_HEALTH_KEY, value ? 1 : 0);
+        PlayerPrefs.SetInt(DEV_MODE_KEY, value ? 1 : 0);
         PlayerPrefs.Save();
 
         OnDeveloperModeChanged?.Invoke(value);

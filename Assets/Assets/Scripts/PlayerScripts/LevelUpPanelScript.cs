@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
@@ -71,8 +72,8 @@ public class LevelUpPanelScript : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        int optionCount = Mathf.Min(numberOfOptions, randomChoices.Count);
         randomChoices = GetRandomChoices(numberOfOptions);
+        int optionCount = Mathf.Min(numberOfOptions, randomChoices.Count);
         for (int i = 0; i < optionCount; i++)
         {
             UpgradeChoice randomFirstUpgrade = randomChoices[i];
@@ -93,8 +94,7 @@ public class LevelUpPanelScript : MonoBehaviour
                 List<UpgradeChoice> bonusUpgrades = GetBonusBasedOnLuck(randomFirstUpgrade.UpgradeCategory);
                 setUpgradeScript.SetUpgradeChoice(randomFirstUpgrade, upgradeCost, isLocked, bonusUpgrades);
                 //Button
-                Button button = upgradeChoice.GetComponent<Button>();
-                if (button != null)
+                if (upgradeChoice.TryGetComponent<Button>(out var button))
                 {
                     if (!isLocked)
                         button.onClick.AddListener(() => BuyOption(randomFirstUpgrade, button.gameObject, setUpgradeScript, bonusUpgrades));
@@ -157,38 +157,50 @@ public class LevelUpPanelScript : MonoBehaviour
             .Take(count)
             .ToList();
     }
-
     private void OnEnable()
     {
         GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
         ShowCatUi();
+
         AudioManager.Instance.PlayRandomSoundFX(levelUpSounds, transform.position, 1f, 1f, 1f);
+
         // Animate panel
         wholeLevelUpPanel.transform.localScale = Vector3.zero;
-        if (!wholeLevelUpPanel.TryGetComponent<CanvasGroup>(out var cg)) cg = wholeLevelUpPanel.AddComponent<CanvasGroup>();
+
+        if (!wholeLevelUpPanel.TryGetComponent<CanvasGroup>(out var cg))
+            cg = wholeLevelUpPanel.AddComponent<CanvasGroup>();
+
         cg.alpha = 0;
 
-        LeanTween.scale(wholeLevelUpPanel, Vector3.one, 0.5f)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
+        // Panel scale animation
+        wholeLevelUpPanel.transform
+            .DOScale(Vector3.one, 0.5f)
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true);
 
-        LeanTween.value(wholeLevelUpPanel, 0f, 1f, 0.4f)
-            .setIgnoreTimeScale(true)
-            .setOnUpdate((float val) => cg.alpha = val);
+        // Fade animation
+        cg.DOFade(1f, 0.4f)
+          .SetUpdate(true);
+
         if (currentRefreshes < maxRefreshes)
         {
             refreshButtonGO.SetActive(true);
             refreshButtonGO.transform.localScale = Vector3.zero;
-            LeanTween.scale(refreshButtonGO, Vector3.one, 0.3f)
-                .setEaseOutBack()
-                .setIgnoreTimeScale(true);
+
+            refreshButtonGO.transform
+                .DOScale(Vector3.one, 0.3f)
+                .SetEase(Ease.OutBack)
+                .SetUpdate(true);
         }
+
         if (HealthCost)
         {
             ShowChoicesWithHealth();
         }
         else
+        {
             RefreshChoices(true);
+        }
     }
 
     public void BuyOption(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript, List<UpgradeChoice> bonusChoices)
@@ -216,14 +228,16 @@ public class LevelUpPanelScript : MonoBehaviour
         }
         else
         {
-            LeanTween.scale(buttonGO, Vector3.one * 1.05f, 0.5f)
-            .setEaseInOutSine()
-            .setLoopPingPong(2)
-            .setIgnoreTimeScale(true)
-            .setOnComplete(() =>
-            {
-                buttonGO.transform.localScale = Vector3.one;
-            });
+            buttonGO.transform.DOKill();
+            buttonGO.transform
+                .DOScale(Vector3.one * 1.05f, 0.5f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(2, LoopType.Yoyo)
+                .SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    buttonGO.transform.localScale = Vector3.one;
+                });
         }
     }
 
@@ -290,10 +304,12 @@ public class LevelUpPanelScript : MonoBehaviour
 
     public void AnimatedDeletion(GameObject GO)
     {
-        LeanTween.cancel(GO);
-        LeanTween.scale(GO, Vector3.zero, 0.5f)
-            .setIgnoreTimeScale(true)
-            .setOnComplete(() => Destroy(GO));
+        GO.transform.DOKill();
+
+        GO.transform
+          .DOScale(Vector3.zero, 0.5f)
+          .SetUpdate(true)
+          .OnComplete(() => Destroy(GO));
     }
 
     public void RefreshChoicesButton()
@@ -305,14 +321,17 @@ public class LevelUpPanelScript : MonoBehaviour
         refreshButtonTextValue.text = (maxRefreshes - currentRefreshes).ToString();
         UpdateRefreshTextColor();
         RefreshChoices(false);
+
         if (currentRefreshes >= maxRefreshes)
         {
             Debug.Log("Hiding refresh button");
             refreshButtonGO.GetComponent<BaseButtonScript>().IsClicked = true;
-            LeanTween.scale(refreshButtonGO, Vector3.zero, 0.3f)
-                .setEaseInBack()
-                .setIgnoreTimeScale(true)
-                .setOnComplete(() =>
+            refreshButtonGO.transform.DOKill();
+            refreshButtonGO.transform
+                .DOScale(Vector3.zero, 0.3f)
+                .SetEase(Ease.InBack)
+                .SetUpdate(true)
+                .OnComplete(() =>
                 {
                     refreshButtonGO.GetComponent<BaseButtonScript>().IsClicked = false;
                     refreshButtonGO.SetActive(false);

@@ -2,13 +2,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PauseGameOverSwitch : MonoBehaviour
 {
     [Header("Buttons")]
     [SerializeField] private GameObject continueButton;
     [SerializeField] private GameObject replayButton;
-
     [SerializeField] GameObject pauseOptions;
     [SerializeField] GameObject gameOverOptions;
     [SerializeField] GameObject colorWheelImage;
@@ -17,18 +17,32 @@ public class PauseGameOverSwitch : MonoBehaviour
     [SerializeField] private GameObject starEmptyPrefab;
     [SerializeField] private Transform starParent;
     [SerializeField] private int maxStars = 7;
+
+    [Header("Score Counter")]
+    [SerializeField] private float pauseScoreDuration = 1.5f;
+    [SerializeField] private Ease pauseScoreEase = Ease.OutCubic;
+    [SerializeField] private float gameOverScoreDuration = 3.5f;
+    [SerializeField] private Ease gameOverScoreEase = Ease.OutCubic;
+
+    [Header("Color Wheel")]
+    [SerializeField] private float colorWheelRotationDuration = 10f;
+
+    [Header("Stars")]
+    [SerializeField] private float starScaleDuration = 0.5f;
+    [SerializeField] private Ease starScaleEase = Ease.OutBack;
+    [SerializeField] private float starDelayBetween = 0.3f;
+
     private int previousScore = 0;
+
     private void OnEnable()
     {
         if (GlobalVariables.Instance.playerIsAlive)
         {
-            LeanTween.value(gameObject, previousScore, GlobalVariables.Instance.score, 1.5f)
-                 .setOnUpdate((float val) =>
-                 {
-                     scoreText.text = Mathf.RoundToInt(val).ToString();
-                 })
-                 .setEase(LeanTweenType.easeOutCubic)
-                 .setIgnoreTimeScale(true);
+            DOTween.To(() => previousScore, x => scoreText.text = x.ToString(),
+                GlobalVariables.Instance.score, pauseScoreDuration)
+                .SetEase(pauseScoreEase)
+                .SetUpdate(true);
+
             previousScore = GlobalVariables.Instance.score;
             gameOverOptions.SetActive(false);
             pauseOptions.SetActive(true);
@@ -38,16 +52,21 @@ public class PauseGameOverSwitch : MonoBehaviour
         {
             pauseOptions.SetActive(false);
             colorWheelImage.SetActive(true);
-            LeanTween.rotateAround(colorWheelImage, Vector3.forward, -360f, 10f).setLoopClamp().setIgnoreTimeScale(true);
+
+            colorWheelImage.transform
+                .DORotate(new Vector3(0, 0, -360f), colorWheelRotationDuration, RotateMode.FastBeyond360)
+                .SetEase(Ease.Linear)
+                .SetLoops(-1, LoopType.Incremental)
+                .SetUpdate(true);
+
             UpdateStars(GlobalVariables.Instance.score);
             gameOverOptions.SetActive(true);
-            LeanTween.value(gameObject, 0, GlobalVariables.Instance.score, 3.5f)
-                 .setOnUpdate((float val) =>
-                 {
-                     scoreText.text = Mathf.RoundToInt(val).ToString();
-                 })
-                 .setEase(LeanTweenType.easeOutCubic)
-                 .setIgnoreTimeScale(true);
+
+            DOTween.To(() => 0f, x => scoreText.text = Mathf.RoundToInt(x).ToString(),
+                GlobalVariables.Instance.score, gameOverScoreDuration)
+                .SetEase(gameOverScoreEase)
+                .SetUpdate(true);
+
             StartCoroutine(SelectNextFrame(replayButton));
         }
     }
@@ -57,35 +76,34 @@ public class PauseGameOverSwitch : MonoBehaviour
         int filledStars = Mathf.Clamp(score / 100, 0, maxStars);
 
         foreach (Transform child in starParent)
-        {
             Destroy(child.gameObject);
-        }
 
         for (int i = 0; i < maxStars; i++)
         {
             bool isFilled = i < filledStars;
             GameObject prefabToUse = isFilled ? starPrefab : starEmptyPrefab;
             GameObject star = Instantiate(prefabToUse, starParent);
-
-
             star.transform.localScale = Vector3.zero;
-            LeanTween.scale(star, Vector3.one, 0.5f)
-                     .setEaseOutBack()
-                     .setDelay(i * 0.3f).setIgnoreTimeScale(true);
 
-            // Play sound at the same delay as animation
+            float delay = i * starDelayBetween;
+
+            star.transform
+                .DOScale(Vector3.one, starScaleDuration)
+                .SetEase(starScaleEase)
+                .SetDelay(delay)
+                .SetUpdate(true);
+
             string soundName = isFilled ? "levelUpSound" : "starFailSound";
-            LeanTween.delayedCall(i * 0.3f, () =>
+            DOVirtual.DelayedCall(delay, () =>
             {
                 AudioManager.Instance.PlaySoundFX(soundName, transform.position, 0.2f, 0.75f, 1.25f);
-            }).setIgnoreTimeScale(true);
+            }, ignoreTimeScale: true);
         }
     }
 
     private System.Collections.IEnumerator SelectNextFrame(GameObject go)
     {
-        yield return null; // wait one frame for layout/activation
-        var es = EventSystem.current;
-        es.SetSelectedGameObject(go);
+        yield return null;
+        EventSystem.current.SetSelectedGameObject(go);
     }
 }

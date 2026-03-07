@@ -44,6 +44,8 @@ public class LinaSpecificScript : MonoBehaviour
     {
         if (GlobalVariables.Instance.mainMenuScene)
         {
+            selectedDirections = directions2;
+            skillInterval = 7.5f;
         }
         else
         {
@@ -112,8 +114,8 @@ public class LinaSpecificScript : MonoBehaviour
         {
             skillInterval -= 1f;
         }
-        stats.IncreaseMaxHealthFromLevels(1);
-        stats.IncreaseMaxManaFromLevels(1);
+        stats.IncreaseMaxHealthFromLevels(2);
+        stats.IncreaseMaxManaFromLevels(2);
         if (stats.CurrentLevel % 5 == 0)
         {
             stats.RuntimeStats.AddLevelValue(PlayerStatType.Attack_Attack, 1);

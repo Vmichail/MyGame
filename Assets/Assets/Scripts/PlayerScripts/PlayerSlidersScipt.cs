@@ -63,7 +63,7 @@ public class PlayerSlidersScipt : MonoBehaviour
         if (PlayerStatsManager.Instance.CurrentExp >= PlayerStatsManager.Instance.MaxExp && !levelUpPanel.activeSelf)
         {
             PlayerStatsManager.Instance.CurrentExp -= PlayerStatsManager.Instance.MaxExp;
-            if (PlayerStatsManager.Instance.MaxExp >= 100 && stats.CurrentLevel < 20)
+            if (PlayerStatsManager.Instance.MaxExp >= 100 && stats.CurrentLevel < 16)
             {
                 PlayerStatsManager.Instance.MaxExp = 100;
             }
@@ -76,6 +76,10 @@ public class PlayerSlidersScipt : MonoBehaviour
                 MiranaSpecificScript.Instance.LevelUpCheck(PlayerStatsManager.Instance.CurrentLevel);
             if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.LinaSprite.ToString()))
                 LinaSpecificScript.Instance.LevelUpCheck(PlayerStatsManager.Instance.CurrentLevel);
+
+            //Heal a bit 
+            PlayerStatsManager.Instance.CurrentHealth = Mathf.Min(PlayerStatsManager.Instance.CurrentHealth + 5, PlayerStatsManager.Instance.MaxHealth());
+            PlayerStatsManager.Instance.CurrentMana = Mathf.Min(PlayerStatsManager.Instance.CurrentMana + 5, PlayerStatsManager.Instance.MaxMana());
             levelUpPanel.SetActive(true);
         }
     }

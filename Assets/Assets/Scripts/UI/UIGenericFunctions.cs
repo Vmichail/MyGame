@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -179,22 +180,27 @@ public class UIGenericFunctions : MonoBehaviour
     //==================== MENU ANIMATION ====================//
     private void AnimateMenu(bool show)
     {
-        LeanTween.cancel(wholeGameMenuPanels);
+        wholeGameMenuPanels.transform.DOKill();
 
         if (show && !isCentered)
         {
             backgroundImage.enabled = true;
-            LeanTween.move(wholeGameMenuPanels, centerPosition, 0.25f)
-                     .setEase(LeanTweenType.easeOutCubic)
-                     .setIgnoreTimeScale(true);
+
+            wholeGameMenuPanels.transform
+                .DOMove(centerPosition, 0.25f)
+                .SetEase(Ease.OutCubic)
+                .SetUpdate(true);
+
             isCentered = true;
         }
         else if (!show && isCentered)
         {
-            LeanTween.move(wholeGameMenuPanels, leftPosition, 0.25f)
-                     .setEase(LeanTweenType.easeInCubic)
-                     .setIgnoreTimeScale(true)
-                     .setOnComplete(() => backgroundImage.enabled = false);
+            wholeGameMenuPanels.transform
+                .DOMove(leftPosition, 0.25f)
+                .SetEase(Ease.InCubic)
+                .SetUpdate(true)
+                .OnComplete(() => backgroundImage.enabled = false);
+
             isCentered = false;
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static DifficultyManager;
@@ -90,14 +91,9 @@ public class DifficultyPanelScript : MonoBehaviour
     private void TweenColor(Image img, Color target)
     {
         if (!img) return;
-
-        // No tween lib? Just snap:
-        // img.color = target;
-
-        // With LeanTween (smooth, unscaled UI-friendly):
-        LeanTween.value(img.gameObject, img.color, target, colorTweenTime)
-                 .setOnUpdate((Color c) => img.color = c)
-                 .setIgnoreTimeScale(true);
+        img.DOKill();
+        img.DOColor(target, colorTweenTime)
+           .SetUpdate(true);
     }
     //Event System selection handling
     private void OnEnable()

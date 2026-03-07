@@ -7,5 +7,5 @@ public class GreenRubyScript : CoinsBaseScript
     protected override int ExpValue => GlobalVariables.Instance.greenRubyExpValue;
     protected override string AudioSound => "GreenRubySound";
     protected override CoinSpecialEffect[] SpecialEffects =>
-    new CoinSpecialEffect[] { CoinSpecialEffect.Heal, CoinSpecialEffect.Magnet };
+    new CoinSpecialEffect[] { CoinSpecialEffect.Magnet };
 }

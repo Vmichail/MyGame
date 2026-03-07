@@ -25,6 +25,10 @@ public class EnemyFireProjectile : MonoBehaviour
 
     private void Start()
     {
+        if (PlayerStatsManager.Instance.CurrentLevel > 20)
+        {
+            lifeTime = Random.Range(lifeTime, lifeTime * 2);
+        }
         Invoke(nameof(EndProjectile), lifeTime);
     }
 
@@ -36,7 +40,7 @@ public class EnemyFireProjectile : MonoBehaviour
         if (Time.time >= nextDamageTime)
         {
             AudioManager.Instance.PlaySoundFX("burnSoundEffect", transform.position, 0.3f, 0.9f, 1.1f);
-            EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(damagePerTick);
+            EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(damagePerTick + DifficultyManager.Instance.CurrentTier);
             nextDamageTime = Time.time + damageInterval;
         }
     }

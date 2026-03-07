@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -50,14 +51,14 @@ public class UILockGeneric : MonoBehaviour,
 
     public void RefreshLockState()
     {
-
         isLocked = AchievementUnlockManager.Instance.IsLocked(unlockKey);
 
         Selectable selectable = GetComponentInParent<Selectable>();
         if (selectable != null)
             selectable.interactable = !isLocked;
 
-        LeanTween.cancel(lockIcon.gameObject);
+        lockIcon.DOKill();
+        lockGO.transform.DOKill();
 
         if (isLocked)
         {
@@ -69,19 +70,25 @@ public class UILockGeneric : MonoBehaviour,
         {
             lockGO.SetActive(true);
 
-            LeanTween.scale(lockIcon, originalScale * scaleMultiplier, scaleDuration + scaleDuration)
-                .setEaseOutBack()
-                .setIgnoreTimeScale(true);
+            // Scale pop animation
+            lockIcon
+                .DOScale(originalScale * scaleMultiplier, scaleDuration + scaleDuration)
+                .SetEase(Ease.OutBack)
+                .SetUpdate(true);
 
-            LeanTween.rotateZ(lockIcon.gameObject, rotationAmount, rotationDuration)
-                .setLoopPingPong(2)
-                .setIgnoreTimeScale(true);
+            // Rotation ping-pong
+            lockIcon
+                .DORotate(new Vector3(0, 0, rotationAmount), rotationDuration)
+                .SetLoops(2, LoopType.Yoyo)
+                .SetUpdate(true);
 
-            LeanTween.scale(lockGO, Vector3.zero, 2.5f)
-                .setDelay(0.3f)
-                .setEaseInBack()
-                .setIgnoreTimeScale(true)
-                .setOnComplete(() =>
+            // Lock disappearing animation
+            lockGO.transform
+                .DOScale(Vector3.zero, 2.5f)
+                .SetDelay(0.3f)
+                .SetEase(Ease.InBack)
+                .SetUpdate(true)
+                .OnComplete(() =>
                 {
                     lockGO.SetActive(false);
                 });
@@ -118,28 +125,32 @@ public class UILockGeneric : MonoBehaviour,
      * ========================= */
     private void PlayHoverAnimation()
     {
-        LeanTween.cancel(lockIcon.gameObject);
+        lockIcon.DOKill();
 
         AudioManager.Instance.PlaySoundFX(denySound, transform.position, 0.8f, 0.9f, 1.1f);
 
-        LeanTween.scale(lockIcon, originalScale * scaleMultiplier, scaleDuration)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
+        lockIcon
+            .DOScale(originalScale * scaleMultiplier, scaleDuration)
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true);
 
-        LeanTween.rotateZ(lockIcon.gameObject, rotationAmount, rotationDuration)
-            .setLoopPingPong(1)
-            .setIgnoreTimeScale(true);
+        lockIcon
+            .DORotate(new Vector3(0, 0, rotationAmount), rotationDuration)
+            .SetLoops(1, LoopType.Yoyo)
+            .SetUpdate(true);
     }
 
     private void ResetAnimation()
     {
-        LeanTween.cancel(lockIcon.gameObject);
+        lockIcon.DOKill();
 
-        LeanTween.scale(lockIcon, originalScale, scaleDuration)
-            .setEaseInOutSine()
-            .setIgnoreTimeScale(true);
+        lockIcon
+            .DOScale(originalScale, scaleDuration)
+            .SetEase(Ease.InOutSine)
+            .SetUpdate(true);
 
-        LeanTween.rotateZ(lockIcon.gameObject, 0f, rotationDuration)
-            .setIgnoreTimeScale(true);
+        lockIcon
+            .DORotate(Vector3.zero, rotationDuration)
+            .SetUpdate(true);
     }
 }

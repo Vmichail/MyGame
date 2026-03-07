@@ -16,7 +16,6 @@ public class EnemyChargeAttack : MonoBehaviour
     //[SerializeField] private SpriteRenderer arrowRenderer;
 
     [Header("Charge Settings")]
-    [SerializeField] private int chargeAdditionalDamage = 2;
     [SerializeField] private float chargeUpTime = 1.2f;
     [SerializeField] private float chargeSpeed = 14f;
     [SerializeField] private float chargeDuration = 0.5f;
@@ -75,7 +74,7 @@ public class EnemyChargeAttack : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             hasHitPlayer = true;
-            enemyBaseScript.DoAdditionalDamage(chargeAdditionalDamage);
+            enemyBaseScript.DoAdditionalDamage(enemyBaseScript.Damage);
         }
     }
 

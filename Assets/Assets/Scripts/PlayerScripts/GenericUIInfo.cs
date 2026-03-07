@@ -6,12 +6,17 @@ public class GenericUIInfo : MonoBehaviour
     [Header("--!!Generic Info Text")]
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] TextMeshProUGUI score;
+    [Header("--!!Enemy Texts")]
     [SerializeField] TextMeshProUGUI aliveEnemies;
     [SerializeField] TextMeshProUGUI killedEnemies;
-    [SerializeField] TextMeshProUGUI score;
+    [Header("--!!Enemy Multipliers")]
+    [SerializeField] TextMeshProUGUI enemyTier;
+    [SerializeField] TextMeshProUGUI enemyHealthMultiplier;
+    [SerializeField] TextMeshProUGUI enemySpeedMultiplier;
+    [SerializeField] TextMeshProUGUI enemyAttackMultiplier;
     [Header("--!!Specific Spawning Enemy Text")]
     [SerializeField] TextMeshProUGUI spawnedSkeletonsText;
-    [SerializeField] TextMeshProUGUI level1BossActiveText;
     private float elapsedTime;
 
     private void Update()
@@ -23,6 +28,13 @@ public class GenericUIInfo : MonoBehaviour
         score.text = "Score:" + GlobalVariables.Instance.score;
         //Specific
         spawnedSkeletonsText.text = "SkeletonsSpawned:" + GlobalVariables.Instance.spawnedSkeletons;
+        if (DifficultyManager.Instance != null)
+        {
+            enemyTier.text = "Enemy Tier:" + DifficultyManager.Instance.CurrentTier.ToString();
+            enemyHealthMultiplier.text = "HP Mult:" + DifficultyManager.Instance.FinalEnemyHealthMultiplier.ToString("F2");
+            enemySpeedMultiplier.text = "Spd Mult:" + DifficultyManager.Instance.FinalEnemySpeedMultiplier.ToString("F2");
+            enemyAttackMultiplier.text = "Atk Mult:" + DifficultyManager.Instance.FinalEnemyDamageMultiplier.ToString("F2");
+        }
     }
 
     private void CountTime()

@@ -246,7 +246,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(Damage);
     }
 
-    public void DoAdditionalDamage(int damage)
+    public void DoAdditionalDamage(float damage)
     {
         EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(Damage + damage);
     }
@@ -408,7 +408,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
         if (isCritical)
         {
-            AudioManager.Instance.PlaySoundFX(criticalHitSound, transform.position, 0.7f, 0.7f, 1.3f);
+            AudioManager.Instance.PlaySoundFX(criticalHitSound, transform.position, 0.4f, 0.8f, 1.3f);
         }
         else if (hitSound != null)
         {
@@ -429,9 +429,9 @@ public abstract class EnemyBaseScript : MonoBehaviour
             dt.SetDamage(spellDamage, isCritical, color);
         }
         if (hasDamageParticles)
-            Instantiate(damageParticles, transform.position, Quaternion.identity);
+            Instantiate(damageParticles, new Vector3(transform.position.x, transform.position.y, 1f), Quaternion.identity);
         if (isCritical)
-            Instantiate(criticalParticles, transform.position, Quaternion.identity);
+            Instantiate(criticalParticles, new Vector3(transform.position.x, transform.position.y, 1f), Quaternion.identity);
 
     }
 

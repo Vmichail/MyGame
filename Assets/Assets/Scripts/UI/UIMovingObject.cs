@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,42 +72,47 @@ public class MovingUIObject : MonoBehaviour
     private void StartLoops()
     {
         loopsStarted = true;
-        // safety: kill any previous tweens
-        LeanTween.cancel(gameObject);
 
-        float delay = (randomInitialDelayMax > 0f) ? Random.Range(0f, randomInitialDelayMax) : 0f;
+        // safety: kill any previous tweens
+        transform.DOKill();
+        rt.DOKill();
+
+        float delay = (randomInitialDelayMax > 0f)
+            ? Random.Range(0f, randomInitialDelayMax)
+            : 0f;
 
         if (doScale)
         {
-            LeanTween.scale(rt, baseScale * (1f + scaleAmount), scaleTime)
-                     .setDelay(delay)
-                     .setEaseInOutSine()
-                     .setLoopPingPong()
-                     .setIgnoreTimeScale(true);
+            rt.DOScale(baseScale * (1f + scaleAmount), scaleTime)
+              .SetDelay(delay)
+              .SetEase(Ease.InOutSine)
+              .SetLoops(-1, LoopType.Yoyo)
+              .SetUpdate(true);
         }
 
         if (doBob)
         {
-            LeanTween.moveY(rt, baseAnchoredPos.y + bobDistance, bobTime)
-                     .setDelay(delay * 0.5f) // tiny desync
-                     .setEaseInOutSine()
-                     .setLoopPingPong()
-                     .setIgnoreTimeScale(true);
+            rt.DOAnchorPosY(baseAnchoredPos.y + bobDistance, bobTime)
+              .SetDelay(delay * 0.5f) // tiny desync
+              .SetEase(Ease.InOutSine)
+              .SetLoops(-1, LoopType.Yoyo)
+              .SetUpdate(true);
         }
 
         if (doColorPulse && img)
         {
-            LeanTween.color(rt, pulseColor, colorTweenTime)
-                     .setDelay(delay)
-                     .setEaseInOutSine()
-                     .setLoopPingPong()
-                     .setIgnoreTimeScale(true);
+            img.DOColor(pulseColor, colorTweenTime)
+               .SetDelay(delay)
+               .SetEase(Ease.InOutSine)
+               .SetLoops(-1, LoopType.Yoyo)
+               .SetUpdate(true);
         }
     }
 
     private void StopLoops(bool resetToBase)
     {
-        LeanTween.cancel(gameObject);
+        transform.DOKill();
+        rt.DOKill();
 
         if (!resetToBase) return;
 

@@ -172,6 +172,11 @@ public class MainMenuBasicScript : MonoBehaviour
 
     public void StartGameWithChar(int hero)
     {
+        if (hero == -1)
+        {
+            AudioManager.Instance.PlaySoundFX("uiDeny", transform.position, 1f, 1f, 1f);
+            return;
+        }
         GlobalVariables.Instance.mainMenuScene = false;
         if (hero == 0)
         {

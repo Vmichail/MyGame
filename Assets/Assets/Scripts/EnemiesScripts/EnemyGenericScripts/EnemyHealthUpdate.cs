@@ -27,6 +27,11 @@ public class EnemyHealthUpdate : MonoBehaviour
 
     private void OnHealthVisibilityChanged(bool show)
     {
+        if (GlobalVariables.Instance.mainMenuScene)
+        {
+            healthText.enabled = false;
+            return;
+        }
         if (isBoss)
         {
             healthText.enabled = true;

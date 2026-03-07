@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,15 +20,15 @@ public class StatRowUI : MonoBehaviour
         canvasGroup.alpha = 0f;
         transform.localScale = new Vector3(1f, 0.9f, 1f);
 
-        LeanTween.alphaCanvas(canvasGroup, 1f, 0.25f)
-                 .setDelay(delay)
-                 .setEaseOutQuad()
-        .setIgnoreTimeScale(true);
+        Sequence seq = DOTween.Sequence();
 
-        LeanTween.scaleY(gameObject, 1f, 0.25f)
-                 .setDelay(delay)
-                 .setEaseOutBack()
-        .setIgnoreTimeScale(true);
+        seq.AppendInterval(delay);
+
+        seq.Join(canvasGroup.DOFade(1f, 0.25f).SetEase(Ease.OutQuad));
+        seq.Join(transform.DOScaleY(1f, 0.25f).SetEase(Ease.OutBack));
+
+        seq.SetUpdate(true)
+           .SetLink(gameObject);
     }
     [Header("Category Sprites")]
     [SerializeField] private Image statusImage;

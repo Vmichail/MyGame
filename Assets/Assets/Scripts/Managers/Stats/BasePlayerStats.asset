@@ -20,7 +20,7 @@ MonoBehaviour:
   - type: 2
     baseValue: 3
   - type: 3
-    baseValue: 0.1
+    baseValue: 0.3
   - type: 4
     baseValue: 2
   - type: 5
