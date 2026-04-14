@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8017051086211515944}
   - component: {fileID: 7377292430957836812}
   - component: {fileID: 5616268089859779714}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ExplosionFire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,9 +103,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1265865805
-  m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingLayerID: 89313081
+  m_SortingLayer: 1
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6451659011051416826, guid: 93a50c5960a45674bb6b781e34adab1f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePerTick: 3
   damageInterval: 1
-  lifeTime: 30
+  lifeTime: 5
 --- !u!1 &3815827710088984293
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +188,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8336629056945429713}
   - component: {fileID: 3121580078774442523}
-  m_Layer: 0
+  - component: {fileID: 8450588425314501294}
+  m_Layer: 13
   m_Name: Light 2D (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,10 +228,10 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.541
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 2
+  m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000039cf5205b36b8cb40b3ba7f14bbf97e7
+  m_ApplyToSortingLayers: 0b3ba7f139cf5205
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -239,7 +240,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -262,3 +263,16 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &8450588425314501294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3815827710088984293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d556359f7d6c32840aac34389b9ff1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseLightScript
+  isMainLight: 0

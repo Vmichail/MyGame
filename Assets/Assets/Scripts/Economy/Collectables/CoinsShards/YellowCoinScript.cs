@@ -2,5 +2,5 @@ using UnityEngine;
 
 public class YellowCoinScript : CoinsBaseScript
 {
-    protected override int CoinValue => GlobalVariables.Instance.yellowCoinValue;
+    protected override int CoinValue => HeroUpgrades.Instance.yellowCoinValue;
 }

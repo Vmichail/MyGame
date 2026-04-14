@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8513095458114762175}
   - component: {fileID: 3623357751401863829}
   - component: {fileID: 2357896958432944495}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: HealthText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  - {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,7 +83,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -109,8 +109,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 80
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e8f710f7077504144992f589d556ba0d, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -134,10 +134,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 9
-  m_fontSizeBase: 36
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 7
   m_fontSizeMax: 10
   m_fontStyle: 0
@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 3217837976303396486}
   - component: {fileID: 5040474251055196172}
   - component: {fileID: 4987402683458607623}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: SkeletonBoss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -246,7 +246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 4ccebee4c23dd4947a227dd3950c28e7, type: 2}
-  particles: {fileID: 7222483889795140674, guid: 44c5885145e4cfb43923e87a256db191, type: 3}
+  enemyHealthUpdate: {fileID: 2357896958432944495}
+  killedParticles: {fileID: 1533611495283434426, guid: 3c6bd4e38ab2c0a46814b46812e7432f, type: 3}
   hasDamageParticles: 1
   damageParticles: {fileID: 5588695382944192682, guid: 3cf3e2e6560568a4d8e69595259985e8, type: 3}
   criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
@@ -259,6 +260,7 @@ MonoBehaviour:
   projectilePosition: {fileID: 7835863399168112519}
   projectileParent: {fileID: 0}
   projectileCanRotate: 0
+  randomSpreadAngle: 10
   normalAttackFX: {fileID: 7040300268674578538}
   specialAttackFX: {fileID: 2610315765121132087}
   isGeneratedByPool: 0
@@ -365,7 +367,7 @@ GameObject:
   - component: {fileID: 3924385088610282389}
   - component: {fileID: 1527669705929914208}
   - component: {fileID: 7771383607569200858}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FXEarthquake
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -433,7 +435,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3747737555937058024, guid: 92c5f46b99807d24ea6274ea78457dae, type: 3}
@@ -495,7 +497,7 @@ GameObject:
   - component: {fileID: 1798432002715673698}
   - component: {fileID: 8593905719210911045}
   - component: {fileID: 2920443816644631979}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -566,7 +568,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3096574302567730256, guid: 8af087cb699b5774392d569bd05fe1ea, type: 3}
@@ -624,7 +626,7 @@ GameObject:
   - component: {fileID: 8106015244297489307}
   - component: {fileID: 4085844225505752174}
   - component: {fileID: 7379798995570017107}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: AttackRange
   m_TagString: Range
   m_Icon: {fileID: 0}
@@ -706,7 +708,7 @@ GameObject:
   - component: {fileID: 4518164090571865561}
   - component: {fileID: 7387782204378177595}
   - component: {fileID: 8217782468635594480}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FXAttackSquash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -774,7 +776,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8196781270583594522, guid: 25e51a50b2adcfa449511728972b902f, type: 3}
@@ -834,7 +836,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6567774927226010541}
   - component: {fileID: 6921881239276478864}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -876,7 +878,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000039cf5205b36b8cb40b3ba7f1
+  m_ApplyToSortingLayers: 39cf5205b36b8cb4
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -885,7 +887,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -917,7 +919,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7835863399168112519}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: attackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -16,7 +16,7 @@ public class ManaPotionScript : CollectableBaseScript, ICollectable
     {
         AudioManager.Instance.PlaySoundFX("bottle", transform.position, 1f, 0.75f, 1.25f);
         PlayerHealthAndManaRegen.ApplyMana(
-           GlobalVariables.Instance.manaPotionMana,
+           HeroUpgrades.Instance.manaPotionMana,
            HealEffectSelector.PlayerHealEffectType.ManaPotion
        );
         gameObject.SetActive(false);

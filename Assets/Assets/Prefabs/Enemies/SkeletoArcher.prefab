@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2871394875955823879}
   - component: {fileID: 2078881551454567457}
   - component: {fileID: 6506459613493719480}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: AttackRange
   m_TagString: Range
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8900454292553871189}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: attackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 4987868389496363802}
   - component: {fileID: 7920369448232272220}
   - component: {fileID: 8267731754857944262}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: SkeletoArcher
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -164,7 +164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 8e68c180b4f40f2408bb806e3c6030c2, type: 2}
-  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  enemyHealthUpdate: {fileID: 7642582459675112130}
+  killedParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   hasDamageParticles: 0
   damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
@@ -177,6 +178,7 @@ MonoBehaviour:
   projectilePosition: {fileID: 8900454292553871189}
   projectileParent: {fileID: 0}
   projectileCanRotate: 1
+  randomSpreadAngle: 10
   normalAttackFX: {fileID: 0}
   specialAttackFX: {fileID: 0}
   isGeneratedByPool: 1
@@ -267,7 +269,7 @@ GameObject:
   - component: {fileID: 3617644418409061488}
   - component: {fileID: 2281992545639576568}
   - component: {fileID: 2839843164126768910}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -335,7 +337,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1842990156, guid: ff3e9ba887063e84984dd4f5e4016d6f, type: 3}
@@ -394,7 +396,7 @@ GameObject:
   - component: {fileID: 5449250858292066659}
   - component: {fileID: 292209600480975613}
   - component: {fileID: 7642582459675112130}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: HealthText
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -445,7 +447,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  - {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -465,7 +467,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -491,8 +493,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e8f710f7077504144992f589d556ba0d, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -516,10 +518,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6.5
-  m_fontSizeBase: 36
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 4
   m_fontSizeMax: 7
   m_fontStyle: 0
@@ -587,7 +589,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3862038626410818721}
   - component: {fileID: 472041385035722805}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Shadow (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -655,7 +657,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 592df8d5149c95745aa86118a188cb85, type: 3}

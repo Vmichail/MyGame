@@ -12,10 +12,33 @@ public class DifficultyManager : MonoBehaviour
 {
     [Header("Time Scaling")]
     [SerializeField] private float secondsPerTier = 2f;
+    [Header("Easy")]
+    [SerializeField] private float easyHealthPerTier = 0.2f;
+    [SerializeField] private float easyDamagePerTier = 0.2f;
+    [SerializeField] private float easySpeedPerTier = 0.02f;
+    [SerializeField] private int easyEnrageTimer = 600;
+    [Header("Normal")]
+    [SerializeField] private float normalHealthPerTier = 0.2f;
+    [SerializeField] private float normalDamagePerTier = 0.2f;
+    [SerializeField] private float normalSpeedPerTier = 0.02f;
+    [SerializeField] private int normalEnrageTimer = 400;
+    [Header("Hard")]
+    [SerializeField] private float hardHealthPerTier = 0.2f;
+    [SerializeField] private float hardDamagePerTier = 0.2f;
+    [SerializeField] private float hardSpeedPerTier = 0.02f;
+    [SerializeField] private int hardEnrageTimer = 120;
+    [Header("Insane")]
+    [SerializeField] private float insaneHealthPerTier = 0.2f;
+    [SerializeField] private float insaneDamagePerTier = 0.2f;
+    [SerializeField] private float insaneSpeedPerTier = 0.02f;
+    [SerializeField] private int insaneEnrageTimer = 0;
 
-    [SerializeField] private float healthPerTier = 0.2f;
-    [SerializeField] private float damagePerTier = 0.2f;
-    [SerializeField] private float speedPerTier = 0.02f;
+    private float healthPerTier;
+    private float damagePerTier;
+    private float speedPerTier;
+    private int enrageTimer = 0;
+
+    public int EnrageTimer => enrageTimer;
 
     private float elapsedTime;
     public int CurrentTier { get; private set; }
@@ -60,17 +83,22 @@ public class DifficultyManager : MonoBehaviour
     public void SetDifficulty(DifficultyLevel level)
     {
         CurrentDifficulty = level;
+        GlobalVariables.Instance.rangedEnragedMode = false;
 
         switch (level)
         {
             case DifficultyLevel.Easy:
-                enemyHealthMultiplier = 0.8f;
+                enemyHealthMultiplier = 0.4f;
                 enemyDamageMultiplier = 0.7f;
-                enemySpeedMultiplier = 0.8f;
+                enemySpeedMultiplier = 0.7f;
                 playerDamageMultiplier = 1.2f;
                 playerGenericMultiplier = 1.5f;
                 playerFlatIncrease = 1;
                 scoreMultiplier = 1;
+                enrageTimer = easyEnrageTimer;
+                healthPerTier = easyHealthPerTier;
+                damagePerTier = easyDamagePerTier;
+                speedPerTier = easySpeedPerTier;
                 break;
 
             case DifficultyLevel.Normal:
@@ -81,6 +109,10 @@ public class DifficultyManager : MonoBehaviour
                 playerGenericMultiplier = 1f;
                 playerFlatIncrease = 1;
                 scoreMultiplier = 2;
+                enrageTimer = normalEnrageTimer;
+                healthPerTier = normalHealthPerTier;
+                damagePerTier = normalDamagePerTier;
+                speedPerTier = normalSpeedPerTier;
                 break;
 
             case DifficultyLevel.Hard:
@@ -90,7 +122,11 @@ public class DifficultyManager : MonoBehaviour
                 playerDamageMultiplier = 0.9f;
                 playerGenericMultiplier = 0.8f;
                 playerFlatIncrease = 0;
-                scoreMultiplier = 3;
+                scoreMultiplier = 5;
+                enrageTimer = hardEnrageTimer;
+                healthPerTier = hardHealthPerTier;
+                damagePerTier = hardDamagePerTier;
+                speedPerTier = hardSpeedPerTier;
                 break;
 
             case DifficultyLevel.Insane:
@@ -100,7 +136,11 @@ public class DifficultyManager : MonoBehaviour
                 playerDamageMultiplier = 0.8f;
                 playerGenericMultiplier = 0.5f;
                 playerFlatIncrease = 0;
-                scoreMultiplier = 5;
+                scoreMultiplier = 10;
+                enrageTimer = insaneEnrageTimer;
+                healthPerTier = insaneHealthPerTier;
+                damagePerTier = insaneDamagePerTier;
+                speedPerTier = insaneSpeedPerTier;
                 break;
         }
         startingDifficultySet = true;

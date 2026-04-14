@@ -1,7 +1,10 @@
 using DG.Tweening;
+using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 
 public class UIGenericFunctions : MonoBehaviour
@@ -116,7 +119,8 @@ public class UIGenericFunctions : MonoBehaviour
 
     public void Exit()
     {
-        Application.Quit();
+        Debug.Log("Exiting Game from " + GetType().Name);
+        Process.GetCurrentProcess().Kill();
     }
 
     public enum GameMenuType

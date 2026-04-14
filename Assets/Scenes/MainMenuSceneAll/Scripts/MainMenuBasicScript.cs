@@ -1,10 +1,15 @@
+using DG.Tweening;
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 
 public class MainMenuBasicScript : MonoBehaviour
@@ -191,6 +196,7 @@ public class MainMenuBasicScript : MonoBehaviour
 
     public void ExitGame()
     {
-        Application.Quit();
+        Debug.Log("Exiting Game from " + GetType().Name);
+        Process.GetCurrentProcess().Kill();
     }
 }

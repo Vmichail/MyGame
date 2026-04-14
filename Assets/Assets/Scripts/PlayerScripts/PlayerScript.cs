@@ -85,6 +85,7 @@ public class PlayerScript : MonoBehaviour
             InitializePlayer();
         }
         SetupCharacter();
+        GlobalVariables.Instance.playerTransform = transform;
     }
 
     void Update()
@@ -338,7 +339,7 @@ public class PlayerScript : MonoBehaviour
         {
             AudioManager.Instance.PlaySoundFX(spell.spellData.castSound, transform.position, 0.5f, 0.80f, 1.25f);
             Vector3 spawnPos = manaSpellTarget.transform.position;
-            GameObject newSpell = Instantiate(spell.spellPrefab, spawnPos, Quaternion.identity);
+            GameObject newSpell = PoolManager.Instance.Get(spell.spellPrefab, spawnPos, Quaternion.identity, PoolCategory.Player);
 
             if (newSpell.TryGetComponent<PlayerSpellBaseScript>(out var playerSpellBaseScript))
             {
@@ -358,7 +359,7 @@ public class PlayerScript : MonoBehaviour
 
     private void CastAttack(Vector3 enemyPosition, GameObject spell)
     {
-        GameObject newSpell = Instantiate(spell, transform.position, Quaternion.identity);
+        GameObject newSpell = PoolManager.Instance.Get(spell, transform.position, Quaternion.identity, PoolCategory.Player);
         AudioManager.Instance.PlaySoundFX("playerAttack", transform.position, 0.2f, 0.80f, 1.25f);
         Vector2 direction = (enemyPosition - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -385,8 +386,10 @@ public class PlayerScript : MonoBehaviour
     {
         foreach (GameObject blade in activeBlades)
         {
-            if (blade != null)
-                Destroy(blade);
+            if (blade.TryGetComponent<PlayerSpellBaseScript>(out var spellScript))
+            {
+                PoolManager.Instance.Return(blade);
+            }
         }
         activeBlades.Clear();
         AudioManager.Instance.PlaySoundFX(spell.spellData.castSound, transform.position, 0.5f, 0.80f, 1.25f);
@@ -394,7 +397,7 @@ public class PlayerScript : MonoBehaviour
         {
             // calculate starting angle so they spread evenly
             float startAngle = i * Mathf.PI * 2f / GlobalVariables.Instance.totalOrbitBlades;
-            GameObject blade = Instantiate(spell.spellPrefab, transform.position, Quaternion.identity);
+            GameObject blade = PoolManager.Instance.Get(spell.spellPrefab, transform.position, Quaternion.identity, PoolCategory.Player);
 
             // set blade's starting angle & radius
             PlayerSpellBaseScript orbit = blade.GetComponent<PlayerSpellBaseScript>();
@@ -405,8 +408,8 @@ public class PlayerScript : MonoBehaviour
 
     public void CastShield(SpellDataFull spell)
     {
-        GameObject shield = Instantiate(spell.spellPrefab, transform.position, Quaternion.identity, transform);
-        PlayerSpellBaseScript shieldSpellScript = shield.GetComponent<PlayerSpellBaseScript>();
+        GameObject shield = PoolManager.Instance.Get(spell.spellPrefab, transform.position + new Vector3(0f, 0.4f, 0f), Quaternion.identity, PoolCategory.Player);
+        shield.transform.SetParent(transform);
     }
 
     private IEnumerator StartSpellCooldown(int index)

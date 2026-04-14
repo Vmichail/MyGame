@@ -27,7 +27,7 @@ MonoBehaviour:
     healthPotionChance: 0.01
     manaPotionChance: 0.01
     greenRubyChance: 0
-    redRubyChance: 0.05
+    redRubyChance: 0.02
     coinDropEnum: 1
     minExp: 2
     maxExp: 3

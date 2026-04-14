@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3735879261477748968}
   - component: {fileID: 4395263885618814318}
   - component: {fileID: 6436776296071338865}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Vampire2Projectile
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ MonoBehaviour:
   receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
   hasDirection: 0
   exposionClipNames: []
-  projectileLifes: 1
+  projectileLifes: 2
   spawnChildrenOnDestroy: 0
   childGameObject: {fileID: 0}
 --- !u!58 &4395263885618814318

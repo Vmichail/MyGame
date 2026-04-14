@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4219315876139037391}
   - component: {fileID: 2226809509168796134}
+  - component: {fileID: 6101331004498652158}
   m_Layer: 6
   m_Name: Light 2D
   m_TagString: Untagged
@@ -52,7 +53,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000039cf5205b36b8cb40b3ba7f1
+  m_ApplyToSortingLayers: 39cf5205
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -84,6 +85,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &6101331004498652158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080899597800156018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d556359f7d6c32840aac34389b9ff1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseLightScript
+  isMainLight: 1
 --- !u!1 &8430877234050659447
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,9 +176,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1265865805
-  m_SortingLayer: 2
-  m_SortingOrder: 10
+  m_SortingLayerID: 89313081
+  m_SortingLayer: 1
+  m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 904585013, guid: d98bdb8ee683d6748a754b58017f5d0f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -209,7 +223,6 @@ GameObject:
   - component: {fileID: 5229197692853739575}
   - component: {fileID: 4935054229504441846}
   - component: {fileID: 9083074788417802443}
-  - component: {fileID: -8210366311912081703}
   m_Layer: 6
   m_Name: ManaPotion
   m_TagString: Collectable
@@ -293,34 +306,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 9
+  initialSpeed: 6
   speedIncreaseRate: 2
   maxSpeed: 80
   stopDistance: 0.15
   isAffectedByMagnet: 0
---- !u!50 &-8210366311912081703
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8756245173967818307}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  collectableType: 3
+  spriteRenderer: {fileID: 5991360890658191139}

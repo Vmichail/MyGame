@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7476019723296410068}
   - component: {fileID: 6525951753408356148}
   - component: {fileID: 6150249749753203673}
+  - component: {fileID: 985153227992431318}
   m_Layer: 0
   m_Name: CriticalHitParticles
   m_TagString: Untagged
@@ -44,7 +45,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 0.8
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4895,6 +4896,18 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &985153227992431318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22457057582532072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16968abb28b2ff449cd2cefe8885446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticlesGeneric
 --- !u!1 &72403269145936584
 GameObject:
   m_ObjectHideFlags: 0

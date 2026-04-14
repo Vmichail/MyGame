@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
@@ -8,8 +9,9 @@ using Random = UnityEngine.Random;
 public abstract class EnemyBaseScript : MonoBehaviour
 {
     [SerializeField] protected EnemyConfig config;
+    [SerializeField] protected EnemyHealthUpdate enemyHealthUpdate;
     protected EnemyStats stats;
-    [SerializeField] GameObject particles;
+    [SerializeField] GameObject killedParticles;
     [SerializeField] bool hasDamageParticles = false;
     [SerializeField] GameObject damageParticles;
     [SerializeField] GameObject criticalParticles;
@@ -61,7 +63,8 @@ public abstract class EnemyBaseScript : MonoBehaviour
         get => maxHealth;
         set
         {
-            maxHealth = value;
+            maxHealth = Mathf.Max(1f, value);
+
             if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
         }
@@ -143,6 +146,10 @@ public abstract class EnemyBaseScript : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        if (enemyHealthUpdate == null)
+        {
+            enemyHealthUpdate = GetComponentInChildren<EnemyHealthUpdate>();
+        }
         BuildStats();
         IsDead = false;
         KnockbackEffect = false;
@@ -158,9 +165,9 @@ public abstract class EnemyBaseScript : MonoBehaviour
         else
             Debug.LogWarning("No Sprite was found!");
         FindPlayer();
-
-
         rb = GetComponent<Rigidbody2D>();
+        if (enemyHealthUpdate != null)
+            enemyHealthUpdate.UpdateHealth(CurrentHealth);
     }
 
     protected virtual void Start()
@@ -182,7 +189,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
             attackCooldownTimer -= Time.deltaTime;
 
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (CurrentHealth < 0.5 && !IsDead)
+        if (CurrentHealth < 0.6 && !IsDead)
         {
             OnDeath();
         }
@@ -192,7 +199,14 @@ public abstract class EnemyBaseScript : MonoBehaviour
     {
         IsDead = true;
         DropCollectables();
-        Instantiate(particles, transform.position, transform.rotation);
+        if (killedParticles != null)
+        {
+            PoolManager.Instance.Get(killedParticles, transform.position, transform.rotation, PoolCategory.Particles);
+        }
+        else
+        {
+            Debug.LogWarning("KilledParticles prefab is not assigned - it will be more beautiful if you assign them xD!");
+        }
         AudioManager.Instance.PlayRandomSoundFX(DeathSoundClips, transform.position, 1f, 0.75f, 1.25f);
         EnemyManagerScript.Instance.UnregisterEnemy(gameObject);
         if (isGeneratedByPool && _pool != null)
@@ -401,6 +415,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
 
         CurrentHealth -= spellDamage;
+        enemyHealthUpdate.UpdateHealth(CurrentHealth);
         //Debug.Log($"CurrentHealth is {CurrentHealth} and MaxHealth is {MaxHealth} and enemyType is {EnemyType} from {this}");
 
         Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
@@ -420,18 +435,18 @@ public abstract class EnemyBaseScript : MonoBehaviour
         }
         if (HurtSounds.Length > 0)
         {
-            AudioManager.Instance.PlayRandomSoundFX(HurtSounds, transform.position, 1.5f, 0.75f, 1.25f);
+            AudioManager.Instance.PlayRandomSoundFX(HurtSounds, transform.position, 0.7f, 1f, 1f);
         }
         if (!GlobalVariables.Instance.mainMenuScene)
         {
-            GameObject dmgText = Instantiate(receivedDamagePopUp, spawnPosition, Quaternion.identity);
+            GameObject dmgText = PoolManager.Instance.Get(receivedDamagePopUp, spawnPosition, Quaternion.identity, PoolCategory.Particles);
             DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
             dt.SetDamage(spellDamage, isCritical, color);
         }
         if (hasDamageParticles)
-            Instantiate(damageParticles, new Vector3(transform.position.x, transform.position.y, 1f), Quaternion.identity);
+            PoolManager.Instance.Get(damageParticles, new Vector3(transform.position.x, transform.position.y, 1f), Quaternion.identity, PoolCategory.Particles);
         if (isCritical)
-            Instantiate(criticalParticles, new Vector3(transform.position.x, transform.position.y, 1f), Quaternion.identity);
+            PoolManager.Instance.Get(criticalParticles, new Vector3(transform.position.x, transform.position.y, 1f), Quaternion.identity, PoolCategory.Particles);
 
     }
 
@@ -511,7 +526,7 @@ public abstract class EnemyBaseScript : MonoBehaviour
             }
         }
         //Red Ruby Drop Chance
-        if (Random.value <= GreenRubyChance)
+        if (Random.value <= RedRubyChance)
         {
             GameObject redRuby = RedRubyPool.Instance.Get();
             if (redRuby.TryGetComponent(out CollectableBaseScript collectableBaseScript))
@@ -536,26 +551,38 @@ public abstract class EnemyBaseScript : MonoBehaviour
     {
         AudioManager.Instance.PlayRandomSoundFX(AttackSoundClips, transform.position, 0.4f, 0.75f, 1.25f);
 
-        GameObject rangeInstance = Instantiate(projectile, projectilePosition.position, Quaternion.identity);
-        rangeInstance.transform.SetParent(projectileParent, false);
+        float spreadAngle = Random.Range(-randomSpreadAngle, randomSpreadAngle);
+        float[] angles = GlobalVariables.Instance.rangedEnragedMode ? new float[] { 0f, 45f, -45f } : new float[] { 0f };
 
-        if (projectileCanRotate && player != null)
-        {
-            Vector2 direction = (player.position - rangeInstance.transform.position).normalized;
-            float spreadAngle = Random.Range(-randomSpreadAngle, randomSpreadAngle);
-            float baseAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            float finalAngle = baseAngle + spreadAngle;
-            rangeInstance.transform.rotation = Quaternion.Euler(0f, 0f, finalAngle);
-        }
 
-        if (rangeInstance.TryGetComponent<EnemyProjectileBaseScript>(out var projectileScript))
+        foreach (float angleOffset in angles)
         {
-            projectileScript.Damage = Damage;
-            projectileScript.speed = ProjectileSpeed;
-        }
-        else
-        {
-            Debug.LogWarning("Projectile script not found on instantiated object!");
+            GameObject rangeInstance = PoolManager.Instance.Get(projectile, projectilePosition.position, Quaternion.identity, PoolCategory.Enemy);
+            //rangeInstance.transform.SetParent(projectileParent, false);
+
+            if (player != null)
+            {
+                Vector2 baseDir = (player.position - rangeInstance.transform.position).normalized;
+                float baseAngle = Mathf.Atan2(baseDir.y, baseDir.x) * Mathf.Rad2Deg;
+                if (projectileCanRotate)
+                {
+                    float finalAngle = baseAngle + spreadAngle + angleOffset;
+                    rangeInstance.transform.rotation = Quaternion.Euler(0f, 0f, finalAngle);
+                }
+
+                if (rangeInstance.TryGetComponent<EnemyProjectileBaseScript>(out var projectileScript))
+                {
+                    projectileScript.Damage = Damage;
+                    projectileScript.speed = ProjectileSpeed;
+                    projectileScript.hasDirection = true;
+                    Vector2 finalDir = Quaternion.Euler(0, 0, angleOffset) * baseDir;
+                    projectileScript.SetDirection(finalDir);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Projectile script not found on instantiated object!");
+            }
         }
     }
 

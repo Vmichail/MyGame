@@ -34,10 +34,11 @@ public class CollectablePetScript : CollectableBaseScript
 
     protected override void CollectEnds()
     {
-        AudioManager.Instance.PlaySoundFX("catCollectSound", transform.position, 0.8f, 0.75f, 1.25f);
+        Debug.Log("Cat collected!");
+        AudioManager.Instance.PlaySoundFX("catCollectSound", transform.position, 1f, 1f, 1f);
         GlobalVariables.Instance.catsCollected++;
-        gameObject.SetActive(false);
         boxCollider.enabled = true;
         IsCollected = false;
+        gameObject.SetActive(false);
     }
 }

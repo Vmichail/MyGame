@@ -52,12 +52,16 @@ public class BaseButtonScript : MonoBehaviour,
 
         if (animateButton)
             StartIdleAnimation();
+
+        if (setOriginalScaleToOne)
+            originalScale = Vector3.one;
     }
 
     // ===== MOUSE HOVER =====
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!enableSelectedEffect) return;
+        if (!enableSelectedEffect || !CursorManagerScript.MouseIsActive) return;
+        EventSystem.current.SetSelectedGameObject(gameObject);
         HighlightButton();
         CursorManagerScript.SetPointer();
     }

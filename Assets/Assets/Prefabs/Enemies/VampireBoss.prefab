@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6774405568430432929}
   - component: {fileID: 4633478745201941322}
   - component: {fileID: 6411966663293545569}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: AttackRange
   m_TagString: Range
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 8028914339369896355}
   - component: {fileID: 7561351563922506943}
   - component: {fileID: 8196059045507383224}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: VampireBoss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -133,7 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: bc2474f45ec1e1041bad193940d61abf, type: 2}
-  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  enemyHealthUpdate: {fileID: 1643614162049206226}
+  killedParticles: {fileID: 1533611495283434426, guid: 3c6bd4e38ab2c0a46814b46812e7432f, type: 3}
   hasDamageParticles: 1
   damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
@@ -146,6 +147,7 @@ MonoBehaviour:
   projectilePosition: {fileID: 6327042533695370261}
   projectileParent: {fileID: 0}
   projectileCanRotate: 1
+  randomSpreadAngle: 10
   normalAttackFX: {fileID: 0}
   specialAttackFX: {fileID: 0}
   isGeneratedByPool: 1
@@ -209,7 +211,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 4
   m_LinearDamping: 1
   m_AngularDamping: 1
   m_GravityScale: 0
@@ -236,7 +238,7 @@ GameObject:
   - component: {fileID: 2331001477600259256}
   - component: {fileID: 2996830230514402830}
   - component: {fileID: 1643614162049206226}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: HealthText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,7 +289,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  - {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -307,7 +309,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -333,8 +335,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 200
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e8f710f7077504144992f589d556ba0d, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -358,10 +360,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 9
-  m_fontSizeBase: 36
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 7
   m_fontSizeMax: 10
   m_fontStyle: 0
@@ -429,7 +431,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9205726109225830178}
   - component: {fileID: 8009557271897162308}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -471,7 +473,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000039cf5205b36b8cb40b3ba7f1
+  m_ApplyToSortingLayers: 39cf5205b36b8cb4
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -512,7 +514,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6327042533695370261}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: attackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +548,7 @@ GameObject:
   - component: {fileID: 3749803812370382496}
   - component: {fileID: 8683147018546817332}
   - component: {fileID: 4602150479765225183}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +616,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7eef530016ad39b4dadc9602ecd3561f, type: 3}

@@ -20,14 +20,14 @@ MonoBehaviour:
     speed: 6
     attackCooldown: 1
     canBeKnockedBack: 1
-    knockbackResistance: 5
+    knockbackResistance: 1
     attackRange: 20
     projectileSpeed: 8
     coinDropChance: 0
     healthPotionChance: 0.4
     manaPotionChance: 0.4
     greenRubyChance: 0
-    redRubyChance: 0
+    redRubyChance: 0.2
     coinDropEnum: 1
     minExp: 1
     maxExp: 3

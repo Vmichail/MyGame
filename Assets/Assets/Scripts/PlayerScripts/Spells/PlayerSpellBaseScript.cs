@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -25,6 +26,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
     [SerializeField] private GameObject particles;
     [SerializeField] private GameObject OnDestroyParticles;
     [SerializeField] private ChildSpellSpawner childSpellSpawner;
+    [SerializeField] private TextMeshPro shieldInfos;
     [Header("Orbit Settings")]
     public virtual float Radius => GlobalVariables.Instance.orbitBladeRadius;
     public virtual float RotationSpeed => GlobalVariables.Instance.orbidBladeSpellSpeed;
@@ -40,14 +42,51 @@ public class PlayerSpellBaseScript : MonoBehaviour
     public virtual string SpellCastSound => null;
     public virtual string OnHitSound => "hitEffect";
     private float shieldSpeed;
+    private bool projectileDestroyed = false;
+    private float elapsedTime = 0f;
 
     public void SetAngle(float startAngle)
     {
         angle = startAngle;
     }
 
+    private void OnEnable()
+    {
+        transform.rotation = Quaternion.identity;
+        currentRadius = 0f;
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+        projectileDestroyed = false;
+        elapsedTime = 0f;
+        currentBounces = 0;
+        currentPiercing = 0;
+        if (IsShield && shieldInfos != null)
+        {
+            shieldInfos.enabled = true;
+        }
+        if (IsShield)
+        {
+
+            GlobalVariables.Instance.playerInvulnerableReasons.Add(GlobalVariables.InvulnerableReasonEnum.ShieldSpell);
+            shieldSpeed = GlobalVariables.Instance.shieldSpellSpeed;
+            HeroUpgrades.Instance.UpdatePlayerSpeed(shieldSpeed);
+        }
+        if (SpellCastSound != null)
+        {
+            AudioManager.Instance.PlaySoundFX(SpellCastSound, transform.position, 0.8f, 0.9f, 1.1f);
+        }
+        /*        Debug.Log($"Spell started: {GetType().Name}, duration: {SpellDuration}");*/
+        if (orbit)
+        {
+            if (couroutineSound)
+                soundCoroutine = StartCoroutine(PlayLoopSound());
+            player = GlobalVariables.Instance.playerTransform;
+        }
+    }
+
     void Update()
     {
+        elapsedTime += Time.deltaTime;
         if (player != null && orbit)
         {
             if (currentRadius < Radius)
@@ -64,6 +103,16 @@ public class PlayerSpellBaseScript : MonoBehaviour
         {
             transform.localPosition = Vector3.zero; // stick to player
         }
+        if (IsShield && shieldInfos != null)
+        {
+            float remainingDuration = Mathf.Max(0f, SpellDuration - elapsedTime);
+            int remainingPiercing = Piercing - currentPiercing;
+            shieldInfos.text = $"{remainingDuration:F1} - {remainingPiercing}";
+        }
+        if (elapsedTime >= SpellDuration)
+        {
+            DestroyProjectile();
+        }
     }
 
     protected virtual void Awake()
@@ -73,24 +122,7 @@ public class PlayerSpellBaseScript : MonoBehaviour
 
     protected virtual void Start()
     {
-        if (IsShield)
-        {
-            GlobalVariables.Instance.playerInvulnerableReasons.Add(GlobalVariables.InvulnerableReasonEnum.ShieldSpell);
-            shieldSpeed = GlobalVariables.Instance.shieldSpellSpeed;
-            HeroUpgrades.Instance.UpdatePlayerSpeed(shieldSpeed);
-        }
-        if (SpellCastSound != null)
-        {
-            AudioManager.Instance.PlaySoundFX(SpellCastSound, transform.position, 0.8f, 0.9f, 1.1f);
-        }
-        Destroy(gameObject, SpellDuration);
-        /*        Debug.Log($"Spell started: {GetType().Name}, duration: {SpellDuration}");*/
-        if (orbit)
-        {
-            if (couroutineSound)
-                soundCoroutine = StartCoroutine(PlayLoopSound());
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-        }
+        //Start has no point for pool gameobjects, initialization should be done in OnEnable or Awake
     }
 
     private IEnumerator PlayLoopSound()
@@ -106,9 +138,13 @@ public class PlayerSpellBaseScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyProjectile"))
         {
-            if (particles != null)
+            if (particles != null && IsShield)
             {
-                Instantiate(particles, transform.position, Quaternion.identity);
+                PoolManager.Instance.Get(particles, collision.gameObject.transform.position, Quaternion.identity, PoolCategory.Particles);
+            }
+            else if (particles != null)
+            {
+                PoolManager.Instance.Get(particles, transform.position, Quaternion.identity, PoolCategory.Particles);
             }
             else
             {
@@ -116,14 +152,14 @@ public class PlayerSpellBaseScript : MonoBehaviour
             }
             if (Bounces > 0 && currentBounces < Bounces && !orbit)
                 Bounce(collision.gameObject);
-            else if (currentPiercing < Piercing)
+            else if (currentPiercing + 1 < Piercing)
             {
                 currentPiercing++;
             }
             else
             {
                 AudioManager.Instance.PlaySoundFX("playerProjectileDestroy", transform.position, 0.5f, 0.6f, 1.1f);
-                Destroy(gameObject);
+                DestroyProjectile();
             }
         }
 
@@ -131,10 +167,10 @@ public class PlayerSpellBaseScript : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall") && !IsShield && !orbit)
         {
             AudioManager.Instance.PlaySoundFX("wallHitSpell", transform.position, 0.8f, 0.9f, 1.1f);
-            Destroy(gameObject);
+            DestroyProjectile();
         }
     }
 
@@ -199,13 +235,15 @@ public class PlayerSpellBaseScript : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void DestroyProjectile()
     {
+        if (projectileDestroyed) return; // Prevent multiple destructions
+        projectileDestroyed = true;
         if (soundCoroutine != null)
             StopCoroutine(soundCoroutine);
         if (OnDestroyParticles != null)
         {
-            Instantiate(OnDestroyParticles, transform.position, Quaternion.identity);
+            PoolManager.Instance.Get(OnDestroyParticles, transform.position, Quaternion.identity, PoolCategory.Particles);
         }
         if (IsShield)
         {
@@ -217,5 +255,12 @@ public class PlayerSpellBaseScript : MonoBehaviour
             AudioManager.Instance.PlaySoundFX(ChildSummonSoundName, transform.position, 0.5f, 0.80f, 1.25f);
             childSpellSpawner.SpawnChildSpells(transform.position);
         }
+        PoolManager.Instance.Return(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        if (soundCoroutine != null)
+            StopCoroutine(soundCoroutine);
     }
 }

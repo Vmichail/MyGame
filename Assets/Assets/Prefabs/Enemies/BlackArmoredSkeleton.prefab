@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  - {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,7 +83,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -109,8 +109,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e8f710f7077504144992f589d556ba0d, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -134,10 +134,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6.5
-  m_fontSizeBase: 36
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 4
   m_fontSizeMax: 7
   m_fontStyle: 0
@@ -245,7 +245,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlackArmoredSkeleton
   config: {fileID: 11400000, guid: 2efd2c05bafe9e5478b2d6a669874a06, type: 2}
-  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  enemyHealthUpdate: {fileID: 3008175845352140974}
+  killedParticles: {fileID: 4197466411371465953, guid: 20c28e5b60f297d4c8287dc3be2800cf, type: 3}
   hasDamageParticles: 1
   damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
@@ -258,6 +259,7 @@ MonoBehaviour:
   projectilePosition: {fileID: 0}
   projectileParent: {fileID: 0}
   projectileCanRotate: 1
+  randomSpreadAngle: 10
   normalAttackFX: {fileID: 0}
   specialAttackFX: {fileID: 0}
   isGeneratedByPool: 1
@@ -321,7 +323,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 1.5
   m_LinearDamping: 1
   m_AngularDamping: 0.5
   m_GravityScale: 0
@@ -414,7 +416,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 592df8d5149c95745aa86118a188cb85, type: 3}
@@ -506,7 +508,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3786491889438787150, guid: 0a908cd60a170574a99082ae3cb0bd67, type: 3}

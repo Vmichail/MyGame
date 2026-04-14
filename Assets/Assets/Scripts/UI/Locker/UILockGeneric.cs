@@ -74,13 +74,15 @@ public class UILockGeneric : MonoBehaviour,
             lockIcon
                 .DOScale(originalScale * scaleMultiplier, scaleDuration + scaleDuration)
                 .SetEase(Ease.OutBack)
-                .SetUpdate(true);
+                .SetUpdate(true)
+                .SetLink(lockIcon.gameObject, LinkBehaviour.KillOnDisable);
 
             // Rotation ping-pong
             lockIcon
                 .DORotate(new Vector3(0, 0, rotationAmount), rotationDuration)
                 .SetLoops(2, LoopType.Yoyo)
-                .SetUpdate(true);
+                .SetUpdate(true)
+                .SetLink(lockIcon.gameObject, LinkBehaviour.KillOnDisable);
 
             // Lock disappearing animation
             lockGO.transform
@@ -88,6 +90,7 @@ public class UILockGeneric : MonoBehaviour,
                 .SetDelay(0.3f)
                 .SetEase(Ease.InBack)
                 .SetUpdate(true)
+                .SetLink(lockGO, LinkBehaviour.KillOnDisable)
                 .OnComplete(() =>
                 {
                     lockGO.SetActive(false);

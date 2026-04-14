@@ -61,7 +61,7 @@ public class OrbScript : MonoBehaviour
 
     private void CastAttack(Vector3 enemyPosition, GameObject spell)
     {
-        GameObject newSpell = Instantiate(spell, transform.position, Quaternion.identity);
+        GameObject newSpell = PoolManager.Instance.Get(spell, transform.position, Quaternion.identity, PoolCategory.Player);
 
         AudioManager.Instance.PlaySoundFX("playerAttack", transform.position, 0.2f, 0.80f, 1.25f);
 

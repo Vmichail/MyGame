@@ -1,17 +1,22 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Rendering.Universal.Internal;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
 {
-    protected Transform player;
+    protected Transform playerTransform;
     protected bool IsCollected { get; set; }
-
+    private static readonly string sortingLayerName = "Ground";
     public float speed = 6f;
+    public float initialSpeed = 6f;
     public float speedIncreaseRate = 1f;
     public float maxSpeed = 80f;
     public float stopDistance = 0.1f;
     public bool isAffectedByMagnet = false;
+    [SerializeField] private CollectableType collectableType;
+
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
     protected BoxCollider2D boxCollider;
 
@@ -20,18 +25,26 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
     protected virtual void Awake()
     {
         boxCollider = GetComponent<BoxCollider2D>();
+        initialSpeed = speed;
     }
 
     protected virtual void OnEnable()
     {
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            ApplySorting();
+        }
+        speed = initialSpeed;
+        playerTransform = GlobalVariables.Instance.playerTransform;
         boxCollider.enabled = true;
         IsCollected = false;
     }
 
     protected virtual void Update()
     {
-        if (player == null) return;
+        if (playerTransform == null) return;
 
         if (isAffectedByMagnet && GlobalVariables.Instance.magnetIsActive)
         {
@@ -45,11 +58,11 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
 
         transform.position = Vector3.MoveTowards(
             transform.position,
-            player.position,
+            playerTransform.position,
             speed * Time.deltaTime
         );
 
-        if (Vector3.Distance(transform.position, player.position) <= stopDistance)
+        if ((transform.position - playerTransform.position).sqrMagnitude <= stopDistance * stopDistance)
         {
             CollectEnds();
         }
@@ -67,7 +80,8 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
             .DOMoveY(spawnPos.y + 0.3f, 0.8f)
             .SetEase(Ease.InOutSine)
             .SetLoops(-1, LoopType.Yoyo)
-            .SetTarget(this);
+            .SetTarget(this)
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 
     private void OnDisable()
@@ -110,5 +124,34 @@ public abstract class CollectableBaseScript : MonoBehaviour, ICollectable
         // DOTween safety: always kill
         idleTween?.Kill();
         transform.DOKill();
+    }
+
+    private void ApplySorting()
+    {
+        spriteRenderer.sortingLayerName = sortingLayerName;
+        switch (collectableType)
+        {
+            case CollectableType.ExpShard:
+                spriteRenderer.sortingOrder = 101;
+                break;
+            case CollectableType.Coin:
+                spriteRenderer.sortingOrder = 102;
+                break;
+            case CollectableType.ManaPotion:
+                spriteRenderer.sortingOrder = 103;
+                break;
+            case CollectableType.HealthPotion:
+                spriteRenderer.sortingOrder = 104;
+                break;
+            case CollectableType.RedRuby:
+                spriteRenderer.sortingOrder = 105;
+                break;
+            case CollectableType.GreenRuby:
+                spriteRenderer.sortingOrder = 106;
+                break;
+            case CollectableType.Cat:
+                spriteRenderer.sortingOrder = 107;
+                break;
+        }
     }
 }

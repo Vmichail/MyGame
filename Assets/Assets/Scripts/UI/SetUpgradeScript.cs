@@ -27,6 +27,7 @@ public class SetUpgradeScript : BaseButtonScript
     [SerializeField] private Image coinCost;
     [SerializeField] private Image healthCost;
     [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private TextMeshProUGUI stackText;
     private UIEffect uiEffect;
 
     [SerializeField] private GameObject[] bonuses;
@@ -35,6 +36,7 @@ public class SetUpgradeScript : BaseButtonScript
 
     public void SetUpgradeChoice(UpgradeChoice upgradeChoice, int cost, bool locked, List<UpgradeChoice> additionalChoices)
     {
+        stackText.text = UpgradeStackTracker.Instance.GetStackLabel(upgradeChoice);
         cardImage.sprite = upgradeChoice.Image;
         iconImage.sprite = upgradeChoice.Icon;
         if (cost > 0)

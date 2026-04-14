@@ -57,7 +57,8 @@ public class PauseGameOverSwitch : MonoBehaviour
                 .DORotate(new Vector3(0, 0, -360f), colorWheelRotationDuration, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear)
                 .SetLoops(-1, LoopType.Incremental)
-                .SetUpdate(true);
+                .SetUpdate(true)
+                .SetLink(colorWheelImage, LinkBehaviour.KillOnDisable);
 
             UpdateStars(GlobalVariables.Instance.score);
             gameOverOptions.SetActive(true);

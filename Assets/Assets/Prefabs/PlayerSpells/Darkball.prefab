@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8095321904212507540}
   - component: {fileID: 556636687456792048}
   - component: {fileID: 740285634188674523}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Darkball
   m_TagString: PlayerSpell
   m_Icon: {fileID: 0}
@@ -84,6 +84,7 @@ BoxCollider2D:
   m_EdgeRadius: 0
 --- !u!212 &9128307855059607231
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,6 +103,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -123,9 +126,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 058633138c89b5148aa6ce8798ed41e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -135,7 +140,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &8095321904212507540
 Animator:
@@ -198,5 +202,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b2ec1d50c9ad7469af6687d9a73bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDirection: 0
+  prefabReference: {fileID: 5606570587196788127}
   particles: {fileID: 4197466411371465953, guid: 20c28e5b60f297d4c8287dc3be2800cf, type: 3}
+  OnDestroyParticles: {fileID: 0}
+  childSpellSpawner: {fileID: 0}
+  shieldInfos: {fileID: 0}
+  orbit: 0
+  couroutineSound: 0
+  StayOnPlayer: 0

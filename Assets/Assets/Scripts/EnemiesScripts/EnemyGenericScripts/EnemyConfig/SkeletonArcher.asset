@@ -18,7 +18,7 @@ MonoBehaviour:
     currentHealth: 6
     damage: 4
     speed: 4
-    attackCooldown: 0.7
+    attackCooldown: 1.5
     canBeKnockedBack: 1
     knockbackResistance: 0
     attackRange: 15
@@ -27,7 +27,7 @@ MonoBehaviour:
     healthPotionChance: 0.05
     manaPotionChance: 0.05
     greenRubyChance: 0
-    redRubyChance: 0.05
+    redRubyChance: 0.025
     coinDropEnum: 1
     minExp: 1
     maxExp: 3

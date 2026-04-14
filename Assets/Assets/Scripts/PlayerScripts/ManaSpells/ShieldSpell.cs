@@ -17,7 +17,7 @@ public class ShieldSpell : PlayerSpellBaseScript
     public override string CouroutineSoundName => "shieldLoopSound";
     public override string ChildSummonSoundName => "shieldBreakSound";
     public override string SpellCastSound => "shieldCastSound";
-    public override string OnHitSound => "shieldHitSound";
+    public override string OnHitSound => "hitEffect";
     public override bool IsShield => true;
 
 }

@@ -69,14 +69,23 @@ public class PlayerStatsManager : MonoBehaviour
     [SerializeField] private PlayerStatsSO insaneBaseStats;
     [SerializeField] private PlayerStatsSO MainMenuSceneStats;
     private PlayerStatsSO selectedBaseStats;
-    public int CurrentHealth { get; set; }
+    private int _currentHealth; // stores the actual value
+    private bool _lowHealthWarningPlayed = false;
+    public int CurrentHealth  // the public face of it
+    {
+        get => _currentHealth;
+        set
+        {
+            _currentHealth = Mathf.Max(0, value);
+            OnHealthChanged();
+        }
+    }
     public int CurrentMana { get; set; }
     //
     public int CurrentLevel = 0;
     public bool RegenIsActive = true;
-    public int CurrentExp = 0;
+    public float CurrentExp = 0;
     public int MaxExp = 10;
-    //
     public static PlayerStatsManager Instance { get; private set; }
 
     public PlayerStats BaseStats { get; private set; }
@@ -204,6 +213,7 @@ public class PlayerStatsManager : MonoBehaviour
     public void ResetToBase()
     {
         RuntimeStats = new PlayerStats(BaseStats);
+        UpgradeStackTracker.Instance.Reset();
     }
 
     //Helper methods
@@ -284,5 +294,27 @@ public class PlayerStatsManager : MonoBehaviour
             DifficultyLevel.Insane => insaneBaseStats,
             _ => normalBaseStats,
         };
+    }
+
+    private void OnHealthChanged()
+    {
+        float healthPercent = (float)_currentHealth / MaxHealth();
+
+        if (healthPercent <= 0.2f && _currentHealth >= 1)
+        {
+            if (!_lowHealthWarningPlayed)
+            {
+                _lowHealthWarningPlayed = true;
+                HurtEffect.Instance.StartLowHealthEffect(0.1f);
+            }
+        }
+        else
+        {
+            if (_lowHealthWarningPlayed)
+            {
+                _lowHealthWarningPlayed = false;
+                HurtEffect.Instance.StopLowHealthEffect();
+            }
+        }
     }
 }

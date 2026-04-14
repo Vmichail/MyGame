@@ -1,23 +1,40 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+public enum CollectableType
+{
+    ExpShard,
+    Coin,
+    HealthPotion,
+    ManaPotion,
+    RedRuby,
+    GreenRuby,
+    Cat,
+}
 public class GlobalVariables : MonoBehaviour
 {
     private const string SHOW_ENEMY_HEALTH_KEY = "ShowAllEnemiesHealth";
     private const string DEV_MODE_KEY = "DeveloperMode";
+    private const string SHOW_LIGHTS = "ShowLights";
     private const string SELECTED_CHAR_KEY = "SelectedCharacter";
     public static GlobalVariables Instance { get; private set; }
 
     private void Update()
     {
         gameTime += Time.deltaTime;
+        if (DifficultyManager.Instance != null && gameTime > DifficultyManager.Instance.EnrageTimer)
+        {
+            rangedEnragedMode = true;
+        }
     }
     void Awake()
     {
+        DOTween.logBehaviour = LogBehaviour.Verbose;
+        Application.targetFrameRate = 60;
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject); // Prevent duplicates
@@ -32,6 +49,7 @@ public class GlobalVariables : MonoBehaviour
     {
         showAllEnemiesHealth = PlayerPrefs.GetInt(SHOW_ENEMY_HEALTH_KEY, 0) == 1;
         developerMode = PlayerPrefs.GetInt(DEV_MODE_KEY, 0) == 1;
+        showAllLights = PlayerPrefs.GetInt(SHOW_LIGHTS, 1) == 1;
         selectedCharacter = PlayerPrefs.GetString(SELECTED_CHAR_KEY, CharacterSprite.MiranaSprite.ToString());
     }
     public void SetSelectedCharacter(string value)
@@ -52,7 +70,9 @@ public class GlobalVariables : MonoBehaviour
     [Header("Settings Options")]
     public bool developerMode = false;
     public bool showAllEnemiesHealth = false;
+    public bool showAllLights = false;
     public event Action<bool> OnShowAllEnemiesHealthChanged;
+    public event Action<bool> OnShowAllLightsChanged;
     public event Action<bool> OnDeveloperModeChanged;
     public void SetShowAllEnemiesHealth(bool value)
     {
@@ -64,6 +84,18 @@ public class GlobalVariables : MonoBehaviour
         PlayerPrefs.Save();
 
         OnShowAllEnemiesHealthChanged?.Invoke(value);
+    }
+
+    public void SetShowAllLights(bool value)
+    {
+        if (showAllLights == value)
+            return;
+
+        showAllLights = value;
+        PlayerPrefs.SetInt(SHOW_LIGHTS, value ? 1 : 0);
+        PlayerPrefs.Save();
+
+        OnShowAllLightsChanged?.Invoke(value);
     }
 
     public void SetDeveloperMode(bool value)
@@ -82,6 +114,7 @@ public class GlobalVariables : MonoBehaviour
     public string[] linaAnnouncementsClips = { "linaGame", "linaFireTime", "linaIamOnFire", "linaLetsGetAFireGoing" };
     public string[] gameOverClips = { "gameOver1", "gameOver2", "gameOver3", "gameOver4", "gameOver5" };
     [Header("Player Generic Values")]
+    public Transform playerTransform = null;
     public bool playerIsAlive = true;
     public List<InvulnerableReasonEnum> playerInvulnerableReasons = new();
     public List<PauseReasonEnum> pauseReasonsList = new();
@@ -92,17 +125,6 @@ public class GlobalVariables : MonoBehaviour
     public bool isSpawningCollectablePets = true;
     public int spawnedPets = 0;
     public int catsCollected = 0;
-    public int yellowCoinValue = 1;
-    public int greenRubyCoinValue = 10;
-    public int greenRubyExpValue = 100;
-    public int redRubyCoinValue = 5;
-    public int redRubyExpValue = 10;
-    [Header("Exp and Mana Values")]
-    public int shardExp = 1;
-
-    //Potions
-    public float manaPotionMana = 10;
-    public float healthPotionHealth = 20;
 
 
     //GreenMultiplier
@@ -130,6 +152,7 @@ public class GlobalVariables : MonoBehaviour
     public int score = 0;
     public int spawnedSkeletons = 0;
     public int spawnedSkeletonArchers = 0;
+    public bool rangedEnragedMode = false;
 
     [Header("!!Spells!!")]
     [Header("!!ManaSpells!!")]
@@ -175,7 +198,6 @@ public class GlobalVariables : MonoBehaviour
     public float shieldDelay = 0.5f;
     public float shieldCooldown = 5f;
     public string shieldCastSound = "fireBladeSound";
-    public float shieldSpellSpeedMultiply = 1.3f;
     [Header("!!AttackSpellsSpells!!")]
     [Header("Spell-FireBall")]
     public float fireballSpeed = 5f;

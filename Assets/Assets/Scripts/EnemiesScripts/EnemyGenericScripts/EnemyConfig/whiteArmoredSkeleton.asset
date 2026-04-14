@@ -20,7 +20,7 @@ MonoBehaviour:
     speed: 4
     attackCooldown: 0.3
     canBeKnockedBack: 1
-    knockbackResistance: 1
+    knockbackResistance: 0
     attackRange: 0
     projectileSpeed: 0
     coinDropChance: 0.2

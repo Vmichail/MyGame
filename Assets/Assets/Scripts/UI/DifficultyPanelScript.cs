@@ -91,9 +91,12 @@ public class DifficultyPanelScript : MonoBehaviour
     private void TweenColor(Image img, Color target)
     {
         if (!img) return;
+
         img.DOKill();
+
         img.DOColor(target, colorTweenTime)
-           .SetUpdate(true);
+           .SetUpdate(true)
+           .SetLink(img.gameObject, LinkBehaviour.KillOnDestroy);
     }
     //Event System selection handling
     private void OnEnable()

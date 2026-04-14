@@ -20,8 +20,10 @@ public class EnemySpawnConfig
 
 public class EnemySpawningScript : MonoBehaviour
 {
+    [SerializeField] private int maxAllowedSpawnedCats = 5;
     [Header("Enemy Spawning Configurations")]
     [SerializeField] private float spawnTimeDefault;
+    [SerializeField] private int maxAliveEnemies = 120;
     [SerializeField] private float skeletonsSpawningTime;
     [SerializeField] private float blackArmoredSkeletonSpawningTime;
     [SerializeField] private float whiteArmoredSkeletonSpawningTime;
@@ -34,7 +36,7 @@ public class EnemySpawningScript : MonoBehaviour
     [SerializeField] private float thirdBossSpawningTime;
     [SerializeField] private float loopBossSpawningTime;
     [SerializeField] private float loopBossSpawningTimeIncrease;
-    [SerializeField] private float loopBossSpawningTimeIncreaseDeacreaseTime;
+    [SerializeField] private float loopBossSpawningTimeIncreaseDecreaseTime;
 
 
     [SerializeField] private EnemySpawnConfig[] enemySpawnConfigs;
@@ -65,12 +67,28 @@ public class EnemySpawningScript : MonoBehaviour
     private bool firstBossSpawned;
     private bool secondBossSpawned;
     private bool thirdBossSpawned;
-    private bool loopBossSpawned;
     private bool vampireMiniBossActivated;
     private Sequence spawnSequence;
+    //
+    private float currentSkeletonSpawnTime;
+    private float minSkeletonSpawnTime = 0.5f;
+    //
+    private float currentSkeletonArchersSpawnTime;
+    private float minSkeletonArchersSpawnTime = 1f;
+    //
+    private float currentBlackArmoredSkeletonSpawnTime;
+    private float minBlackArmoredSkeletonSpawnTime = 2f;
+    //
+    private float currentWhiteArmoredSkeletonSpawnTime;
+    private float minWhiteArmoredSkeletonSpawnTime = 5f;
 
     void Start()
     {
+        currentSkeletonSpawnTime = skeletonsSpawningTime;
+        currentSkeletonArchersSpawnTime = skeletonArchersSpawningTime;
+        currentBlackArmoredSkeletonSpawnTime = blackArmoredSkeletonSpawningTime;
+        currentWhiteArmoredSkeletonSpawnTime = whiteArmoredSkeletonSpawningTime;
+
         foreach (var config in enemySpawnConfigs)
         {
             EnemyTypes type = config.enemyType;
@@ -163,13 +181,13 @@ public class EnemySpawningScript : MonoBehaviour
             StartCoroutine(SpawnSpecificMobs(EnemyTypes.Level1Skeleton));
         }
 
-        if (canSpawnSkeletonArchers && Instance.gameTime > 15 && skeletonArchersEnabled == false)
+        if (canSpawnSkeletonArchers && Instance.gameTime > skeletonArchersSpawningTime && skeletonArchersEnabled == false)
         {
             skeletonArchersEnabled = true;
             StartCoroutine(SpawnSpecificMobs(EnemyTypes.SkeletonArcher));
         }
 
-        if (canSpawnBlackArmoredSkeletons && Instance.gameTime > 35 && blackArmoredSkeletonEnabled == false)
+        if (canSpawnBlackArmoredSkeletons && Instance.gameTime > blackArmoredSkeletonSpawningTime && blackArmoredSkeletonEnabled == false)
         {
             blackArmoredSkeletonEnabled = true;
             StartCoroutine(SpawnSpecificMobs(EnemyTypes.BlackArmoredSkeleton));
@@ -193,14 +211,14 @@ public class EnemySpawningScript : MonoBehaviour
         {
             firstBossSpawned = true;
             SpawnVampireMiniBoss();
-            StartCoroutine(SpawnSpecificMobs(EnemyTypes.Level1Skeleton));
+            currentSkeletonSpawnTime = Mathf.Max(minSkeletonSpawnTime, currentSkeletonSpawnTime - 0.2f);
         }
 
         if (Instance.gameTime >= skeletonKingBossSpawningTime && !secondBossSpawned)
         {
             secondBossSpawned = true;
             SpawnSkeletonKingBoss();
-            StartCoroutine(SpawnSpecificMobs(EnemyTypes.Level1Skeleton));
+            currentSkeletonSpawnTime = Mathf.Max(minSkeletonSpawnTime, currentSkeletonSpawnTime - 0.2f);
         }
 
         if (Instance.gameTime >= thirdBossSpawningTime && !thirdBossSpawned)
@@ -215,13 +233,13 @@ public class EnemySpawningScript : MonoBehaviour
         {
             Instance.endlessModeOn = true;
             loopBossSpawningTime += loopBossSpawningTimeIncrease;
-            loopBossSpawningTimeIncrease -= loopBossSpawningTimeIncreaseDeacreaseTime;
+            loopBossSpawningTimeIncrease = Mathf.Max(40, loopBossSpawningTimeIncrease - loopBossSpawningTimeIncreaseDecreaseTime);
             SpawnVampireMiniBoss();
             SpawnSkeletonKingBoss();
             //
-            StartCoroutine(SpawnSpecificMobs(EnemyTypes.WhiteArmoredSkeleton));
-            StartCoroutine(SpawnSpecificMobs(EnemyTypes.SkeletonArcher));
-            StartCoroutine(SpawnSpecificMobs(EnemyTypes.BlackArmoredSkeleton));
+            currentSkeletonArchersSpawnTime = Mathf.Max(minSkeletonArchersSpawnTime, currentSkeletonArchersSpawnTime - 0.3f);
+            currentBlackArmoredSkeletonSpawnTime = Mathf.Max(minBlackArmoredSkeletonSpawnTime, currentBlackArmoredSkeletonSpawnTime - 1.5f);
+            currentWhiteArmoredSkeletonSpawnTime = Mathf.Max(minWhiteArmoredSkeletonSpawnTime, currentWhiteArmoredSkeletonSpawnTime - 2);
         }
 
         if (Instance.endlessModeOn && !vampireMiniBossActivated)
@@ -280,10 +298,15 @@ public class EnemySpawningScript : MonoBehaviour
     {
         Vector2 position = new(Random.Range(minWidth, maxWidth), Random.Range(minHeight, maxHeight));
         StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[enemyType], position, false));
-        float spawningTime = GetSpawnTime(enemyType);
-        while (Instance.spawningMobsIsEnabled && Instance.aliveEnemies < 150)
+        while (Instance.spawningMobsIsEnabled)
         {
+            if (Instance.aliveEnemies >= maxAliveEnemies)
+            {
+                yield return new WaitForSeconds(1f);
+                continue;
+            }
             position = new(Random.Range(minWidth, maxWidth), Random.Range(minHeight, maxHeight));
+            float spawningTime = GetSpawnTime(enemyType);
             yield return new WaitForSeconds(spawningTime);
             StartCoroutine(SpawnIndicatorThenEnemy(enemyPools[enemyType], position, false));
         }
@@ -293,10 +316,10 @@ public class EnemySpawningScript : MonoBehaviour
     {
         return enemyType switch
         {
-            EnemyTypes.Level1Skeleton => skeletonsSpawningTime,
-            EnemyTypes.BlackArmoredSkeleton => blackArmoredSkeletonSpawningTime,
-            EnemyTypes.WhiteArmoredSkeleton => whiteArmoredSkeletonSpawningTime,
-            EnemyTypes.SkeletonArcher => skeletonArchersSpawningTime,
+            EnemyTypes.Level1Skeleton => currentSkeletonSpawnTime,
+            EnemyTypes.BlackArmoredSkeleton => currentBlackArmoredSkeletonSpawnTime,
+            EnemyTypes.WhiteArmoredSkeleton => currentWhiteArmoredSkeletonSpawnTime,
+            EnemyTypes.SkeletonArcher => currentSkeletonArchersSpawnTime,
             EnemyTypes.VampireNormal => vampireNormalSpawningTime,
             EnemyTypes.VampireBoss => vampireBossSpawningTimeEndlessMode,
             _ => spawnTimeDefault
@@ -305,6 +328,12 @@ public class EnemySpawningScript : MonoBehaviour
 
     private IEnumerator SpawnIndicatorThenEnemy(ObjectPool<GameObject> pool, Vector2 position, bool isBoss = false)
     {
+        if (isBoss && spawnBossIndicatorPrefab == null)
+        {
+            Debug.LogError("spawnBossIndicatorPrefab is not assigned!");
+            yield break;
+        }
+
         GameObject indicator = null;
         if (isBoss)
             indicator = Instantiate(spawnBossIndicatorPrefab, position, Quaternion.identity, parent);
@@ -327,13 +356,7 @@ public class EnemySpawningScript : MonoBehaviour
         // Cancel automatically if GameObject destroyed
         var token = this.GetCancellationTokenOnDestroy();
 
-        if (Instance.isSpawningCollectablePets && Instance.spawnedPets < 5)
-        {
-            SpawnCollectableCat();
-            Instance.spawnedPets++;
-        }
-
-        while (Instance.isSpawningCollectablePets && !token.IsCancellationRequested)
+        while (Instance.isSpawningCollectablePets && !token.IsCancellationRequested && Instance.spawnedPets < maxAllowedSpawnedCats)
         {
             await UniTask.Delay(
                 (int)(collectableSpawnDelay * 1000),
@@ -341,7 +364,7 @@ public class EnemySpawningScript : MonoBehaviour
                 PlayerLoopTiming.Update,
                 token
             );
-
+            Instance.spawnedPets++;
             SpawnCollectableCat();
         }
     }

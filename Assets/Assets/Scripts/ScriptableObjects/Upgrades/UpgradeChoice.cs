@@ -17,6 +17,9 @@ public class UpgradeChoice : ScriptableObject
     [Header("Bonus Values")]
     [SerializeField] private UpgradeValueData upgradeValueData;
 
+    [Header("Stack Limit")]
+    public int maxStack = 0; // 0 = infinite
+
     public Sprite Image => image;
     public Sprite Icon => icon;
     public int Cost => cost;

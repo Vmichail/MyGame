@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 7946519828992039686}
   - component: {fileID: 5844386777082248138}
   - component: {fileID: 4774684900185818875}
-  m_Layer: 0
+  - component: {fileID: 3287195421409149757}
+  m_Layer: 12
   m_Name: VampireProjectile
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -37,6 +38,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1818321397497409096
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -55,6 +57,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -76,9 +80,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
   m_SortingLayer: 3
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -2054740260875147591, guid: 1001c319b66d70a4ca0b29b9d13e120d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -88,7 +94,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &7946519828992039686
 Animator:
@@ -126,9 +131,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   lifeTime: 5
+  lifeTimeMax: 4
   particles: {fileID: 3292213846079307020, guid: 1044e1f64dbf4cf4095cdeb0503383dc, type: 3}
   receivedDamagePopUp: {fileID: 3116200365909034762, guid: 15a2e85232ddb974c9431f50b755d265, type: 3}
   hasDirection: 0
+  exposionClipNames: []
+  projectileLifes: 2
+  spawnChildrenOnDestroy: 0
+  childGameObject: {fileID: 0}
 --- !u!58 &4774684900185818875
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -165,3 +175,30 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.0096235275, y: -0.0015214682}
   m_Radius: 0.23564672
+--- !u!50 &3287195421409149757
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828209180850330798}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

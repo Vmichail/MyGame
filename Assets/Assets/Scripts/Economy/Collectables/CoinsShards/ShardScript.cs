@@ -3,7 +3,8 @@ using UnityEngine.EventSystems;
 
 public class ShardScript : CollectableBaseScript, ICollectable
 {
-    private int ShardExp { get => GlobalVariables.Instance.shardExp; }
+    private float ShardExp { get => HeroUpgrades.Instance.shardExp * HeroUpgrades.Instance.ExpMultiplier(); }
+    private ParentShardScript parentShardScript;
 
     protected override void CollectEnds()
     {
@@ -11,5 +12,11 @@ public class ShardScript : CollectableBaseScript, ICollectable
         PlayerStatsManager.Instance.CurrentExp += ShardExp;
         gameObject.SetActive(false);
         IsCollected = false;
+        parentShardScript.CheckToDisable();
+    }
+
+    public void SetParentShardScript(ParentShardScript parent)
+    {
+        parentShardScript = parent;
     }
 }

@@ -19,18 +19,17 @@ public class LevelUpPanelScript : MonoBehaviour
     [SerializeField] int numberOfOptions = 5;
     [SerializeField] GameObject upgradeOptionPrefab;
     private int upgradeCost = 0;
-    [SerializeField] private int healthCost = 10;
     private List<UpgradeChoice> randomChoices = new();
     private List<UpgradeChoice> allSpells = new();
     [SerializeField] private Animator buffAnimator;
     private List<SetUpgradeScript> upgradeScripts = new();
     [SerializeField] private GameObject refreshButtonGO;
+    private Vector2 refreshButtonInitialPosition;
     [SerializeField] private TextMeshProUGUI refreshButtonTextValue;
     private int currentRefreshes;
     public bool HealthCost = false;
     private Image levelUpPanelImage;
     private Color normalColor;
-    private Color redColor = new(1f, 0f, 0f, 0.3f);
     private string[] levelUpSounds = new[] { "levelup1", "levelup2", "levelup3" };
     private int maxRefreshes = 0;
     private void Awake()
@@ -38,11 +37,7 @@ public class LevelUpPanelScript : MonoBehaviour
         allSpells = upgradeChoices.Where(uc => uc.UpgradeCategory == PlayerStatCategory.Spells).ToList();
         levelUpPanelImage = wholeLevelUpPanel.GetComponent<Image>();
         normalColor = levelUpPanelImage.color;
-    }
-
-    private void Update()
-    {
-
+        refreshButtonInitialPosition = refreshButtonGO.transform.localPosition;
     }
 
     private void Start()
@@ -107,58 +102,25 @@ public class LevelUpPanelScript : MonoBehaviour
 
         }
     }
-
-    public void ShowChoicesWithHealth()
-    {
-        levelUpPanelImage.color = redColor;
-        upgradeScripts.Clear();
-        foreach (Transform child in upgradeChoicesParentTransform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        randomChoices = GetOnlySpells(3);
-        foreach (int i in Enumerable.Range(0, 3))
-        {
-            UpgradeChoice choiceCopy = randomChoices[i];
-            GameObject upgradeChoice = Instantiate(upgradeOptionPrefab, upgradeChoicesParentTransform);
-            upgradeChoice.name = "UpgradeOption" + i;
-            if (upgradeChoice.TryGetComponent(out SetUpgradeScript setUpgradeScript))
-            {
-                upgradeScripts.Add(setUpgradeScript);
-                setUpgradeScript.HealthCost = true;
-                setUpgradeScript.SetUpgradeChoice(randomChoices[i], healthCost, false, new List<UpgradeChoice>());
-                //Button
-                if (upgradeChoice.TryGetComponent<Button>(out var button))
-                {
-                    button.onClick.AddListener(() => BuyOptionWithHealth(choiceCopy, button.gameObject, setUpgradeScript));
-                }
-            }
-            if (i == 0)
-            {
-                SetNavigationGO(upgradeChoice);
-            }
-        }
-        refreshButtonGO.SetActive(false);
-    }
-
     public List<UpgradeChoice> GetRandomChoices(int count)
     {
         return upgradeChoices
-            .OrderBy(x => Random.value)  // Random.value gives a float between 0–1
-            .Take(count)
-            .ToList();
+        .Where(uc => !UpgradeStackTracker.Instance.IsMaxed(uc))
+        .OrderBy(x => Random.value)
+        .Take(count)
+        .ToList();
     }
 
-    public List<UpgradeChoice> GetOnlySpells(int count)
-    {
-        return allSpells
-            .OrderBy(x => Random.value)  // Random.value gives a float between 0–1
-            .Take(count)
-            .ToList();
-    }
+    //public List<UpgradeChoice> GetOnlySpells(int count)
+    //{
+    //    return allSpells
+    //        .OrderBy(x => Random.value)  // Random.value gives a float between 0–1
+    //        .Take(count)
+    //        .ToList();
+    //}
     private void OnEnable()
     {
+        CursorManagerScript.MouseIsActive = false;
         GlobalVariables.Instance.PauseTime(GlobalVariables.PauseReasonEnum.LevelUpPanel);
         ShowCatUi();
 
@@ -186,21 +148,15 @@ public class LevelUpPanelScript : MonoBehaviour
         {
             refreshButtonGO.SetActive(true);
             refreshButtonGO.transform.localScale = Vector3.zero;
+            refreshButtonGO.transform.localPosition = refreshButtonInitialPosition;
 
             refreshButtonGO.transform
                 .DOScale(Vector3.one, 0.3f)
                 .SetEase(Ease.OutBack)
                 .SetUpdate(true);
-        }
 
-        if (HealthCost)
-        {
-            ShowChoicesWithHealth();
         }
-        else
-        {
-            RefreshChoices(true);
-        }
+        RefreshChoices(true);
     }
 
     public void BuyOption(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript, List<UpgradeChoice> bonusChoices)
@@ -220,9 +176,11 @@ public class LevelUpPanelScript : MonoBehaviour
             AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
             AnimatedDeletion(buttonGO);
             HeroUpgrades.Instance.UpgradeHero(chosenUpgrade);
+            UpgradeStackTracker.Instance.Register(chosenUpgrade.UpgradeCode);
             foreach (UpgradeChoice bonus in bonusChoices)
             {
                 HeroUpgrades.Instance.UpgradeHero(bonus);
+                UpgradeStackTracker.Instance.Register(bonus.UpgradeCode);
             }
             Continue();
         }
@@ -240,25 +198,6 @@ public class LevelUpPanelScript : MonoBehaviour
                 });
         }
     }
-
-    public void BuyOptionWithHealth(UpgradeChoice chosenUpgrade, GameObject buttonGO, SetUpgradeScript setUpgradeScript)
-    {
-        if (buttonGO.TryGetComponent(out Button button))
-        {
-            button.interactable = false;
-        }
-        healthCost = Mathf.Min(healthCost, PlayerStatsManager.Instance.CurrentHealth - 1);
-        healthCost = Mathf.Max(healthCost, 0);
-        UpdatePrices(healthCost);
-        EnemyGenericFunctionsForPlayer.Instance.DamagePlayer(healthCost);
-        TriggerBuff();
-        setUpgradeScript.IsClicked = true;
-        AudioManager.Instance.PlaySoundFX("cardChooseSound", transform.position, 1f, 0.75f, 1.25f);
-        AnimatedDeletion(buttonGO);
-        HeroUpgrades.Instance.UpgradeHero(chosenUpgrade);
-        Continue();
-    }
-
     private void UpdatePrices(int cost = -1)
     {
         if (cost == -1)
@@ -378,6 +317,7 @@ public class LevelUpPanelScript : MonoBehaviour
         // Make absolutely sure it stays selected
         es.sendNavigationEvents = true;
         es.SetSelectedGameObject(null);
+        yield return null;
         es.SetSelectedGameObject(go);
 
         if (go.TryGetComponent<Button>(out var btn))

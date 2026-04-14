@@ -30,7 +30,11 @@ public class ChildSpellSpawner : MonoBehaviour
     {
         foreach (Vector2 dir in directions)
         {
-            GameObject childSpell = Instantiate(childSpellPrefab, spawnPosition, Quaternion.identity);
+            // Calculate the rotation angle from the direction vector
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+            GameObject childSpell = PoolManager.Instance.Get(childSpellPrefab, spawnPosition, rotation, PoolCategory.Player);
 
             Rigidbody2D rb = childSpell.GetComponent<Rigidbody2D>();
             if (rb != null)

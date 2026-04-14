@@ -5,7 +5,18 @@ public class HeroUpgrades : MonoBehaviour
     [Header("SerializeFields")]
     [SerializeField] private Transform playerRangeTransform;
     [SerializeField] private PlayerScript playerScript;
-    [SerializeField] private CircleCollider2D playerMagnetColliderRadius;
+    [SerializeField] private GameObject playerMagnetColliderGO;
+
+    [Header("Collectable Values")]
+    public int yellowCoinValue = 1;
+    public int redRubyExpValue = 10;
+    public int redRubyCoinValue = 5;
+    public int greenRubyCoinValue = 10;
+    public int greenRubyExpValue = 100;
+    public int shardExp = 1;
+    //Potions
+    public float manaPotionMana = 10;
+    public float healthPotionHealth = 20;
 
     public static HeroUpgrades Instance { get; private set; }
 
@@ -27,6 +38,15 @@ public class HeroUpgrades : MonoBehaviour
     private bool fireBladeSpellEnabled = false;
     private bool rotatingBladesSpellEnabled = false;
     private bool shieldSpellEnabled = false;
+
+    // ================= Shards Values =================
+    private float expMultiplier = 1f;
+
+
+    public float ExpMultiplier()
+    {
+        return expMultiplier;
+    }
 
     // ================= CORE FUNCTION =================
     public void UpgradeHero(UpgradeChoice uc)
@@ -113,15 +133,15 @@ public class HeroUpgrades : MonoBehaviour
 
             case PlayerStatType.Defence_BetterPotions:
                 {
-                    gv.healthPotionHealth += upgradeValue;
-                    gv.manaPotionMana += upgradeValue;
+                    healthPotionHealth += upgradeValue;
+                    manaPotionMana += upgradeValue;
                     break;
                 }
 
             // ================= ECONOMY =================
             case PlayerStatType.Economy_CoinsValue:
                 {
-                    gv.yellowCoinValue += (int)upgradeValue;
+                    yellowCoinValue += (int)upgradeValue;
                     break;
                 }
 
@@ -139,15 +159,17 @@ public class HeroUpgrades : MonoBehaviour
 
             case PlayerStatType.Economy_MoreShardExp:
                 {
-                    Debug.LogError("More Shard EXP upgrade is not yet implemented.");
+                    IncreaseShardsExp(upgradeValue);
                     break;
                 }
 
             case PlayerStatType.Economy_PickUpRange:
                 {
-                    playerMagnetColliderRadius.radius += upgradeValue;
+                    playerMagnetColliderGO.transform.localScale = new(playerMagnetColliderGO.transform.localScale.x + upgradeValue, playerMagnetColliderGO.transform.localScale.y + upgradeValue);
                     break;
                 }
+
+            // ================= SPELLS =================
 
             case PlayerStatType.Spells_FireBlade:
                 {
@@ -206,8 +228,8 @@ public class HeroUpgrades : MonoBehaviour
                     {
                         gv.shieldSpellDamage += 1;
                         gv.shieldSpellDuration += 1f;
-                        gv.shieldSpellPiercing += 1;
-                        gv.shieldSpellSpeedMultiply += 0.05f;
+                        gv.shieldSpellPiercing += 2;
+                        gv.shieldSpellSpeed += 0.2f;
                     }
                     break;
                 }
@@ -248,6 +270,13 @@ public class HeroUpgrades : MonoBehaviour
             PlayerStatsManager.Instance.RuntimeStats.AddFlat(PlayerStatType.Defence_MovementSpeed, -speedIncrease);
         else
             PlayerStatsManager.Instance.RuntimeStats.AddFlat(PlayerStatType.Defence_MovementSpeed, speedIncrease);
+        Debug.Log($"Player movement speed updated by {(decrease ? -speedIncrease : speedIncrease)}. New speed: {PlayerStatsManager.Instance.RuntimeStats.Get(PlayerStatType.Defence_MovementSpeed)}");
+    }
+
+    private void IncreaseShardsExp(float upgradeValue)
+    {
+        expMultiplier += upgradeValue;
+        Debug.Log($"Shard EXP multiplier increased by {upgradeValue}. New multiplier: {expMultiplier}");
     }
 
 }

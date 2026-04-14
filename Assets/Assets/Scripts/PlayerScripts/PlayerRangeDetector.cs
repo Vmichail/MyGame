@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerRangeDetector : MonoBehaviour
 {
     [SerializeField] SpriteRenderer rangeCircleSr;
+    [SerializeField] Vector2 linaOffSet = new Vector2(-0.22f, -0.29f);
+    [SerializeField] Vector2 miranaOffSet = new Vector2(0.03f, -0.24f);
     private List<GameObject> enemiesInRange = new List<GameObject>();
 
     public GameObject ClosestEnemy { get; private set; }
@@ -41,11 +43,11 @@ public class PlayerRangeDetector : MonoBehaviour
         }
         if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.LinaSprite.ToString()))
         {
-            transform.localPosition = new Vector2(-0.22f, -0.29f);
+            transform.localPosition = linaOffSet;
         }
         else if (GlobalVariables.Instance.selectedCharacter.Equals(CharacterSprite.MiranaSprite.ToString()))
         {
-            transform.localPosition = new Vector2(0.03f, -0.24f);
+            transform.localPosition = miranaOffSet;
         }
     }
 

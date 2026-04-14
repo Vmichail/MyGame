@@ -270,6 +270,7 @@ public class AuthManager : MonoBehaviour
         if (FirebaseInitializer.auth.CurrentUser == null)
         {
             Debug.Log("⚠️ No user logged in");
+            mainMenu.ShowLogin();
             return;
         }
         if (FirebaseInitializer.auth.CurrentUser.IsAnonymous)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3958580452697393394}
   - component: {fileID: 2199971227933493373}
   - component: {fileID: 649181204057776574}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: VampireNormal
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -51,7 +51,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: cb35f6d3ee938fb46af8febbbff23dfb, type: 2}
-  particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
+  enemyHealthUpdate: {fileID: 8173731771014870321}
+  killedParticles: {fileID: 1533611495283434426, guid: 3c6bd4e38ab2c0a46814b46812e7432f, type: 3}
   hasDamageParticles: 0
   damageParticles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   criticalParticles: {fileID: 22457057582532072, guid: 48149391a2ad15f4ea4145d591265408, type: 3}
@@ -64,6 +65,7 @@ MonoBehaviour:
   projectilePosition: {fileID: 4074421219935893854}
   projectileParent: {fileID: 0}
   projectileCanRotate: 1
+  randomSpreadAngle: 10
   normalAttackFX: {fileID: 0}
   specialAttackFX: {fileID: 0}
   isGeneratedByPool: 1
@@ -151,7 +153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4074421219935893854}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: attackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +186,7 @@ GameObject:
   - component: {fileID: 1415726419786943784}
   - component: {fileID: 3809242694913270832}
   - component: {fileID: 4884313152187819443}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: AttackRange
   m_TagString: Range
   m_Icon: {fileID: 0}
@@ -266,7 +268,7 @@ GameObject:
   - component: {fileID: 3212523493316844945}
   - component: {fileID: 4442439744357065514}
   - component: {fileID: 1658153217329489204}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +336,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 9191453521416240754, guid: 05610d46d824b564aa530223400d5284, type: 3}
@@ -393,7 +395,7 @@ GameObject:
   - component: {fileID: 974626017686003662}
   - component: {fileID: 5721347883498267276}
   - component: {fileID: 8173731771014870321}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: HealthText
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -444,7 +446,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  - {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -464,7 +466,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
@@ -490,8 +492,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e8f710f7077504144992f589d556ba0d, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: e8f710f7077504144992f589d556ba0d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -515,10 +517,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6.5
-  m_fontSizeBase: 36
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 4
   m_fontSizeMax: 7
   m_fontStyle: 0

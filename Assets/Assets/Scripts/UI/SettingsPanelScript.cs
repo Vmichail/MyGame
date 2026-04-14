@@ -7,6 +7,7 @@ public class SettingsPanelScript : MonoBehaviour
 {
     [SerializeField] private Toggle showEnemiesHealthToggle;
     [SerializeField] private Toggle developerModeToggle;
+    [SerializeField] private Toggle showLightsToggle;
     [SerializeField] private GameObject musicButton;
     [SerializeField] private GameObject otherButton;
     [SerializeField] private GameObject musicSettingsPanel;
@@ -34,6 +35,7 @@ public class SettingsPanelScript : MonoBehaviour
         SelectUnSelectButtons();
         showEnemiesHealthToggle.SetIsOnWithoutNotify(GlobalVariables.Instance.showAllEnemiesHealth);
         developerModeToggle.SetIsOnWithoutNotify(GlobalVariables.Instance.developerMode);
+        showLightsToggle.SetIsOnWithoutNotify(GlobalVariables.Instance.showAllLights);
     }
 
     private void SelectUnSelectButtons()
@@ -65,6 +67,12 @@ public class SettingsPanelScript : MonoBehaviour
     {
         ToggleGeneric(isOn);
         GlobalVariables.Instance.SetShowAllEnemiesHealth(isOn);
+    }
+
+    public void SetShowAllLights(bool isOn)
+    {
+        ToggleGeneric(isOn);
+        GlobalVariables.Instance.SetShowAllLights(isOn);
     }
 
     public void SetDeveloperMode(bool isOn)

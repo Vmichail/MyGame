@@ -101,11 +101,14 @@ public class MovingUIObject : MonoBehaviour
 
         if (doColorPulse && img)
         {
+            img.DOKill();
+
             img.DOColor(pulseColor, colorTweenTime)
                .SetDelay(delay)
                .SetEase(Ease.InOutSine)
                .SetLoops(-1, LoopType.Yoyo)
-               .SetUpdate(true);
+               .SetUpdate(true)
+               .SetLink(img.gameObject, LinkBehaviour.KillOnDisable);
         }
     }
 

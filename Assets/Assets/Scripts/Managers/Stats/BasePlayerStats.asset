@@ -18,9 +18,9 @@ MonoBehaviour:
   - type: 1
     baseValue: 1
   - type: 2
-    baseValue: 3
+    baseValue: 6
   - type: 3
-    baseValue: 0.3
+    baseValue: 0.05
   - type: 4
     baseValue: 2
   - type: 5
@@ -30,7 +30,7 @@ MonoBehaviour:
   - type: 101
     baseValue: 1
   - type: 102
-    baseValue: 5
+    baseValue: 4
   - type: 103
     baseValue: 0
   - type: 104
@@ -40,7 +40,7 @@ MonoBehaviour:
   - type: 106
     baseValue: 1
   - type: 107
-    baseValue: 10
+    baseValue: 5
   - type: 108
     baseValue: 0
   - type: 200

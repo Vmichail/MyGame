@@ -56,7 +56,7 @@ public class EnemyGenericFunctionsForPlayer : MonoBehaviour
         {
             Vector2 randomOffset = new(Random.Range(-0.3f, 0.3f), Random.Range(0.5f, 1.0f));
             Vector2 spawnPosition = (Vector2)player.transform.position + randomOffset;
-            GameObject dmgText = Instantiate(playerWasHitDamage, spawnPosition, Quaternion.identity);
+            GameObject dmgText = PoolManager.Instance.Get(playerWasHitDamage, spawnPosition, Quaternion.identity, PoolCategory.Particles);
             DamageTextScript dt = dmgText.GetComponent<DamageTextScript>();
             dt.SetDamage(damage, false, Color.red);
         }

@@ -18,11 +18,11 @@ MonoBehaviour:
     currentHealth: 350
     damage: 7
     speed: 7
-    attackCooldown: 1
+    attackCooldown: 2
     canBeKnockedBack: 1
     knockbackResistance: 5
-    attackRange: 25
-    projectileSpeed: 7
+    attackRange: 15
+    projectileSpeed: 8
     coinDropChance: 0.1
     healthPotionChance: 0.1
     manaPotionChance: 0.1

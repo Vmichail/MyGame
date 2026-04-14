@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 
 public class CoinsBaseScript : CollectableBaseScript, ICollectable
 {
-    protected virtual int CoinValue { get => GlobalVariables.Instance.yellowCoinValue; }
-    protected virtual int ExpValue { get => 0; }
+    protected virtual int CoinValue { get => HeroUpgrades.Instance.yellowCoinValue; }
+    protected virtual float ExpValue { get => 0; }
     protected virtual string AudioSound { get => "coinSound"; }
     protected virtual CoinSpecialEffect[] SpecialEffects => new CoinSpecialEffect[] { CoinSpecialEffect.None };
 

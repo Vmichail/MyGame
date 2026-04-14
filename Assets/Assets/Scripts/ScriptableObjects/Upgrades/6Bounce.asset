@@ -20,7 +20,6 @@ MonoBehaviour:
   upgradeCategory: 0
   upgradeCode: 5
   upgradeValueData:
-    upgradeCategory: 0
-    upgradeCode: 5
     value: 1
     percentage: 0
+  maxStack: 10

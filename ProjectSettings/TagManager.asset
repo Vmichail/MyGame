@@ -10,6 +10,8 @@ TagManager:
   - iconImage
   - Collectable
   - Range
+  - Wall
+  - EnemyProjectile
   layers:
   - Default
   - TransparentFX
@@ -20,14 +22,14 @@ TagManager:
   - Collectables
   - Range
   - Player
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - ChargingEnemy
+  - RangedEnemy
+  - Boss
+  - EnemyProjectiles
+  - Effects
+  - Wall
+  - EnemyRangeAOE
+  - PlayerProjectiles
   - 
   - 
   - 

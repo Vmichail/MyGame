@@ -78,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1265865805
-  m_SortingLayer: 2
+  m_SortingLayerID: 89313081
+  m_SortingLayer: 1
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7461578102965628160, guid: 3f902450f1c87b84696040e0c8832956, type: 3}
@@ -124,6 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5984641721739567222}
   - component: {fileID: 1356498334482331141}
+  - component: {fileID: 7410355246105658060}
   m_Layer: 6
   m_Name: Light 2D
   m_TagString: Untagged
@@ -166,7 +167,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000039cf5205b36b8cb40b3ba7f1
+  m_ApplyToSortingLayers: 39cf5205
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -175,7 +176,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -198,6 +199,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &7410355246105658060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894079725046645337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d556359f7d6c32840aac34389b9ff1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseLightScript
+  isMainLight: 1
 --- !u!1 &8238363093055479000
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +223,6 @@ GameObject:
   - component: {fileID: 5052998621424351556}
   - component: {fileID: 4492164582801649837}
   - component: {fileID: 1010883331264834261}
-  - component: {fileID: -6114169899453737748}
   m_Layer: 6
   m_Name: HealthPotion
   m_TagString: Collectable
@@ -293,34 +306,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 9
+  initialSpeed: 6
   speedIncreaseRate: 2
   maxSpeed: 80
   stopDistance: 0.15
   isAffectedByMagnet: 0
---- !u!50 &-6114169899453737748
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8238363093055479000}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  collectableType: 2
+  spriteRenderer: {fileID: 1475862935154633392}

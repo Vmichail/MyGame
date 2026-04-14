@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5956451290248206886}
   - component: {fileID: 3004178257472563792}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Shadow (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1265865805
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 592df8d5149c95745aa86118a188cb85, type: 3}
@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7001550591887503221}
   - component: {fileID: 8855388136390236783}
+  - component: {fileID: 2408799147447129194}
   m_Layer: 0
   m_Name: Spot Light 2D
   m_TagString: Untagged
@@ -143,7 +144,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000039cf52054bbf97e7b36b8cb40b3ba7f1
+  m_ApplyToSortingLayers: 39cf52050b3ba7f1
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -152,7 +153,7 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -175,6 +176,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &2408799147447129194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236005113760685489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d556359f7d6c32840aac34389b9ff1ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseLightScript
+  isMainLight: 0
 --- !u!1 &5531751384487865537
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +203,7 @@ GameObject:
   - component: {fileID: 3740973134953890183}
   - component: {fileID: 2306034060432519822}
   - component: {fileID: 8312651343150294863}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireTornado
   m_TagString: PlayerSpell
   m_Icon: {fileID: 0}
@@ -305,7 +319,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -240698613
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4606519016202575534, guid: f15cf33f92a6e674bbdb74b890f5dad2, type: 3}
@@ -379,9 +393,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1acf1d68dff8246bc3bdd20a6973b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabReference: {fileID: 5531751384487865537}
   particles: {fileID: 4197466411371465953, guid: 0f6e3c05d94970d47831e48d4aa8a9a4, type: 3}
   OnDestroyParticles: {fileID: 1883924839587944033, guid: 3fd15d5ac9d24454fbbe7c7f7852486e, type: 3}
   childSpellSpawner: {fileID: 0}
+  shieldInfos: {fileID: 0}
   orbit: 0
   couroutineSound: 0
   StayOnPlayer: 0

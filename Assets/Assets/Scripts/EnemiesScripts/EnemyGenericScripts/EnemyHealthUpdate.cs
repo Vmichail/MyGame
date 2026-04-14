@@ -39,11 +39,17 @@ public class EnemyHealthUpdate : MonoBehaviour
         }
 
         healthText.enabled = show;
+        if (show)
+        {
+            int roundedHealth = Mathf.RoundToInt(enemyBaseScript.CurrentHealth);
+            healthText.SetText(roundedHealth.ToString());
+        }
     }
 
-    private void Update()
+    public void UpdateHealth(float currentHealth)
     {
-        int roundedHealth = Mathf.RoundToInt(enemyBaseScript.CurrentHealth);
+        if (healthText == null || !healthText.enabled) return;
+        int roundedHealth = Mathf.RoundToInt(currentHealth);
         healthText.SetText(roundedHealth.ToString());
     }
 }

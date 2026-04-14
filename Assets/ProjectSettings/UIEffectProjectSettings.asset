@@ -17,6 +17,8 @@ ShaderVariantCollection:
         passType: 0
       - keywords: TRANSITION_SHINY
         passType: 0
+      - keywords: TRANSITION_SHINY UNITY_UI_ALPHACLIP
+        passType: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

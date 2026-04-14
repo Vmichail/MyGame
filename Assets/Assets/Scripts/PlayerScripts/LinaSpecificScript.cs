@@ -82,11 +82,7 @@ public class LinaSpecificScript : MonoBehaviour
         AudioManager.Instance.PlaySoundFX("FireTornadoCast", transform.position, 0.7f, 1f, 1f);
         foreach (Vector2 dir in selectedDirections)
         {
-            GameObject newSpell = Instantiate(
-                fireTornadoPrefab,
-                transform.position,
-                Quaternion.identity
-            );
+            GameObject newSpell = PoolManager.Instance.Get(fireTornadoPrefab, transform.position, Quaternion.identity, PoolCategory.Player);
 
             if (newSpell.TryGetComponent<PlayerSpellBaseScript>(out var playerSpellBaseScript))
             {

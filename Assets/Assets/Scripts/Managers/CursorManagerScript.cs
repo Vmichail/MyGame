@@ -18,7 +18,8 @@ public class CursorManagerScript : MonoBehaviour
     private Vector3 lastMousePosition;
     private bool isHidden;
 
-    private static CursorManagerScript instance;
+    public static CursorManagerScript instance;
+    public static bool MouseIsActive { get; set; }
 
     void Awake()
     {
@@ -42,6 +43,8 @@ public class CursorManagerScript : MonoBehaviour
             lastMousePosition = Input.mousePosition;
             timer = 0f;
 
+            MouseIsActive = true;
+
             if (isHidden)
             {
                 Cursor.visible = true;
@@ -56,7 +59,12 @@ public class CursorManagerScript : MonoBehaviour
             {
                 Cursor.visible = false;
                 isHidden = true;
+                MouseIsActive = false;
             }
+        }
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        {
+            MouseIsActive = false;
         }
     }
 

@@ -54,6 +54,19 @@ public class EnemyChargeAttack : MonoBehaviour
         animator = enemyBaseScript.GetEnemyAnimator();
     }
 
+
+    private void OnEnable()
+    {
+        isOnCooldown = true;
+        StartCoroutine(InitialCooldown());
+    }
+
+    private IEnumerator InitialCooldown()
+    {
+        yield return new WaitForSeconds(1f);
+        isOnCooldown = false;
+    }
+
     void Update()
     {
         if (isCharging || isOnCooldown || player == null)

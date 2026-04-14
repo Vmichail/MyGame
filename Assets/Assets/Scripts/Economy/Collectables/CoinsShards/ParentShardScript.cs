@@ -5,24 +5,14 @@ public class ParentShardScript : MonoBehaviour
 {
     public int MaxShardsToSpawn { get; set; }
     public int MinShardsToSpawn { get; set; }
-    private void Update()
+    private int currentSpawnedShards = 0;
+    public void CheckToDisable()
     {
-        // Only check if parent is active
         if (gameObject.activeSelf)
         {
-            bool allInactive = true;
-
-            foreach (Transform child in transform)
-            {
-                if (child.gameObject.activeSelf)
-                {
-                    allInactive = false;
-                    break;
-                }
-            }
-
+            currentSpawnedShards--;
             // If every child is inactive, disable parent
-            if (allInactive)
+            if (currentSpawnedShards <= 0)
             {
                 MinShardsToSpawn = 0;
                 MaxShardsToSpawn = 0;
@@ -48,6 +38,7 @@ public class ParentShardScript : MonoBehaviour
             MinShardsToSpawn = Mathf.Clamp(effectiveMax - 1, 0, effectiveMax);
 
         int shardCount = Random.Range(MinShardsToSpawn, effectiveMax + 1);
+        currentSpawnedShards = shardCount;
 
         // Disable all shards first
         for (int i = 0; i < maxShards; i++)
@@ -61,6 +52,7 @@ public class ParentShardScript : MonoBehaviour
         {
             Transform child = transform.GetChild(i);
             child.gameObject.SetActive(true);
+            child.GetComponent<ShardScript>().SetParentShardScript(this);
 
             // Even angular distribution
             float angle = (360f / shardCount) * i;
@@ -87,6 +79,7 @@ public class ParentShardScript : MonoBehaviour
         transform.DOMoveY(0.3f, 0.8f)
                     .SetRelative()
                     .SetEase(Ease.InOutSine)
-                    .SetLoops(-1, LoopType.Yoyo);
+                    .SetLoops(-1, LoopType.Yoyo)
+        .SetLink(gameObject, LinkBehaviour.KillOnDisable);
     }
 }
