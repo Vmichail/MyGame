@@ -6,6 +6,8 @@
 [Bb]uilds/
 [Ll]ogs/
 UserSettings/
+MemoryCaptures/
+ProfilerCaptures/
 
 # Visual Studio / Rider / IDE files
 .vs/
@@ -21,3 +23,7 @@ UserSettings/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+13-18
+19-24
+25-30
